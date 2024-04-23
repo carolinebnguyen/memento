@@ -1,0 +1,15 @@
+{
+	"name": "memento",
+	"version": "1.0",
+	"description": "memento app",
+	"main": "index.js",
+	"scripts": {
+		"start": "live-server"
+	},
+	"author": "carolibn",
+	"license": "ISC",
+	"devDependencies": {
+		"live-server": "^1.2.2"
+	},
+	"dependencies": {}
+}
