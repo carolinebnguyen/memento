@@ -5,9 +5,62 @@
     <link rel="shortcut icon" href="./favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Memento Registration</title>
-    <link rel="stylesheet" type="text/css" href="src/css/index.css" />
+    <link rel="stylesheet" type="text/css" href="../css/registration.css" />
   </head>
   <body>
-    <h1>Registration</h1>
+    <div class="container">
+      <div class="form-container">
+        <img id="logo" src="../assets/logo-black.png" alt="Memento Logo" />
+        <form id="login-form">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              autocomplete="off"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="full-name">Full Name</label>
+            <input
+              type="text"
+              id="full-name"
+              name="full-name"
+              autocomplete="off"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              autocomplete="off"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required />
+          </div>
+          <button id="sign-up-button" type="submit">Sign up</button>
+        </form>
+      </div>
+    </div>
+    <footer>
+      <div class="footer-container">
+        <div class="copyright">Copyright © 2024 Memento</div>
+        <div class="footer-links">
+          <a href="#">About</a>
+          <a href="#">Terms & Conditions</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+    </footer>
+    <script type="text/javascript" src="../js/registration.js"></script>
   </body>
 </html>
