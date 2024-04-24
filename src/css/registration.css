@@ -56,13 +56,13 @@ button {
 }
 
 #signup-button {
-  background-color: #96c3d6;
+  background-color: #87afc0;
   color: white;
   margin-bottom: 15px;
 }
 
 #signup-button:hover {
-  background-color: #87afc0;
+  background-color: #799dac;
 }
 
 footer {
@@ -74,7 +74,7 @@ footer {
 .footer-container {
   display: flex;
   justify-content: space-between;
-  background-color: #96c3d6;
+  background-color: #87afc0;
   padding: 5px;
 }
 
