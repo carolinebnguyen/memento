@@ -67,6 +67,7 @@ footer {
   justify-content: space-between;
   background-color: #87afc0;
   padding: 5px;
+  color: white;
 }
 
 .footer-container a {
@@ -78,6 +79,11 @@ footer {
   margin-left: 20px;
 }
 
-.footer-links a:hover {
+.footer-links a {
   color: white;
+  padding: 5px;
+}
+
+.footer-links a:hover {
+  background-color: #abded3;
 }
