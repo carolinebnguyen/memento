@@ -16,7 +16,7 @@ body {
   padding: 10px;
 }
 
-#login-form {
+#signup-form {
   width: 100%;
 }
 
@@ -55,13 +55,13 @@ button {
   cursor: pointer;
 }
 
-#sign-up-button {
+#signup-button {
   background-color: #96c3d6;
   color: white;
   margin-bottom: 15px;
 }
 
-#sign-up-button:hover {
+#signup-button:hover {
   background-color: #87afc0;
 }
 
