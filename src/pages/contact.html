@@ -16,45 +16,39 @@
         </a>
       </div>
       <section class="about-us">
-        <h1>About Memento</h1>
-        <div class="description">
-          <p>
-            Memento is an engaging social media platform focused on sharing
-            precious moments through photos and text statuses. Users are the
-            authors of their digital life stories as they share their
-            experiences and memories with the world.
-          </p>
+        <h1>Contact Us</h1>
+        <div class="form-container">
+          <form id="contact-form">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" name="subject" required />
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                required
+              ></textarea>
+            </div>
+            <button type="submit" id="submit-button">Submit</button>
+          </form>
         </div>
       </section>
-      <section class="mission">
-        <h2>Our Mission</h2>
+      <section id="success-message" style="display: none">
         <p>
-          At Memento, our mission is to foster a community built on authenticity
-          and connection by empowering individuals to capture and share
-          treasured moments of their lives.
+          Thank you! Your message has been sent. We will get back to you within
+          5 business days.
         </p>
-      </section>
-      <section class="team">
-        <h2>Meet the Team</h2>
-        <div class="team-member">
-          <h3>Caroline Nguyen</h3>
-          <img
-            class="avatar"
-            src="../assets/caroline_avatar.png"
-            alt="Animated avatar of Caroline"
-          />
-          <em>Developer</em>
-        </div>
-        <div class="team-member">
-          <h3>Snowie</h3>
-          <img
-            class="avatar"
-            id="snowie"
-            src="../assets/snowie_avatar.png"
-            alt="Animated avatar of Snowie, a white Pomeranian"
-          />
-          <em>CEO, COO, CFO, CTO</em>
-        </div>
       </section>
     </div>
     <footer>
