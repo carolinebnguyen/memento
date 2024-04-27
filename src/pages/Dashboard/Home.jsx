@@ -1,10 +1,12 @@
 import React from 'react';
-import { Text } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
+import Sidebar from '../../components/Sidebar';
 
 export default function Home() {
   return (
     <>
-      <Text>Home</Text>
+      <Sidebar />
+      <Flex justify="center" align="center"></Flex>
     </>
   );
 }
