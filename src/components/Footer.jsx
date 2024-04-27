@@ -17,13 +17,13 @@ export default function Footer() {
     >
       <Text>© 2024 Memento</Text>
       <Flex>
-        <Link href={'#'} mr={6}>
+        <Link href="/about" mr={6}>
           About
         </Link>
-        <Link href={'#'} mr={6}>
+        <Link href="/terms" mr={6}>
           Terms
         </Link>
-        <Link href={'#'} mr={6}>
+        <Link href="/privacy" mr={6}>
           Privacy
         </Link>
         <Link href="/contact">Contact</Link>

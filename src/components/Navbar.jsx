@@ -13,6 +13,7 @@ export default function Navbar() {
       top="0"
       zIndex="9999"
       w="100%"
+      bgColor="whiteAlpha.900"
     >
       <Link href="/">
         <Image src={logo} alt="Memento logo" />
