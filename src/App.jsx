@@ -7,6 +7,7 @@ import About from './pages/Footer/About';
 import TermsConditions from './pages/Footer/TermsConditions';
 import PrivacyPolicy from './pages/Footer/PrivacyPolicy';
 import Contact from './pages/Footer/Contact';
+import Layout from './components/Layout';
 import Home from './pages/Dashboard/Home';
 import Notifications from './pages/Dashboard/Notifications';
 
@@ -42,14 +43,13 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: '/home',
-    element: <Home />,
+    path: '/',
+    element: <Layout />,
     errorElement: <ErrorPage />,
-  },
-  {
-    path: '/notifications',
-    element: <Notifications />,
-    errorElement: <ErrorPage />,
+    children: [
+      { path: 'home', element: <Home /> },
+      { path: 'notifications', element: <Notifications /> },
+    ],
   },
 ]);
 
