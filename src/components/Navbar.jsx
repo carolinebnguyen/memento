@@ -1,5 +1,6 @@
 import React from 'react';
-import { Flex, Image, Button, Link } from '@chakra-ui/react';
+import { Flex, Image, Button } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 import logo from '../assets/logoBlack.png';
 
 export default function Navbar() {
@@ -15,17 +16,17 @@ export default function Navbar() {
       w="100%"
       bgColor="whiteAlpha.900"
     >
-      <Link href="/">
+      <Link to="/">
         <Image src={logo} alt="Memento logo" />
       </Link>
-      <Flex gap={5}>
-        <Link href="/">
-          <Button variant="outline">Sign In</Button>
-        </Link>
-        <Link href="/signup">
-          <Button colorScheme="blue" mr="2">
-            Sign Up
+      <Flex gap={{ base: 2, sm: 5 }}>
+        <Link to="/">
+          <Button variant="outline" ml={{ base: 2, sm: 0 }}>
+            Sign In
           </Button>
+        </Link>
+        <Link to="/signup">
+          <Button colorScheme="blue">Sign Up</Button>
         </Link>
       </Flex>
     </Flex>

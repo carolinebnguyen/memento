@@ -70,7 +70,7 @@ function FullSidebar() {
   return (
     <>
       <Flex direction="column" boxShadow="md" p={3} w="300px">
-        <NavLink href="/">
+        <NavLink to="/">
           <Image src={logo} alt="Memento logo" p={3} />
         </NavLink>
         <SidebarContent />

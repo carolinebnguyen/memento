@@ -1,15 +1,12 @@
 import React from 'react';
 import { Flex, Heading, Stack, Text, Image } from '@chakra-ui/react';
-import Navbar from '../../components/Navbar';
-import Footer from '../../components/Footer';
 import caroline from '../../assets/carolineAvatar.png';
 import snowie from '../../assets/snowieAvatar.png';
 
 export default function About() {
   return (
     <>
-      <Navbar />
-      <Flex justify="center" pt={16} h="100vh">
+      <Flex justify="center" pt={16} h="auto">
         <Stack align="center" minW={{ base: '100%', lg: '50%', xl: '30%' }}>
           <Stack padding={9} align="center" maxW={{ base: '100%', lg: '50%' }}>
             <Heading as="h1" size="2xl">
@@ -47,7 +44,6 @@ export default function About() {
           </Stack>
         </Stack>
       </Flex>
-      <Footer />
     </>
   );
 }

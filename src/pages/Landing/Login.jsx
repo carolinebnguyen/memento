@@ -11,14 +11,12 @@ import {
   Box,
   Divider,
   AbsoluteCenter,
-  Link,
   Text,
 } from '@chakra-ui/react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import logo from '../../assets/logoBlack.png';
-import Footer from '../../components/Footer';
 import PasswordField from '../../components/PasswordField';
 
 export default function Login() {
@@ -46,7 +44,7 @@ export default function Login() {
     <>
       <Flex justify="center" align="center" h="100vh">
         <Stack align="center" minW={{ base: '100%', lg: '50%', xl: '30%' }}>
-          <Link href="/">
+          <Link to="/">
             <Image src={logo} alt="Memento logo" mb={5} />
           </Link>
           <Stack padding={9} paddingTop={0} align="center">
@@ -113,7 +111,7 @@ export default function Login() {
                   or
                 </AbsoluteCenter>
               </Box>
-              <Link href="/signup">
+              <Link to="/signup">
                 <Button variant="outline" w="100%" mt={5}>
                   Sign up
                 </Button>
@@ -122,7 +120,6 @@ export default function Login() {
           </Stack>
         </Stack>
       </Flex>
-      <Footer />
     </>
   );
 }

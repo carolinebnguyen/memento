@@ -7,40 +7,33 @@ import About from './pages/Footer/About';
 import TermsConditions from './pages/Footer/TermsConditions';
 import PrivacyPolicy from './pages/Footer/PrivacyPolicy';
 import Contact from './pages/Footer/Contact';
-import DashboardLayout from './components/DashboardLayout';
 import Home from './pages/Dashboard/Home';
 import Notifications from './pages/Dashboard/Notifications';
+
+import LandingLayout from './components/layouts/LandingLayout';
+import FooterLayout from './components/layouts/FooterLayout';
+import DashboardLayout from './components/layouts/DashboardLayout';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Login />,
+    element: <LandingLayout />,
     errorElement: <ErrorPage />,
+    children: [
+      { index: true, element: <Login /> },
+      { path: 'signup', element: <Signup /> },
+    ],
   },
   {
-    path: '/signup',
-    element: <Signup />,
+    path: '/',
+    element: <FooterLayout />,
     errorElement: <ErrorPage />,
-  },
-  {
-    path: '/about',
-    element: <About />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: '/terms',
-    element: <TermsConditions />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: '/privacy',
-    element: <PrivacyPolicy />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: '/contact',
-    element: <Contact />,
-    errorElement: <ErrorPage />,
+    children: [
+      { path: 'about', element: <About /> },
+      { path: 'terms', element: <TermsConditions /> },
+      { path: 'privacy', element: <PrivacyPolicy /> },
+      { path: 'contact', element: <Contact /> },
+    ],
   },
   {
     path: '/',

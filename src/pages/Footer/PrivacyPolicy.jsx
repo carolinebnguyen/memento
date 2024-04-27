@@ -13,8 +13,6 @@ import {
 } from '@chakra-ui/react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
-import Navbar from '../../components/Navbar';
-import Footer from '../../components/Footer';
 
 export default function PrivacyPolicy() {
   const toast = useToast();
@@ -48,7 +46,6 @@ export default function PrivacyPolicy() {
 
   return (
     <>
-      <Navbar />
       <Flex justify="center" align="center" h="100vh">
         <Stack align="center" minW={{ base: '100%', lg: '50%', xl: '30%' }}>
           <Stack padding={9} paddingTop={0} align="center">
@@ -148,7 +145,6 @@ export default function PrivacyPolicy() {
           </Stack>
         </Stack>
       </Flex>
-      <Footer />
     </>
   );
 }
