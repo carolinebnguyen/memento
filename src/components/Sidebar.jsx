@@ -69,7 +69,7 @@ export default function Sidebar() {
 function FullSidebar() {
   return (
     <>
-      <Flex direction="column" boxShadow="md" p={3}>
+      <Flex direction="column" boxShadow="md" p={3} w="300px">
         <Link href="/">
           <Image src={logo} alt="Memento logo" p={3} />
         </Link>
@@ -82,63 +82,74 @@ function FullSidebar() {
 function SidebarContent() {
   return (
     <>
-      <Stack gap={3} mt={5}>
-        <Link
-          _hover={{
-            bg: 'blue.50',
-          }}
-          href="/home"
-        >
-          <HStack p={2}>
-            <Icon as={MdOutlineHome} boxSize={22} />
-            <Text>Home</Text>
+      <Flex direction="column" justify="space-between" h="100%">
+        <Stack gap={3} mt={5}>
+          <Link
+            _hover={{
+              bg: 'blue.50',
+            }}
+            href="/home"
+          >
+            <HStack p={2}>
+              <Icon as={MdOutlineHome} boxSize={22} />
+              <Text>Home</Text>
+            </HStack>
+          </Link>
+          <Link
+            _hover={{
+              bg: 'blue.50',
+            }}
+            href="/search"
+          >
+            <HStack p={2}>
+              <Icon as={MdOutlineSearch} boxSize={22} />
+              <Text>Search</Text>
+            </HStack>
+          </Link>
+          <Link
+            _hover={{
+              bg: 'blue.50',
+            }}
+            href="/messages"
+          >
+            <HStack p={2}>
+              <Icon as={MdOutlineMail} boxSize={22} />
+              <Text>Direct Messages</Text>
+            </HStack>
+          </Link>
+          <Link
+            _hover={{
+              bg: 'blue.50',
+            }}
+            href="/notifications"
+          >
+            <HStack p={2}>
+              <Icon as={FaRegBell} boxSize={22} />
+              <Text>Notifications</Text>
+            </HStack>
+          </Link>
+          <Link
+            _hover={{
+              bg: 'blue.50',
+            }}
+            href="/create"
+          >
+            <HStack p={2}>
+              <Icon as={FiPlusCircle} boxSize={22} />
+              <Text>Create</Text>
+            </HStack>
+          </Link>
+        </Stack>
+        <Stack fontSize={12}>
+          <Text>© 2024 Memento</Text>
+          <HStack justify="space-between">
+            <Link href="/about">About</Link>
+            <Link href="/terms">Terms</Link>
+            <Link href="/privacy">Privacy</Link>
+            <Link href="/contact">Contact</Link>
           </HStack>
-        </Link>
-        <Link
-          _hover={{
-            bg: 'blue.50',
-          }}
-          href="/search"
-        >
-          <HStack p={2}>
-            <Icon as={MdOutlineSearch} boxSize={22} />
-            <Text>Search</Text>
-          </HStack>
-        </Link>
-        <Link
-          _hover={{
-            bg: 'blue.50',
-          }}
-          href="/messages"
-        >
-          <HStack p={2}>
-            <Icon as={MdOutlineMail} boxSize={22} />
-            <Text>Direct Messages</Text>
-          </HStack>
-        </Link>
-        <Link
-          _hover={{
-            bg: 'blue.50',
-          }}
-          href="/notifications"
-        >
-          <HStack p={2}>
-            <Icon as={FaRegBell} boxSize={22} />
-            <Text>Notifications</Text>
-          </HStack>
-        </Link>
-        <Link
-          _hover={{
-            bg: 'blue.50',
-          }}
-          href="/create"
-        >
-          <HStack p={2}>
-            <Icon as={FiPlusCircle} boxSize={22} />
-            <Text>Create</Text>
-          </HStack>
-        </Link>
-      </Stack>
+        </Stack>
+      </Flex>
     </>
   );
 }
