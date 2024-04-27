@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Flex,
   Button,
@@ -7,8 +7,6 @@ import {
   Heading,
   Input,
   Stack,
-  InputGroup,
-  InputRightElement,
   Image,
   Box,
   Divider,
@@ -16,12 +14,12 @@ import {
   Link,
   Text,
 } from '@chakra-ui/react';
-import { FaEyeSlash, FaEye } from 'react-icons/fa';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/logoBlack.png';
 import Footer from '../../components/Footer';
+import PasswordField from '../../components/PasswordField';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -126,37 +124,5 @@ export default function Login() {
       </Flex>
       <Footer />
     </>
-  );
-}
-
-function PasswordField({ field, form, ...props }) {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setIsPasswordVisible((prevIsPasswordVisible) => !prevIsPasswordVisible);
-  };
-
-  return (
-    <InputGroup>
-      <Input
-        {...field}
-        type={isPasswordVisible ? 'text' : 'password'}
-        id="password"
-      />
-      <InputRightElement>
-        <Button
-          onClick={togglePasswordVisibility}
-          h="1.75rem"
-          size="xs"
-          colorScheme="whiteAlpha"
-        >
-          {isPasswordVisible ? (
-            <FaEye size={22} color="black" />
-          ) : (
-            <FaEyeSlash size={22} color="black" />
-          )}
-        </Button>
-      </InputRightElement>
-    </InputGroup>
   );
 }
