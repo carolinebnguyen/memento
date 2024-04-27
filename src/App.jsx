@@ -8,6 +8,7 @@ import TermsConditions from './pages/Footer/TermsConditions';
 import PrivacyPolicy from './pages/Footer/PrivacyPolicy';
 import Contact from './pages/Footer/Contact';
 import Home from './pages/Dashboard/Home';
+import Notifications from './pages/Dashboard/Notifications';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,11 @@ const router = createBrowserRouter([
   {
     path: '/home',
     element: <Home />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/notifications',
+    element: <Notifications />,
     errorElement: <ErrorPage />,
   },
 ]);
