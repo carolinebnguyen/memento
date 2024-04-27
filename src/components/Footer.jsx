@@ -13,6 +13,7 @@ export default function Footer() {
       left="0"
       right="0"
       zIndex="9999"
+      w="100%"
     >
       <Text>© 2024 Memento</Text>
       <Flex>
