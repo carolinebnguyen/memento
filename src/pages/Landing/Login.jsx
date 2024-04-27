@@ -14,16 +14,35 @@ import {
   Divider,
   AbsoluteCenter,
   Link,
+  Text,
 } from '@chakra-ui/react';
 import { FaEyeSlash, FaEye } from 'react-icons/fa';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/logoBlack.png';
 import Footer from '../../components/Footer';
 
 export default function Login() {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const navigate = useNavigate();
 
-  const togglePasswordVisibility = () =>
-    setIsPasswordVisible(!isPasswordVisible);
+  const initialValues = {
+    username: '',
+    password: '',
+  };
+
+  const validationSchema = yup.object({
+    username: yup.string().required('Username is required'),
+    password: yup.string().required('Password is required'),
+  });
+
+  const onSubmit = (values, { setSubmitting, resetForm }) => {
+    setTimeout(() => {
+      resetForm(initialValues);
+      setSubmitting(false);
+      navigate('/home');
+    }, 1000);
+  };
 
   return (
     <>
@@ -35,41 +54,61 @@ export default function Login() {
           <Stack padding={9} paddingTop={0} align="center">
             <Heading as="h1">Log In</Heading>
             <Stack w="100%">
-              <form>
-                <FormControl>
-                  <FormLabel fontSize="16px" fontWeight="500" mt={5}>
-                    Email Address
-                  </FormLabel>
-                  <Input type="email" id="email" isRequired />
-                  <FormLabel fontSize="16px" fontWeight="500" mt={5}>
-                    Password
-                  </FormLabel>
-                  <InputGroup>
-                    <Input
-                      type={isPasswordVisible ? 'text' : 'password'}
-                      id="password"
-                      isRequired
-                    />
-                    <InputRightElement>
-                      <Button
-                        onClick={togglePasswordVisibility}
-                        h="1.75rem"
-                        size="xs"
-                        colorScheme="whiteAlpha"
-                      >
-                        {isPasswordVisible ? (
-                          <FaEye size={22} color="#232323" />
-                        ) : (
-                          <FaEyeSlash size={22} color="#232323" />
-                        )}
-                      </Button>
-                    </InputRightElement>
-                  </InputGroup>
-                  <Button colorScheme="blue" type="submit" w="100%" mt={10}>
-                    Log in
-                  </Button>
-                </FormControl>
-              </form>
+              <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={onSubmit}
+                enableReinitialize
+              >
+                {({
+                  values,
+                  isSubmitting,
+                  resetForm,
+                  handleSubmit,
+                  errors,
+                  touched,
+                }) => (
+                  <Form>
+                    <FormControl
+                      isInvalid={errors.username && touched.username}
+                    >
+                      <FormLabel fontSize="16px" mt={5}>
+                        Username
+                      </FormLabel>
+                      <Field
+                        as={Input}
+                        type="text"
+                        name="username"
+                        id="username"
+                        mb={2}
+                      />
+                      <ErrorMessage name="username">
+                        {(msg) => <Text color="red">{msg}</Text>}
+                      </ErrorMessage>
+                    </FormControl>
+                    <FormControl
+                      isInvalid={errors.password && touched.password}
+                    >
+                      <FormLabel fontSize="16px" mt={5}>
+                        Password
+                      </FormLabel>
+                      <Field name="password" component={PasswordField} />
+                      <ErrorMessage name="password">
+                        {(msg) => <Text color="red">{msg}</Text>}
+                      </ErrorMessage>
+                    </FormControl>
+                    <Button
+                      colorScheme="blue"
+                      type="submit"
+                      w="100%"
+                      mt={10}
+                      isLoading={isSubmitting}
+                    >
+                      Log in
+                    </Button>
+                  </Form>
+                )}
+              </Formik>
               <Box position="relative" mt={5}>
                 <Divider />
                 <AbsoluteCenter bg="white" px="4">
@@ -87,5 +126,37 @@ export default function Login() {
       </Flex>
       <Footer />
     </>
+  );
+}
+
+function PasswordField({ field, form, ...props }) {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible((prevIsPasswordVisible) => !prevIsPasswordVisible);
+  };
+
+  return (
+    <InputGroup>
+      <Input
+        {...field}
+        type={isPasswordVisible ? 'text' : 'password'}
+        id="password"
+      />
+      <InputRightElement>
+        <Button
+          onClick={togglePasswordVisibility}
+          h="1.75rem"
+          size="xs"
+          colorScheme="whiteAlpha"
+        >
+          {isPasswordVisible ? (
+            <FaEye size={22} color="black" />
+          ) : (
+            <FaEyeSlash size={22} color="black" />
+          )}
+        </Button>
+      </InputRightElement>
+    </InputGroup>
   );
 }
