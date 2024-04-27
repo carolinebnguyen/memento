@@ -3,7 +3,7 @@ import { Box, Flex } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 
-export default function Layout() {
+export default function DashboardLayout() {
   return (
     <Flex>
       <Sidebar />
