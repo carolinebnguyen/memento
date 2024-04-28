@@ -1,44 +1,57 @@
 import React from 'react';
-import { Flex, Heading, Stack, Text, Image } from '@chakra-ui/react';
-import caroline from '../../assets/carolineAvatar.png';
-import snowie from '../../assets/snowieAvatar.png';
+import {
+  Flex,
+  Heading,
+  Stack,
+  Text,
+  UnorderedList,
+  ListItem,
+} from '@chakra-ui/react';
 
 export default function PrivacyPolicy() {
   return (
     <>
       <Flex justify="center" pt={16} h="auto">
         <Stack align="center" minW={{ base: '100%', lg: '50%', xl: '30%' }}>
-          <Stack padding={9} align="center" maxW={{ base: '100%', lg: '50%' }}>
-            <Heading as="h1" size="2xl">
+          <Stack padding={9} maxW={{ base: '100%', lg: '50%' }}>
+            <Heading as="h1" size="2xl" align="center" mb={5}>
               Privacy Policy
             </Heading>
             <Text>
-              Memento is an engaging social media platform focused on sharing
-              precious moments through photos and text statuses. Users are the
-              authors of their digital life stories as they share their
-              experiences and memories with the world.
+              At Memento, our visitors' privacy is one of our top priorities.
+              This Privacy Policy explains how we collect and use your
+              information.
             </Text>
-            <Heading as="h2" size="xl" mt={5}>
-              Our Mission
+            <Heading as="h2" size="xl" my={5}>
+              Information We Collect
             </Heading>
             <Text>
-              At Memento, our mission is to foster a community built on
-              authenticity and connection by empowering individuals to capture
-              and share treasured moments of their lives.
+              We collect certain personally identifiable information necessary
+              for your usage of the website. This information may include, but
+              is not limited to:
             </Text>
-            <Heading as="h2" size="xl" mt={5}>
-              Our Team
+            <UnorderedList>
+              <ListItem>Your email address</ListItem>
+              <ListItem>Your first and last name</ListItem>
+            </UnorderedList>
+            <Heading as="h2" size="xl" my={5}>
+              How We Use Your Information
             </Heading>
-            <Heading as="h3" size="md" mt={5}>
-              Caroline Nguyen
+            <Text>
+              We use your information to provide you with a personalized
+              experience, ensure your account security, and communicate with
+              you.
+            </Text>
+            <Heading as="h2" size="xl" my={5}>
+              Updating Privacy Policy
             </Heading>
-            <Image src={caroline} boxSize="250px" my={2} />
-            <Text as="i">Developer</Text>
-            <Heading as="h3" size="md" mt={5}>
-              Snowie
-            </Heading>
-            <Image src={snowie} boxSize="250px" my={2} />
-            <Text as="i">CEO, COO, CFO, CTO</Text>
+            <Text>
+              We reserve the right to modify this policy at any time. We will
+              notify you before the updated Privacy Policy goes into effect, and
+              you will have the chance to review any changes before they become
+              effective. If you continue to use Memento after these updates, you
+              will be subject to the revised policy.
+            </Text>
           </Stack>
         </Stack>
       </Flex>
