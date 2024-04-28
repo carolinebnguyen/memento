@@ -24,7 +24,8 @@ import {
 import { FaRegBell } from 'react-icons/fa';
 import { FiPlusCircle } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
-import logo from '../assets/logoBlack.png';
+import logo from '../../assets/logoBlack.png';
+import styles from './Sidebar.module.css';
 
 export default function Sidebar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -34,7 +35,6 @@ export default function Sidebar() {
     <Flex h="100vh">
       {isCollapsed ? (
         <>
-          {' '}
           <Icon
             as={MdMenu}
             boxSize={22}
@@ -83,67 +83,20 @@ function SidebarContent() {
   return (
     <>
       <Flex direction="column" justify="space-between" h="100%">
-        <Stack gap={3} mt={5}>
-          <NavLink
-            to="/home"
-            style={({ isActive }) => ({
-              backgroundColor: isActive ? 'powderblue' : undefined,
-              padding: '5px',
-            })}
-          >
-            <HStack p={2}>
-              <Icon as={MdOutlineHome} boxSize={22} />
-              <Text>Home</Text>
-            </HStack>
-          </NavLink>
-          <NavLink
-            to="/search"
-            style={({ isActive }) => ({
-              backgroundColor: isActive ? 'powderblue' : undefined,
-              padding: '5px',
-            })}
-          >
-            <HStack p={2}>
-              <Icon as={MdOutlineSearch} boxSize={22} />
-              <Text>Search</Text>
-            </HStack>
-          </NavLink>
-          <NavLink
+        <Stack gap={5} mt={5}>
+          <CustomNavLink to="/home" icon={MdOutlineHome} label="Home" />
+          <CustomNavLink to="/search" icon={MdOutlineSearch} label="Search" />
+          <CustomNavLink
             to="/messages"
-            style={({ isActive }) => ({
-              backgroundColor: isActive ? 'powderblue' : undefined,
-              padding: '5px',
-            })}
-          >
-            <HStack p={2}>
-              <Icon as={MdOutlineMail} boxSize={22} />
-              <Text>Direct Messages</Text>
-            </HStack>
-          </NavLink>
-          <NavLink
+            icon={MdOutlineMail}
+            label="Direct Messages"
+          />
+          <CustomNavLink
             to="/notifications"
-            style={({ isActive }) => ({
-              backgroundColor: isActive ? 'powderblue' : undefined,
-              padding: '5px',
-            })}
-          >
-            <HStack p={2}>
-              <Icon as={FaRegBell} boxSize={22} />
-              <Text>Notifications</Text>
-            </HStack>
-          </NavLink>
-          <NavLink
-            to="/create"
-            style={({ isActive }) => ({
-              backgroundColor: isActive ? 'powderblue' : undefined,
-              padding: '5px',
-            })}
-          >
-            <HStack p={2}>
-              <Icon as={FiPlusCircle} boxSize={22} />
-              <Text>Create</Text>
-            </HStack>
-          </NavLink>
+            icon={FaRegBell}
+            label="Notifications"
+          />
+          <CustomNavLink to="/create" icon={FiPlusCircle} label="Create" />
         </Stack>
         <Stack fontSize={12}>
           <Text>© 2024 Memento</Text>
@@ -156,5 +109,21 @@ function SidebarContent() {
         </Stack>
       </Flex>
     </>
+  );
+}
+
+function CustomNavLink({ to, icon, label }) {
+  return (
+    <NavLink
+      to={to}
+      className={({ isActive }) =>
+        isActive ? styles['nav-link-active'] : styles['nav-link']
+      }
+    >
+      <HStack p={2}>
+        <Icon as={icon} boxSize={22} />
+        <Text>{label}</Text>
+      </HStack>
+    </NavLink>
   );
 }
