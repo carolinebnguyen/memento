@@ -39,7 +39,10 @@ export default function Contact() {
         'Thank you! Your message has been sent. We will get back to you within 5 business days.',
       status: 'success',
       duration: 5000,
-      position: 'top',
+      position: 'bottom',
+      containerStyle: {
+        marginBottom: '30px',
+      },
     });
     setSubmitting(false);
   };
