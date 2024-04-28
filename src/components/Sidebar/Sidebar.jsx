@@ -37,10 +37,13 @@ export default function Sidebar() {
         <>
           <Icon
             as={MdMenu}
-            boxSize={22}
-            m={4}
+            boxSize={30}
+            pl={2}
             onClick={onOpen}
             cursor="pointer"
+            borderBottomWidth="1px"
+            borderColor="blackAlpha.300"
+            h={14}
           >
             Open Modal
           </Icon>
