@@ -4,7 +4,7 @@ import Login from './pages/Landing/Login';
 import ErrorPage from './components/ErrorPage';
 import Signup from './pages/Landing/Signup';
 import About from './pages/Footer/About';
-import TermsConditions from './pages/Footer/TermsConditions';
+import Terms from './pages/Footer/Terms';
 import PrivacyPolicy from './pages/Footer/PrivacyPolicy';
 import Contact from './pages/Footer/Contact';
 import Home from './pages/Dashboard/Home';
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { path: 'about', element: <About /> },
-      { path: 'terms', element: <TermsConditions /> },
+      { path: 'terms', element: <Terms /> },
       { path: 'privacy', element: <PrivacyPolicy /> },
       { path: 'contact', element: <Contact /> },
     ],

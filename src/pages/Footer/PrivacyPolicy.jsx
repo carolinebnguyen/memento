@@ -1,147 +1,44 @@
 import React from 'react';
-import {
-  Flex,
-  Button,
-  FormControl,
-  FormLabel,
-  Heading,
-  Input,
-  Stack,
-  Textarea,
-  useToast,
-  Text,
-} from '@chakra-ui/react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as yup from 'yup';
+import { Flex, Heading, Stack, Text, Image } from '@chakra-ui/react';
+import caroline from '../../assets/carolineAvatar.png';
+import snowie from '../../assets/snowieAvatar.png';
 
 export default function PrivacyPolicy() {
-  const toast = useToast();
-
-  const initialValues = {
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  };
-
-  const validationSchema = yup.object({
-    name: yup.string().required('Name is required'),
-    email: yup.string().email().required('Email is required'),
-    subject: yup.string().required('Subject is required'),
-    message: yup.string().required('Message is required'),
-  });
-
-  const onSubmit = (values, { setSubmitting, resetForm }) => {
-    resetForm(initialValues);
-    toast({
-      title: 'Message Sent',
-      description:
-        'Thank you! Your message has been sent. We will get back to you within 5 business days.',
-      status: 'success',
-      duration: 5000,
-      position: 'top',
-    });
-    setSubmitting(false);
-  };
-
   return (
     <>
-      <Flex justify="center" align="center" h="100vh">
+      <Flex justify="center" pt={16} h="auto">
         <Stack align="center" minW={{ base: '100%', lg: '50%', xl: '30%' }}>
-          <Stack padding={9} paddingTop={0} align="center">
-            <Heading as="h1">Contact Us</Heading>
-            <Stack w="100%">
-              <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
-                onSubmit={onSubmit}
-                enableReinitialize
-              >
-                {({
-                  values,
-                  isSubmitting,
-                  resetForm,
-                  handleSubmit,
-                  errors,
-                  touched,
-                }) => (
-                  <Form>
-                    <FormControl isRequired>
-                      <FormLabel fontSize="16px" mt={5}>
-                        Name
-                      </FormLabel>
-                      <Field
-                        as={Input}
-                        type="text"
-                        name="name"
-                        id="name"
-                        isInvalid={errors.name && touched.name}
-                        mb={2}
-                      />
-                      <ErrorMessage name="name">
-                        {(msg) => <Text color="red">{msg}</Text>}
-                      </ErrorMessage>
-                    </FormControl>
-                    <FormControl isRequired>
-                      <FormLabel fontSize="16px" mt={5}>
-                        Email Address
-                      </FormLabel>
-                      <Field
-                        as={Input}
-                        type="email"
-                        name="email"
-                        id="email"
-                        isInvalid={errors.email && touched.email}
-                        mb={2}
-                      />
-                      <ErrorMessage name="email">
-                        {(msg) => <Text color="red">{msg}</Text>}
-                      </ErrorMessage>
-                    </FormControl>
-                    <FormControl isRequired>
-                      <FormLabel fontSize="16px" mt={5}>
-                        Subject
-                      </FormLabel>
-                      <Field
-                        as={Input}
-                        type="text"
-                        name="subject"
-                        id="subject"
-                        isInvalid={errors.subject && touched.subject}
-                        mb={2}
-                      />
-                      <ErrorMessage name="subject">
-                        {(msg) => <Text color="red">{msg}</Text>}
-                      </ErrorMessage>
-                    </FormControl>
-                    <FormControl isRequired>
-                      <FormLabel fontSize="16px" mt={5}>
-                        Message
-                      </FormLabel>
-                      <Field
-                        as={Textarea}
-                        name="message"
-                        id="message"
-                        isInvalid={errors.message && touched.message}
-                        mb={2}
-                      />
-                      <ErrorMessage name="message">
-                        {(msg) => <Text color="red">{msg}</Text>}
-                      </ErrorMessage>
-                    </FormControl>
-                    <Button
-                      colorScheme="blue"
-                      type="submit"
-                      w="100%"
-                      mt={5}
-                      isLoading={isSubmitting}
-                    >
-                      Submit
-                    </Button>
-                  </Form>
-                )}
-              </Formik>
-            </Stack>
+          <Stack padding={9} align="center" maxW={{ base: '100%', lg: '50%' }}>
+            <Heading as="h1" size="2xl">
+              Privacy Policy
+            </Heading>
+            <Text>
+              Memento is an engaging social media platform focused on sharing
+              precious moments through photos and text statuses. Users are the
+              authors of their digital life stories as they share their
+              experiences and memories with the world.
+            </Text>
+            <Heading as="h2" size="xl" mt={5}>
+              Our Mission
+            </Heading>
+            <Text>
+              At Memento, our mission is to foster a community built on
+              authenticity and connection by empowering individuals to capture
+              and share treasured moments of their lives.
+            </Text>
+            <Heading as="h2" size="xl" mt={5}>
+              Our Team
+            </Heading>
+            <Heading as="h3" size="md" mt={5}>
+              Caroline Nguyen
+            </Heading>
+            <Image src={caroline} boxSize="250px" my={2} />
+            <Text as="i">Developer</Text>
+            <Heading as="h3" size="md" mt={5}>
+              Snowie
+            </Heading>
+            <Image src={snowie} boxSize="250px" my={2} />
+            <Text as="i">CEO, COO, CFO, CTO</Text>
           </Stack>
         </Stack>
       </Flex>
