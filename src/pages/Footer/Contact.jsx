@@ -41,7 +41,7 @@ export default function Contact() {
       duration: 5000,
       position: 'bottom',
       containerStyle: {
-        marginBottom: '30px',
+        zIndex: "9999"
       },
     });
     setSubmitting(false);
