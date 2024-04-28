@@ -46,9 +46,9 @@ export default function Contact() {
 
   return (
     <>
-      <Flex justify="center" align="center" h="100vh">
+      <Flex justify="center" align="center" h="95vh">
         <Stack align="center" minW={{ base: '100%', lg: '50%', xl: '30%' }}>
-          <Stack padding={9} paddingTop={0} align="center">
+          <Stack padding={9} paddingTop={{ base: 20, md: 0 }} align="center">
             <Heading as="h1">Contact Us</Heading>
             <Stack w="100%">
               <Formik
