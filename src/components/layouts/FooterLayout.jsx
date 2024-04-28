@@ -5,14 +5,19 @@ import Navbar from '../Navbar';
 import Footer from '../Footer';
 
 export default function FooterLayout() {
-  const hideFooter = useBreakpointValue({ base: true, sm: true, md: false });
+  const showFooter = useBreakpointValue({ base: false, md: true });
   return (
-    <Flex direction="column" justify="center" align="center">
+    <Flex direction="column" justify="center" align="center" h="100%">
       <Navbar />
       <Box>
         <Outlet />
       </Box>
-      {!hideFooter && <Footer />}
+      {showFooter ? (
+        <>
+          <Box h="35px" />
+          <Footer />
+        </>
+      ) : null}
     </Flex>
   );
 }

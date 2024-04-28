@@ -1,11 +1,10 @@
 import React from 'react';
-import { Flex, Text, Spacer } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
   return (
     <>
-      <Spacer height="50px" />
       <Flex
         bg="blue.400"
         color="white"
