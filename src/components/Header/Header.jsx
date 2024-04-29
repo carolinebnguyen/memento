@@ -1,22 +1,9 @@
 import React from 'react';
-import {
-  Flex,
-  Text,
-  Avatar,
-  Spacer,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
-  Image,
-  Icon,
-  useBreakpointValue,
-} from '@chakra-ui/react';
-import { MdLogout, MdOutlineSettings } from 'react-icons/md';
-import caroline from '../../assets/carolineAvatar.png';
+import { Flex, Image, useBreakpointValue } from '@chakra-ui/react';
+import { NavLink } from 'react-router-dom';
+
 import { headerHeight, sidebarWidth } from '../../utils/constants';
-import styles from './Header.module.css';
+import logo from '../../assets/logoBlack.png';
 
 export default function Header() {
   const isWide = useBreakpointValue({ base: false, md: true });
@@ -25,7 +12,7 @@ export default function Header() {
     <Flex
       as="header"
       align="center"
-      justify="space-between"
+      justify="center"
       w={isWide ? `calc(100vw - ${sidebarWidth})` : `full`}
       px={5}
       borderBottomWidth="1px"
@@ -35,35 +22,9 @@ export default function Header() {
       position="fixed"
       bgColor="white"
     >
-      <Spacer />
-      <Menu>
-        <MenuButton as={Avatar} src={caroline} size="sm" cursor="pointer" />
-        <MenuList>
-          <MenuItem as="a" href="/profile" className={`${styles['menu-link']}`}>
-            <Image
-              boxSize="3rem"
-              borderRadius="full"
-              src={caroline}
-              alt="User profile picture"
-              mr={2}
-            />
-            <Text>My Profile</Text>
-          </MenuItem>
-          <MenuDivider />
-          <MenuItem
-            as="a"
-            href="/settings"
-            className={`${styles['menu-link']}`}
-          >
-            <Icon as={MdOutlineSettings} boxSize={5} mr={3} />
-            Settings
-          </MenuItem>
-          <MenuItem as="a" href="/" className={`${styles['menu-link']}`}>
-            <Icon as={MdLogout} boxSize={5} mr={3} />
-            Log Out
-          </MenuItem>
-        </MenuList>
-      </Menu>
+      <NavLink to="/">
+        <Image src={logo} boxSize={24} objectFit="contain" />
+      </NavLink>
     </Flex>
   );
 }

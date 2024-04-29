@@ -1,12 +1,5 @@
 import React from 'react';
 import {
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  useDisclosure,
   useBreakpointValue,
   Flex,
   Icon,
@@ -36,15 +29,12 @@ import { NavLink } from 'react-router-dom';
 import logo from '../../assets/logoBlack.png';
 import logoLetter from '../../assets/mementoLetter.png';
 import StyledNavLink from '../StyledNavLink/StyledNavLink';
+import BottomNav from '../BottomNav/BottomNav';
 import styles from './Sidebar.module.css';
-import {
-  headerHeight,
-  sidebarWidth,
-  compactSidebarWidth,
-} from '../../utils/constants';
+import { sidebarWidth, compactSidebarWidth } from '../../utils/constants';
+import Header from '../Header/Header';
 
 export default function Sidebar() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const isCollapsed = useBreakpointValue({ base: true, sm: false });
   const isCompact = useBreakpointValue({ sm: true, md: false });
 
@@ -52,30 +42,8 @@ export default function Sidebar() {
     <Flex minH="100vh" h="100%" position="fixed" zIndex="2">
       {isCollapsed ? (
         <>
-          <Icon
-            as={MdMenu}
-            boxSize={30}
-            pl={2}
-            onClick={onOpen}
-            cursor="pointer"
-            h={headerHeight}
-          >
-            Open Modal
-          </Icon>
-          <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
-            <DrawerOverlay />
-            <DrawerContent>
-              <DrawerCloseButton />
-              <DrawerHeader borderBottomWidth="1px">
-                <NavLink to="/">
-                  <Image src={logo} alt="Memento logo" />
-                </NavLink>
-              </DrawerHeader>
-              <DrawerBody>
-                <SidebarContent />
-              </DrawerBody>
-            </DrawerContent>
-          </Drawer>
+          <Header />
+          <BottomNav />
         </>
       ) : isCompact ? (
         <CompactSidebar />
