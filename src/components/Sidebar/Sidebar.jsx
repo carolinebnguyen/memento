@@ -2,7 +2,6 @@ import React from 'react';
 import {
   useBreakpointValue,
   Flex,
-  Icon,
   Text,
   Image,
   HStack,
@@ -27,11 +26,13 @@ import {
   MdSettings,
 } from 'react-icons/md';
 import { FaRegBell, FaBell, FaRegUser, FaUser, FaSearch } from 'react-icons/fa';
-import { BsPlusCircle, BsFillPlusCircleFill } from 'react-icons/bs';
+import { FiPlusCircle } from 'react-icons/fi';
+import { AiFillPlusCircle } from 'react-icons/ai';
 import { NavLink } from 'react-router-dom';
 import logo from '../../assets/logoBlack.png';
 import logoLetter from '../../assets/mementoLetter.png';
 import StyledNavLink from '../StyledNavLink/StyledNavLink';
+import CompactNavLink from '../CompactNavLink/CompactNavLink';
 import BottomNav from '../BottomNav/BottomNav';
 import styles from './Sidebar.module.css';
 import { sidebarWidth, compactSidebarWidth } from '../../utils/constants';
@@ -126,8 +127,8 @@ function SidebarContent() {
           />
           <StyledNavLink
             to="/create"
-            icon={BsPlusCircle}
-            filledIcon={BsFillPlusCircleFill}
+            icon={FiPlusCircle}
+            filledIcon={AiFillPlusCircle}
             label="Create"
           />
           <StyledNavLink
@@ -182,8 +183,8 @@ function CompactSidebarContent() {
           />
           <CompactNavLink
             to="/create"
-            icon={BsPlusCircle}
-            filledIcon={BsFillPlusCircleFill}
+            icon={FiPlusCircle}
+            filledIcon={AiFillPlusCircle}
           />
           <CompactNavLink to="/profile" icon={FaRegUser} filledIcon={FaUser} />
           <Divider />
@@ -243,16 +244,6 @@ function FooterMenu() {
         </MenuGroup>
       </MenuList>
     </Menu>
-  );
-}
-
-function CompactNavLink({ to, icon, filledIcon }) {
-  return (
-    <NavLink to={to} className={styles['compact-nav-link']}>
-      {({ isActive }) => (
-        <Icon as={isActive ? filledIcon : icon} boxSize={22} />
-      )}
-    </NavLink>
   );
 }
 

@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Flex,
   Text,
-  Spacer,
   Menu,
   MenuButton,
   MenuList,
@@ -13,14 +12,28 @@ import {
   useBreakpointValue,
   IconButton,
 } from '@chakra-ui/react';
-import { MdLogout, MdOutlineSettings } from 'react-icons/md';
-import { FaRegUser } from 'react-icons/fa';
+import {
+  MdOutlineHome,
+  MdHome,
+  MdOutlineSearch,
+  MdOutlineMail,
+  MdMail,
+  MdLogout,
+  MdOutlineSettings,
+} from 'react-icons/md';
+import { FaRegUser, FaUser, FaSearch } from 'react-icons/fa';
+import { FiPlusCircle } from 'react-icons/fi';
+import { AiFillPlusCircle } from 'react-icons/ai';
+import { useLocation } from 'react-router-dom';
 import caroline from '../../assets/carolineAvatar.png';
+import CompactNavLink from '../CompactNavLink/CompactNavLink';
 import { headerHeight, sidebarWidth } from '../../utils/constants';
 import styles from './BottomNav.module.css';
 
 export default function BottomNav() {
   const isWide = useBreakpointValue({ base: false, md: true });
+  const location = useLocation();
+  const isProfilePage = location.pathname === '/profile';
 
   return (
     <Flex
@@ -37,11 +50,22 @@ export default function BottomNav() {
       bottom="0"
       bgColor="white"
     >
-      <Spacer />
+      <CompactNavLink to="/home" icon={MdOutlineHome} filledIcon={MdHome} />
+      <CompactNavLink
+        to="/search"
+        icon={MdOutlineSearch}
+        filledIcon={FaSearch}
+      />
+      <CompactNavLink
+        to="/create"
+        icon={FiPlusCircle}
+        filledIcon={AiFillPlusCircle}
+      />
+      <CompactNavLink to="/messages" icon={MdOutlineMail} filledIcon={MdMail} />
       <Menu>
         <MenuButton
           as={IconButton}
-          icon={<FaRegUser />}
+          icon={isProfilePage ? <FaUser /> : <FaRegUser />}
           cursor="pointer"
           variant="ghost"
         />

@@ -2,10 +2,6 @@
   text-decoration: underline;
 }
 
-.compact-nav-link {
-  padding: 5px 2px 0px;
-}
-
 .compact-footer-link:hover,
 .compact-footer-link:focus {
   background-color: #cbebef;
