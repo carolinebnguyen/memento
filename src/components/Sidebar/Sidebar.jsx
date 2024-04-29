@@ -67,7 +67,7 @@ function FullSidebar() {
         w={sidebarWidth}
         zIndex="9999"
       >
-        <NavLink to="/">
+        <NavLink to="/home">
           <Image src={logo} alt="Memento logo" p={3} />
         </NavLink>
         <SidebarContent />
@@ -85,7 +85,7 @@ function CompactSidebar() {
         w={compactSidebarWidth}
         zIndex="9999"
       >
-        <NavLink to="/">
+        <NavLink to="/home">
           <Image src={logoLetter} alt="Letter M" mb={5} p={3} />
         </NavLink>
         <Divider />
@@ -174,13 +174,11 @@ function CompactSidebarContent() {
             to="/messages"
             icon={MdOutlineMail}
             filledIcon={MdMail}
-            label="Direct Messages"
           />
           <CompactNavLink
             to="/notifications"
             icon={FaRegBell}
             filledIcon={FaBell}
-            label="Notifications"
           />
           <CompactNavLink
             to="/create"
@@ -217,28 +215,28 @@ function FooterMenu() {
           <MenuItem
             as="a"
             href="/about"
-            className={`${styles['compact-footer-link']}`}
+            className={styles['compact-footer-link']}
           >
             About
           </MenuItem>
           <MenuItem
             as="a"
             href="/terms"
-            className={`${styles['compact-footer-link']}`}
+            className={styles['compact-footer-link']}
           >
             Terms
           </MenuItem>
           <MenuItem
             as="a"
             href="/privacy"
-            className={`${styles['compact-footer-link']}`}
+            className={styles['compact-footer-link']}
           >
             Privacy
           </MenuItem>
           <MenuItem
             as="a"
             href="/contact"
-            className={`${styles['compact-footer-link']}`}
+            className={styles['compact-footer-link']}
           >
             Contact
           </MenuItem>
@@ -250,14 +248,7 @@ function FooterMenu() {
 
 function CompactNavLink({ to, icon, filledIcon }) {
   return (
-    <NavLink
-      to={to}
-      className={({ isActive }) =>
-        isActive
-          ? styles['compact-nav-link-active']
-          : styles['compact-nav-link']
-      }
-    >
+    <NavLink to={to} className={styles['compact-nav-link']}>
       {({ isActive }) => (
         <Icon as={isActive ? filledIcon : icon} boxSize={22} />
       )}
@@ -267,7 +258,7 @@ function CompactNavLink({ to, icon, filledIcon }) {
 
 function FooterNavLink({ to, label }) {
   return (
-    <NavLink to={to} className={`${styles['footer-link']}`}>
+    <NavLink to={to} className={styles['footer-link']}>
       {label}
     </NavLink>
   );

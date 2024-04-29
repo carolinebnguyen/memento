@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Flex,
   Text,
-  Avatar,
   Spacer,
   Menu,
   MenuButton,
@@ -12,8 +11,10 @@ import {
   Image,
   Icon,
   useBreakpointValue,
+  IconButton,
 } from '@chakra-ui/react';
 import { MdLogout, MdOutlineSettings } from 'react-icons/md';
+import { FaRegUser } from 'react-icons/fa';
 import caroline from '../../assets/carolineAvatar.png';
 import { headerHeight, sidebarWidth } from '../../utils/constants';
 import styles from './BottomNav.module.css';
@@ -38,9 +39,14 @@ export default function BottomNav() {
     >
       <Spacer />
       <Menu>
-        <MenuButton as={Avatar} src={caroline} size="sm" cursor="pointer" />
+        <MenuButton
+          as={IconButton}
+          icon={<FaRegUser />}
+          cursor="pointer"
+          variant="ghost"
+        />
         <MenuList>
-          <MenuItem as="a" href="/profile" className={`${styles['menu-link']}`}>
+          <MenuItem as="a" href="/profile" className={styles['menu-link']}>
             <Image
               boxSize="3rem"
               borderRadius="full"
@@ -51,15 +57,11 @@ export default function BottomNav() {
             <Text>My Profile</Text>
           </MenuItem>
           <MenuDivider />
-          <MenuItem
-            as="a"
-            href="/settings"
-            className={`${styles['menu-link']}`}
-          >
+          <MenuItem as="a" href="/settings" className={styles['menu-link']}>
             <Icon as={MdOutlineSettings} boxSize={5} mr={3} />
             Settings
           </MenuItem>
-          <MenuItem as="a" href="/" className={`${styles['menu-link']}`}>
+          <MenuItem as="a" href="/" className={styles['menu-link']}>
             <Icon as={MdLogout} boxSize={5} mr={3} />
             Log Out
           </MenuItem>
