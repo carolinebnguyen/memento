@@ -1,4 +1,5 @@
 const headerHeight = '55px';
-const sidebarWidth = '300px';
+const sidebarWidth = '250px';
+const compactSidebarWidth = '50px';
 
-export { headerHeight, sidebarWidth };
+export { headerHeight, sidebarWidth, compactSidebarWidth };

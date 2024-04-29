@@ -1,3 +1,13 @@
 .footer-link:hover {
   text-decoration: underline;
 }
+
+.compact-nav-link {
+  padding: 5px 2px 0px;
+}
+
+.compact-nav-link-active {
+  background-color: powderblue;
+  border-radius: 5px;
+  padding: 5px 2px 0px;
+}
