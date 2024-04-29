@@ -107,7 +107,7 @@ function SidebarContent() {
           />
           <StyledNavLink to="/create" icon={FiPlusCircle} label="Create" />
         </Stack>
-        <Stack fontSize={12} mb={5}>
+        <Stack fontSize={12} p={3}>
           <Text>© 2024 Memento</Text>
           <HStack justify="space-between">
             <FooterNavLink to="/about" label="About" />
