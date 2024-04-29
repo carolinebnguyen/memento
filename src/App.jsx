@@ -13,6 +13,8 @@ import Notifications from './pages/Dashboard/Notifications';
 import LandingLayout from './components/layouts/LandingLayout';
 import FooterLayout from './components/layouts/FooterLayout';
 import DashboardLayout from './components/layouts/DashboardLayout';
+import Profile from './pages/Dashboard/Profile';
+import Settings from './pages/Dashboard/Settings';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +45,16 @@ const router = createBrowserRouter([
       { path: 'home', element: <Home /> },
       { path: 'notifications', element: <Notifications /> },
     ],
+  },
+  {
+    path: '/profile',
+    element: <Profile />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/settings',
+    element: <Settings />,
+    errorElement: <ErrorPage />,
   },
 ]);
 
