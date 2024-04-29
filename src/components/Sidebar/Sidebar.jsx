@@ -33,7 +33,7 @@ export default function Sidebar() {
   const isCollapsed = useBreakpointValue({ base: true, md: false });
 
   return (
-    <Flex minH="100vh" h="100%" position="fixed">
+    <Flex minH="100vh" h="100%" position="fixed" zIndex="2">
       {isCollapsed ? (
         <>
           <Icon
@@ -42,8 +42,6 @@ export default function Sidebar() {
             pl={2}
             onClick={onOpen}
             cursor="pointer"
-            borderBottomWidth="1px"
-            borderColor="blackAlpha.300"
             h={headerHeight}
           >
             Open Modal
@@ -73,7 +71,13 @@ export default function Sidebar() {
 function FullSidebar() {
   return (
     <>
-      <Flex direction="column" boxShadow="md" p={3} w={sidebarWidth}>
+      <Flex
+        direction="column"
+        boxShadow="md"
+        p={3}
+        w={sidebarWidth}
+        zIndex="9999"
+      >
         <NavLink to="/">
           <Image src={logo} alt="Memento logo" p={3} />
         </NavLink>
@@ -102,7 +106,7 @@ function SidebarContent() {
           />
           <CustomNavLink to="/create" icon={FiPlusCircle} label="Create" />
         </Stack>
-        <Stack fontSize={12}>
+        <Stack fontSize={12} mb={5}>
           <Text>© 2024 Memento</Text>
           <HStack justify="space-between">
             <NavLink to="/about">About</NavLink>

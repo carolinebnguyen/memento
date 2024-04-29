@@ -30,7 +30,9 @@ export default function Header() {
       borderBottomWidth="1px"
       borderColor="blackAlpha.300"
       h={headerHeight}
-      ml={sidebarWidth}
+      ml={isWide ? sidebarWidth : 0}
+      position="fixed"
+      bgColor="white"
     >
       <Spacer />
       <Menu>
