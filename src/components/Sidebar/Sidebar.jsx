@@ -25,6 +25,7 @@ import { FaRegBell } from 'react-icons/fa';
 import { FiPlusCircle } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
 import logo from '../../assets/logoBlack.png';
+import StyledNavLink from '../StyledNavLink/StyledNavLink';
 import styles from './Sidebar.module.css';
 import { headerHeight, sidebarWidth } from '../../utils/constants';
 
@@ -92,27 +93,27 @@ function SidebarContent() {
     <>
       <Flex direction="column" justify="space-between" h="100%">
         <Stack gap={5} mt={5}>
-          <CustomNavLink to="/home" icon={MdOutlineHome} label="Home" />
-          <CustomNavLink to="/search" icon={MdOutlineSearch} label="Search" />
-          <CustomNavLink
+          <StyledNavLink to="/home" icon={MdOutlineHome} label="Home" />
+          <StyledNavLink to="/search" icon={MdOutlineSearch} label="Search" />
+          <StyledNavLink
             to="/messages"
             icon={MdOutlineMail}
             label="Direct Messages"
           />
-          <CustomNavLink
+          <StyledNavLink
             to="/notifications"
             icon={FaRegBell}
             label="Notifications"
           />
-          <CustomNavLink to="/create" icon={FiPlusCircle} label="Create" />
+          <StyledNavLink to="/create" icon={FiPlusCircle} label="Create" />
         </Stack>
         <Stack fontSize={12} mb={5}>
           <Text>© 2024 Memento</Text>
           <HStack justify="space-between">
-            <NavLink to="/about">About</NavLink>
-            <NavLink to="/terms">Terms</NavLink>
-            <NavLink to="/privacy">Privacy</NavLink>
-            <NavLink to="/contact">Contact</NavLink>
+            <FooterNavLink to="/about" label="About" />
+            <FooterNavLink to="/terms" label="Terms" />
+            <FooterNavLink to="/privacy" label="Privacy" />
+            <FooterNavLink to="/contact" label="Contact" />
           </HStack>
         </Stack>
       </Flex>
@@ -120,18 +121,10 @@ function SidebarContent() {
   );
 }
 
-function CustomNavLink({ to, icon, label }) {
+function FooterNavLink({ to, label }) {
   return (
-    <NavLink
-      to={to}
-      className={({ isActive }) =>
-        isActive ? styles['nav-link-active'] : styles['nav-link']
-      }
-    >
-      <HStack p={2}>
-        <Icon as={icon} boxSize={22} />
-        <Text>{label}</Text>
-      </HStack>
+    <NavLink to={to} className={`${styles['footer-link']}`}>
+      {label}
     </NavLink>
   );
 }
