@@ -1,9 +1,9 @@
 import React from 'react';
-import { Icon } from '@chakra-ui/react';
+import { Icon, IconButton } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 import styles from './CompactNavLink.module.css';
 
-export default function CompactNavLink({ to, icon, filledIcon }) {
+function CompactNavLink({ to, icon, filledIcon }) {
   return (
     <NavLink to={to} className={styles['compact-nav-link']}>
       {({ isActive }) => (
@@ -12,3 +12,18 @@ export default function CompactNavLink({ to, icon, filledIcon }) {
     </NavLink>
   );
 }
+
+function CompactIconButton({ to, icon, filledIcon }) {
+  return (
+    <NavLink to={to} className={styles['compact-nav-link']}>
+      {({ isActive }) => (
+        <IconButton
+          icon={React.createElement(isActive ? filledIcon : icon)}
+          variant="ghost"
+          size="md"
+        />
+      )}
+    </NavLink>
+  );
+}
+export { CompactNavLink, CompactIconButton };

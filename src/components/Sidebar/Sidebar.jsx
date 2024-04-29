@@ -32,7 +32,7 @@ import { NavLink } from 'react-router-dom';
 import logo from '../../assets/logoBlack.png';
 import logoLetter from '../../assets/mementoLetter.png';
 import StyledNavLink from '../StyledNavLink/StyledNavLink';
-import CompactNavLink from '../CompactNavLink/CompactNavLink';
+import { CompactNavLink } from '../CompactNavLink/CompactNavLink';
 import BottomNav from '../BottomNav/BottomNav';
 import styles from './Sidebar.module.css';
 import { sidebarWidth, compactSidebarWidth } from '../../utils/constants';

@@ -26,7 +26,7 @@ import { FiPlusCircle } from 'react-icons/fi';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { useLocation } from 'react-router-dom';
 import caroline from '../../assets/carolineAvatar.png';
-import CompactNavLink from '../CompactNavLink/CompactNavLink';
+import { CompactIconButton } from '../CompactNavLink/CompactNavLink';
 import { headerHeight, sidebarWidth } from '../../utils/constants';
 import styles from './BottomNav.module.css';
 
@@ -50,18 +50,22 @@ export default function BottomNav() {
       bottom="0"
       bgColor="white"
     >
-      <CompactNavLink to="/home" icon={MdOutlineHome} filledIcon={MdHome} />
-      <CompactNavLink
+      <CompactIconButton to="/home" icon={MdOutlineHome} filledIcon={MdHome} />
+      <CompactIconButton
         to="/search"
         icon={MdOutlineSearch}
         filledIcon={FaSearch}
       />
-      <CompactNavLink
+      <CompactIconButton
         to="/create"
         icon={FiPlusCircle}
         filledIcon={AiFillPlusCircle}
       />
-      <CompactNavLink to="/messages" icon={MdOutlineMail} filledIcon={MdMail} />
+      <CompactIconButton
+        to="/messages"
+        icon={MdOutlineMail}
+        filledIcon={MdMail}
+      />
       <Menu>
         <MenuButton
           as={IconButton}
@@ -77,6 +81,7 @@ export default function BottomNav() {
               src={caroline}
               alt="User profile picture"
               mr={2}
+              size="lg"
             />
             <Text>My Profile</Text>
           </MenuItem>
