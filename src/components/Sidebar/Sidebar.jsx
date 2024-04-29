@@ -17,14 +17,17 @@ import {
 } from '@chakra-ui/react';
 import {
   MdOutlineHome,
+  MdHome,
   MdOutlineSearch,
   MdMenu,
   MdOutlineMail,
+  MdMail,
   MdLogout,
   MdOutlineSettings,
+  MdSettings,
 } from 'react-icons/md';
-import { FaRegBell } from 'react-icons/fa';
-import { FiPlusCircle, FiUser } from 'react-icons/fi';
+import { FaRegBell, FaBell, FaRegUser, FaUser, FaSearch } from 'react-icons/fa';
+import { BsPlusCircle, BsFillPlusCircleFill } from 'react-icons/bs';
 import { NavLink } from 'react-router-dom';
 import logo from '../../assets/logoBlack.png';
 import logoLetter from '../../assets/mementoLetter.png';
@@ -97,24 +100,47 @@ function SidebarContent() {
     <>
       <Flex direction="column" justify="space-between" h="100%">
         <Stack gap={5} mt={5}>
-          <StyledNavLink to="/home" icon={MdOutlineHome} label="Home" />
-          <StyledNavLink to="/search" icon={MdOutlineSearch} label="Search" />
+          <StyledNavLink
+            to="/home"
+            icon={MdOutlineHome}
+            filledIcon={MdHome}
+            label="Home"
+          />
+          <StyledNavLink
+            to="/search"
+            icon={MdOutlineSearch}
+            filledIcon={FaSearch}
+            label="Search"
+          />
           <StyledNavLink
             to="/messages"
             icon={MdOutlineMail}
+            filledIcon={MdMail}
             label="Direct Messages"
           />
           <StyledNavLink
             to="/notifications"
             icon={FaRegBell}
+            filledIcon={FaBell}
             label="Notifications"
           />
-          <StyledNavLink to="/create" icon={FiPlusCircle} label="Create" />
-          <StyledNavLink to="/profile" icon={FiUser} label="Profile" />
+          <StyledNavLink
+            to="/create"
+            icon={BsPlusCircle}
+            filledIcon={BsFillPlusCircleFill}
+            label="Create"
+          />
+          <StyledNavLink
+            to="/profile"
+            icon={FaRegUser}
+            filledIcon={FaUser}
+            label="Profile"
+          />
           <Divider />
           <StyledNavLink
             to="/settings"
             icon={MdOutlineSettings}
+            filledIcon={MdSettings}
             label="Settings"
           />
           <StyledNavLink to="/" icon={MdLogout} label="Log Out" />
@@ -138,22 +164,36 @@ function CompactSidebarContent() {
     <>
       <Flex direction="column" justify="space-between" h="100%">
         <Stack gap={5} mt={5} p={3}>
-          <CompactNavLink to="/home" icon={MdOutlineHome} />
-          <CompactNavLink to="/search" icon={MdOutlineSearch} />
+          <CompactNavLink to="/home" icon={MdOutlineHome} filledIcon={MdHome} />
+          <CompactNavLink
+            to="/search"
+            icon={MdOutlineSearch}
+            filledIcon={FaSearch}
+          />
           <CompactNavLink
             to="/messages"
             icon={MdOutlineMail}
+            filledIcon={MdMail}
             label="Direct Messages"
           />
           <CompactNavLink
             to="/notifications"
             icon={FaRegBell}
+            filledIcon={FaBell}
             label="Notifications"
           />
-          <CompactNavLink to="/create" icon={FiPlusCircle} />
-          <CompactNavLink to="/profile" icon={FiUser} />
+          <CompactNavLink
+            to="/create"
+            icon={BsPlusCircle}
+            filledIcon={BsFillPlusCircleFill}
+          />
+          <CompactNavLink to="/profile" icon={FaRegUser} filledIcon={FaUser} />
           <Divider />
-          <CompactNavLink to="/settings" icon={MdOutlineSettings} />
+          <CompactNavLink
+            to="/settings"
+            icon={MdOutlineSettings}
+            filledIcon={MdSettings}
+          />
           <CompactNavLink to="/" icon={MdLogout} />
         </Stack>
         <FooterMenu />
@@ -208,7 +248,7 @@ function FooterMenu() {
   );
 }
 
-function CompactNavLink({ to, icon }) {
+function CompactNavLink({ to, icon, filledIcon }) {
   return (
     <NavLink
       to={to}
@@ -218,7 +258,9 @@ function CompactNavLink({ to, icon }) {
           : styles['compact-nav-link']
       }
     >
-      <Icon as={icon} boxSize={22} />
+      {({ isActive }) => (
+        <Icon as={isActive ? filledIcon : icon} boxSize={22} />
+      )}
     </NavLink>
   );
 }

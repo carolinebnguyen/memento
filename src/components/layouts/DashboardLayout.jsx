@@ -12,7 +12,7 @@ export default function DashboardLayout() {
         <Box
           px={16}
           py={8}
-          mx={{ base: 0, sm: 5, md: sidebarWidth }}
+          ml={{ base: 0, sm: 5, md: sidebarWidth }}
           my={{ base: headerHeight, sm: 0 }}
         >
           <Outlet />
