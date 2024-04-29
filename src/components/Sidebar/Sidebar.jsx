@@ -14,15 +14,18 @@ import {
   Image,
   HStack,
   Stack,
+  Divider,
 } from '@chakra-ui/react';
 import {
   MdOutlineHome,
   MdOutlineSearch,
   MdMenu,
   MdOutlineMail,
+  MdLogout,
+  MdOutlineSettings,
 } from 'react-icons/md';
 import { FaRegBell } from 'react-icons/fa';
-import { FiPlusCircle } from 'react-icons/fi';
+import { FiPlusCircle, FiUser } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
 import logo from '../../assets/logoBlack.png';
 import StyledNavLink from '../StyledNavLink/StyledNavLink';
@@ -106,6 +109,14 @@ function SidebarContent() {
             label="Notifications"
           />
           <StyledNavLink to="/create" icon={FiPlusCircle} label="Create" />
+          <StyledNavLink to="/profile" icon={FiUser} label="Profile" />
+          <Divider />
+          <StyledNavLink
+            to="/settings"
+            icon={MdOutlineSettings}
+            label="Settings"
+          />
+          <StyledNavLink to="/" icon={MdLogout} label="Log Out" />
         </Stack>
         <Stack fontSize={12} p={3}>
           <Text>© 2024 Memento</Text>

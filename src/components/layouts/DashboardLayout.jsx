@@ -2,8 +2,7 @@ import React from 'react';
 import { Box, Flex, Stack, useBreakpointValue } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../Sidebar/Sidebar';
-import Header from '../Header/Header';
-import { headerHeight, sidebarWidth } from '../../utils/constants';
+import { sidebarWidth } from '../../utils/constants';
 
 export default function DashboardLayout() {
   const isWide = useBreakpointValue({ base: false, md: true });
@@ -11,8 +10,7 @@ export default function DashboardLayout() {
     <Flex>
       <Sidebar />
       <Stack>
-        <Header />
-        <Box px={16} py={8} ml={isWide ? sidebarWidth : 0} mt={headerHeight}>
+        <Box px={16} py={8} ml={isWide ? sidebarWidth : 0}>
           <Outlet />
         </Box>
       </Stack>
