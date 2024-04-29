@@ -114,6 +114,12 @@ function SidebarContent() {
             label="Search"
           />
           <StyledNavLink
+            to="/create"
+            icon={FiPlusCircle}
+            filledIcon={AiFillPlusCircle}
+            label="Create"
+          />
+          <StyledNavLink
             to="/messages"
             icon={MdOutlineMail}
             filledIcon={MdMail}
@@ -124,12 +130,6 @@ function SidebarContent() {
             icon={FaRegBell}
             filledIcon={FaBell}
             label="Notifications"
-          />
-          <StyledNavLink
-            to="/create"
-            icon={FiPlusCircle}
-            filledIcon={AiFillPlusCircle}
-            label="Create"
           />
           <StyledNavLink
             to="/profile"
@@ -172,6 +172,11 @@ function CompactSidebarContent() {
             filledIcon={FaSearch}
           />
           <CompactNavLink
+            to="/create"
+            icon={FiPlusCircle}
+            filledIcon={AiFillPlusCircle}
+          />
+          <CompactNavLink
             to="/messages"
             icon={MdOutlineMail}
             filledIcon={MdMail}
@@ -180,11 +185,6 @@ function CompactSidebarContent() {
             to="/notifications"
             icon={FaRegBell}
             filledIcon={FaBell}
-          />
-          <CompactNavLink
-            to="/create"
-            icon={FiPlusCircle}
-            filledIcon={AiFillPlusCircle}
           />
           <CompactNavLink to="/profile" icon={FaRegUser} filledIcon={FaUser} />
           <Divider />
