@@ -33,7 +33,7 @@ export default function Sidebar() {
   const isCollapsed = useBreakpointValue({ base: true, md: false });
 
   return (
-    <Flex h="100vh">
+    <Flex minH="100vh" h="100%" position="fixed">
       {isCollapsed ? (
         <>
           <Icon

@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { MdLogout, MdOutlineSettings } from 'react-icons/md';
 import caroline from '../assets/carolineAvatar.png';
-import { headerHeight } from '../utils/constants';
+import { headerHeight, sidebarWidth } from '../utils/constants';
 
 export default function Header() {
   const isWide = useBreakpointValue({ base: false, md: true });
@@ -30,6 +30,7 @@ export default function Header() {
       borderBottomWidth="1px"
       borderColor="blackAlpha.300"
       h={headerHeight}
+      ml={sidebarWidth}
     >
       <Spacer />
       <Menu>
