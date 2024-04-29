@@ -1,23 +1,28 @@
 import React from 'react';
-import { Box, Flex, Stack } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../Sidebar/Sidebar';
-import { headerHeight, sidebarWidth } from '../../utils/constants';
+import {
+  headerHeight,
+  sidebarWidth,
+  compactSidebarWidth,
+} from '../../utils/constants';
 
 export default function DashboardLayout() {
   return (
-    <Flex>
+    <>
       <Sidebar />
-      <Stack>
-        <Box
+      <Flex justify="center" align="center">
+        <Flex
           px={16}
           py={8}
-          ml={{ base: 0, sm: 5, md: sidebarWidth }}
+          ml={{ base: 0, sm: compactSidebarWidth, md: sidebarWidth }}
           my={{ base: headerHeight, sm: 0 }}
+          maxW={{ md: '50vw' }}
         >
           <Outlet />
-        </Box>
-      </Stack>
-    </Flex>
+        </Flex>
+      </Flex>
+    </>
   );
 }
