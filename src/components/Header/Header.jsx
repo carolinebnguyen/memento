@@ -14,8 +14,9 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { MdLogout, MdOutlineSettings } from 'react-icons/md';
-import caroline from '../assets/carolineAvatar.png';
-import { headerHeight, sidebarWidth } from '../utils/constants';
+import caroline from '../../assets/carolineAvatar.png';
+import { headerHeight, sidebarWidth } from '../../utils/constants';
+import styles from './Header.module.css';
 
 export default function Header() {
   const isWide = useBreakpointValue({ base: false, md: true });
@@ -25,7 +26,7 @@ export default function Header() {
       as="header"
       align="center"
       justify="space-between"
-      w={isWide ? `calc(100vw - 300px)` : `full`}
+      w={isWide ? `calc(100vw - ${sidebarWidth})` : `full`}
       px={5}
       borderBottomWidth="1px"
       borderColor="blackAlpha.300"
@@ -38,7 +39,7 @@ export default function Header() {
       <Menu>
         <MenuButton as={Avatar} src={caroline} size="sm" cursor="pointer" />
         <MenuList>
-          <MenuItem>
+          <MenuItem as="a" href="/profile" className={`${styles['menu-link']}`}>
             <Image
               boxSize="3rem"
               borderRadius="full"
@@ -49,11 +50,15 @@ export default function Header() {
             <Text>My Profile</Text>
           </MenuItem>
           <MenuDivider />
-          <MenuItem>
+          <MenuItem
+            as="a"
+            href="/settings"
+            className={`${styles['menu-link']}`}
+          >
             <Icon as={MdOutlineSettings} boxSize={5} mr={3} />
             Settings
           </MenuItem>
-          <MenuItem>
+          <MenuItem as="a" href="/" className={`${styles['menu-link']}`}>
             <Icon as={MdLogout} boxSize={5} mr={3} />
             Log Out
           </MenuItem>

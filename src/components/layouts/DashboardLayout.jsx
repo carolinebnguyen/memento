@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Flex, Stack, useBreakpointValue } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../Sidebar/Sidebar';
-import Header from '../Header';
+import Header from '../Header/Header';
 import { headerHeight, sidebarWidth } from '../../utils/constants';
 
 export default function DashboardLayout() {

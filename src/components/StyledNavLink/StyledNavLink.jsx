@@ -1,8 +1,6 @@
 import React from 'react';
 import { Icon, Text, HStack } from '@chakra-ui/react';
-
 import { NavLink } from 'react-router-dom';
-
 import styles from './StyledNavLink.module.css';
 
 export default function StyledNavLink({ to, icon, label }) {
