@@ -15,7 +15,12 @@ import {
   HStack,
   Stack,
   Divider,
-  VStack,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  IconButton,
+  MenuGroup,
 } from '@chakra-ui/react';
 import {
   MdOutlineHome,
@@ -106,12 +111,11 @@ function CompactSidebar() {
       <Flex
         direction="column"
         boxShadow="md"
-        p={3}
         w={compactSidebarWidth}
         zIndex="9999"
       >
         <NavLink to="/">
-          <Image src={logoLetter} alt="Letter M" mb={5} />
+          <Image src={logoLetter} alt="Letter M" mb={5} p={3} />
         </NavLink>
         <Divider />
         <CompactSidebarContent />
@@ -165,7 +169,7 @@ function CompactSidebarContent() {
   return (
     <>
       <Flex direction="column" justify="space-between" h="100%">
-        <Stack gap={5} mt={5}>
+        <Stack gap={5} mt={5} p={3}>
           <CompactNavLink to="/home" icon={MdOutlineHome} />
           <CompactNavLink to="/search" icon={MdOutlineSearch} />
           <CompactNavLink
@@ -184,15 +188,55 @@ function CompactSidebarContent() {
           <CompactNavLink to="/settings" icon={MdOutlineSettings} />
           <CompactNavLink to="/" icon={MdLogout} />
         </Stack>
-        <VStack fontSize={12} p={3}>
-          <Text>© 2024 Memento</Text>
-          <FooterNavLink to="/about" label="About" />
-          <FooterNavLink to="/terms" label="Terms" />
-          <FooterNavLink to="/privacy" label="Privacy" />
-          <FooterNavLink to="/contact" label="Contact" />
-        </VStack>
+        <FooterMenu />
       </Flex>
     </>
+  );
+}
+
+function FooterMenu() {
+  return (
+    <Menu>
+      <MenuButton
+        as={IconButton}
+        icon={<MdMenu />}
+        cursor="pointer"
+        variant="link"
+        mb={5}
+      />
+      <MenuList>
+        <MenuGroup title="© 2024 Memento">
+          <MenuItem
+            as="a"
+            href="/about"
+            className={`${styles['compact-footer-link']}`}
+          >
+            About
+          </MenuItem>
+          <MenuItem
+            as="a"
+            href="/terms"
+            className={`${styles['compact-footer-link']}`}
+          >
+            Terms
+          </MenuItem>
+          <MenuItem
+            as="a"
+            href="/privacy"
+            className={`${styles['compact-footer-link']}`}
+          >
+            Privacy
+          </MenuItem>
+          <MenuItem
+            as="a"
+            href="/contact"
+            className={`${styles['compact-footer-link']}`}
+          >
+            Contact
+          </MenuItem>
+        </MenuGroup>
+      </MenuList>
+    </Menu>
   );
 }
 
