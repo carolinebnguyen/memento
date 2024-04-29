@@ -26,6 +26,7 @@ import { FiPlusCircle } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
 import logo from '../../assets/logoBlack.png';
 import styles from './Sidebar.module.css';
+import { headerHeight, sidebarWidth } from '../../utils/constants';
 
 export default function Sidebar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,7 +44,7 @@ export default function Sidebar() {
             cursor="pointer"
             borderBottomWidth="1px"
             borderColor="blackAlpha.300"
-            h={14}
+            h={headerHeight}
           >
             Open Modal
           </Icon>
@@ -72,7 +73,7 @@ export default function Sidebar() {
 function FullSidebar() {
   return (
     <>
-      <Flex direction="column" boxShadow="md" p={3} w="300px">
+      <Flex direction="column" boxShadow="md" p={3} w={sidebarWidth}>
         <NavLink to="/">
           <Image src={logo} alt="Memento logo" p={3} />
         </NavLink>
