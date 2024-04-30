@@ -4,8 +4,6 @@ import {
   MdOutlineHome,
   MdHome,
   MdOutlineSearch,
-  MdOutlineMail,
-  MdMail,
   MdLogout,
   MdOutlineSettings,
   MdSettings,
@@ -56,11 +54,6 @@ function CompactSidebarContent() {
             to="/create"
             icon={FiPlusCircle}
             filledIcon={AiFillPlusCircle}
-          />
-          <CompactNavLink
-            to="/messages"
-            icon={MdOutlineMail}
-            filledIcon={MdMail}
           />
           <CompactNavLink
             to="/notifications"

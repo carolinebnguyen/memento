@@ -12,8 +12,6 @@ import {
   MdOutlineHome,
   MdHome,
   MdOutlineSearch,
-  MdOutlineMail,
-  MdMail,
   MdLogout,
   MdOutlineSettings,
   MdSettings,
@@ -91,12 +89,6 @@ function SidebarContent() {
             icon={FiPlusCircle}
             filledIcon={AiFillPlusCircle}
             label="Create"
-          />
-          <StyledNavLink
-            to="/messages"
-            icon={MdOutlineMail}
-            filledIcon={MdMail}
-            label="Direct Messages"
           />
           <StyledNavLink
             to="/notifications"
