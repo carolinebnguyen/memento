@@ -48,11 +48,15 @@ const router = createBrowserRouter([
       { path: 'home', element: <Home /> },
       { path: 'search', element: <Search /> },
       { path: 'create', element: <Create /> },
-      { path: 'messages', element: <Messages /> },
       { path: 'notifications', element: <Notifications /> },
       { path: 'profile', element: <Profile /> },
       { path: 'settings', element: <Settings /> },
     ],
+  },
+  {
+    path: '/messages',
+    element: <Messages />,
+    errorElement: <ErrorPage />,
   },
 ]);
 

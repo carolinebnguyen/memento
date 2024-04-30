@@ -27,6 +27,9 @@ export default function CompactSidebar() {
         boxShadow="md"
         w={compactSidebarWidth}
         zIndex="9999"
+        minH="100vh"
+        h="100%"
+        position="fixed"
       >
         <NavLink to="/home">
           <Image src={logoLetter} alt="Letter M" mb={5} p={3} />
