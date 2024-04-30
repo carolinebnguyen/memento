@@ -8,13 +8,16 @@ import Terms from './pages/Footer/Terms';
 import PrivacyPolicy from './pages/Footer/PrivacyPolicy';
 import Contact from './pages/Footer/Contact';
 import Home from './pages/Dashboard/Home';
+import Search from './pages/Dashboard/Search';
+import Create from './pages/Dashboard/Create';
+import Messages from './pages/Dashboard/Messages';
 import Notifications from './pages/Dashboard/Notifications';
+import Profile from './pages/Dashboard/Profile';
+import Settings from './pages/Dashboard/Settings';
 
 import LandingLayout from './components/layouts/LandingLayout';
 import FooterLayout from './components/layouts/FooterLayout';
 import DashboardLayout from './components/layouts/DashboardLayout';
-import Profile from './pages/Dashboard/Profile';
-import Settings from './pages/Dashboard/Settings';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +46,9 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { path: 'home', element: <Home /> },
+      { path: 'search', element: <Search /> },
+      { path: 'create', element: <Create /> },
+      { path: 'messages', element: <Messages /> },
       { path: 'notifications', element: <Notifications /> },
       { path: 'profile', element: <Profile /> },
       { path: 'settings', element: <Settings /> },
