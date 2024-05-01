@@ -1,23 +1,18 @@
 import React from 'react';
 import {
-  Avatar,
-  Button,
   Flex,
   Grid,
   GridItem,
-  Heading,
   Image,
-  Stack,
   Tabs,
   TabList,
   TabPanels,
   TabPanel,
-  Text,
+  Divider,
 } from '@chakra-ui/react';
-import { FaRegHeart, FaRegComment, FaEllipsis } from 'react-icons/fa6';
-import { LuShare } from 'react-icons/lu';
 import { PostTab, StatusTab } from '../../components/Tabs';
 import ProfileHeader from '../../components/ProfileHeader';
+import StatusCard from '../../components/StatusCard';
 import caroline from '../../assets/placeholders/carolineAvatarClear.png';
 
 export default function Profile() {
@@ -67,38 +62,13 @@ export default function Profile() {
             </Grid>
           </TabPanel>
           <TabPanel role="tabpanel">
-            <Flex justify="space-between">
-              <Stack direction="row" align="center" gap={2}>
-                <Avatar size="xs" src={caroline} />
-                <Heading as="h2" size="xs" noOfLines={1}>
-                  carolibn
-                </Heading>
-                <Text fontSize="xs">2 days ago</Text>
-              </Stack>
-
-              <Button size="xs" colorScheme="whiteAlpha">
-                <FaEllipsis size={16} color="gray" />
-              </Button>
-            </Flex>
-
-            <Text fontSize="sm" mt={2}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora
-              quasi, nemo, quos at beatae corrupti aspernatur ab fugit,
-              laudantium magni velit necessitatibus perspiciatis placeat totam
-              quisquam. Quo provident eaque nihil.
-            </Text>
-
-            <Stack direction="row" gap={0}>
-              <Button size="xs" colorScheme="whiteAlpha">
-                <FaRegHeart size={16} color="gray" />
-              </Button>
-              <Button size="xs" colorScheme="whiteAlpha">
-                <FaRegComment size={16} color="gray" />
-              </Button>
-              <Button size="xs" colorScheme="whiteAlpha">
-                <LuShare size={16} color="gray" />
-              </Button>
-            </Stack>
+            <StatusCard username="carolibn" picture={caroline} />
+            <Divider my={3} />
+            <StatusCard username="carolibn" picture={caroline} />
+            <Divider my={3} />
+            <StatusCard username="carolibn" picture={caroline} />
+            <Divider my={3} />
+            <StatusCard username="carolibn" picture={caroline} />
           </TabPanel>
         </TabPanels>
       </Tabs>
