@@ -5,7 +5,7 @@ import { MdOutlineIosShare } from 'react-icons/md';
 
 export default function StatusCard({ username, picture }) {
   return (
-    <>
+    <Flex direction="column">
       <Flex justify="space-between">
         <Stack direction="row" align="center" gap={2}>
           <Avatar size="xs" src={picture} />
@@ -35,6 +35,6 @@ export default function StatusCard({ username, picture }) {
           <MdOutlineIosShare size={16} color="gray" />
         </Button>
       </Stack>
-    </>
+    </Flex>
   );
 }

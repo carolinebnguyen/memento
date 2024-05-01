@@ -43,7 +43,6 @@ export default function BottomNav() {
       borderTopWidth="1px"
       borderColor="blackAlpha.300"
       h={headerHeight}
-      ml={isWide ? sidebarWidth : 0}
       position="fixed"
       bottom="0"
       bgColor="white"

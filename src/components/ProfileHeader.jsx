@@ -18,7 +18,7 @@ export default function ProfileHeader({ username, name, picture }) {
           </Link>
         </Stack>
 
-        <Stack direction="row" gap={10}>
+        <Stack direction="row" gap={10} mt={2}>
           <Stack
             direction={{ base: 'column', sm: 'row' }}
             gap={{ base: 0, sm: 1 }}
@@ -57,7 +57,7 @@ export default function ProfileHeader({ username, name, picture }) {
           </Stack>
         </Stack>
 
-        <Heading as="h2" size="xs" noOfLines={1}>
+        <Heading as="h2" size="xs" noOfLines={1} my={2}>
           {name}
         </Heading>
 

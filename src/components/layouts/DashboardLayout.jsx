@@ -18,7 +18,7 @@ export default function DashboardLayout() {
           py={8}
           ml={{ base: 0, sm: compactSidebarWidth, md: sidebarWidth }}
           my={{ base: headerHeight, sm: 0 }}
-          maxW={{ md: '60vw', xl: '50vw' }}
+          maxW={{ sm: '80vw', md: '60vw', xl: '50vw' }}
         >
           <Outlet />
         </Flex>
