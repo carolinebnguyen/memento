@@ -18,18 +18,23 @@ import { FaRegHeart, FaRegComment, FaEllipsis } from 'react-icons/fa6';
 import { LuShare } from 'react-icons/lu';
 import { PostTab, StatusTab } from '../../components/Tabs';
 import ProfileHeader from '../../components/ProfileHeader';
+import caroline from '../../assets/placeholders/carolineAvatarClear.png';
 
 export default function Profile() {
   return (
     <Flex justify="center" align="center" direction="column">
-      <ProfileHeader />
+      <ProfileHeader
+        username="carolibn"
+        name="Caroline Nguyen"
+        picture={caroline}
+      />
       <Tabs align="center">
-        <TabList>
+        <TabList role="tablist">
           <PostTab>Posts</PostTab>
           <StatusTab>Statuses</StatusTab>
         </TabList>
         <TabPanels>
-          <TabPanel>
+          <TabPanel role="tabpanel">
             <Grid templateColumns="repeat(3, 1fr)" gap={2}>
               <GridItem border="2px" borderColor="gray.200">
                 <Image
@@ -61,15 +66,10 @@ export default function Profile() {
               </GridItem>
             </Grid>
           </TabPanel>
-          <TabPanel>
+          <TabPanel role="tabpanel">
             <Flex justify="space-between">
               <Stack direction="row" align="center" gap={2}>
-                <Avatar
-                  size="xs"
-                  name="Caroline Nguyen"
-                  bg="teal.500"
-                  src="https://media.tenor.com/mbsKdEmx9V0AAAAe/bubu-cute-bubu-adorable.png"
-                />
+                <Avatar size="xs" src={caroline} />
                 <Heading as="h2" size="xs" noOfLines={1}>
                   carolibn
                 </Heading>

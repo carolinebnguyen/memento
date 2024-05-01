@@ -14,7 +14,7 @@ export default function DashboardLayout() {
       <Sidebar />
       <Flex justify="center" align="center">
         <Flex
-          px={16}
+          px={{ base: 4, sm: 16 }}
           py={8}
           ml={{ base: 0, sm: compactSidebarWidth, md: sidebarWidth }}
           my={{ base: headerHeight, sm: 0 }}

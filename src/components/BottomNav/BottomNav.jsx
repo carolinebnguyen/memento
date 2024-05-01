@@ -23,7 +23,7 @@ import { FaRegUser, FaUser, FaSearch, FaRegBell, FaBell } from 'react-icons/fa';
 import { FiPlusCircle } from 'react-icons/fi';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { useLocation } from 'react-router-dom';
-import caroline from '../../assets/carolineAvatar.png';
+import caroline from '../../assets/placeholders/carolineAvatarClear.png';
 import { CompactIconButton } from '../CompactNavLink/CompactNavLink';
 import { headerHeight, sidebarWidth } from '../../utils/constants';
 import styles from './BottomNav.module.css';

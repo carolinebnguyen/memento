@@ -10,9 +10,9 @@ const PostTab = React.forwardRef((props, ref) => {
   const styles = useMultiStyleConfig('Tabs', tabProps);
 
   return (
-    <Button __css={styles.tab} {...tabProps}>
+    <Button __css={styles.tab} {...tabProps} role="tab">
       <Icon as={isSelected ? AiFillPicture : AiOutlinePicture} mr="2" />
-      {tabProps.children}
+      <span style={{ fontSize: '14px' }}>{tabProps.children}</span>
     </Button>
   );
 });
@@ -24,9 +24,9 @@ const StatusTab = React.forwardRef((props, ref) => {
   const styles = useMultiStyleConfig('Tabs', tabProps);
 
   return (
-    <Button __css={styles.tab} {...tabProps}>
+    <Button __css={styles.tab} {...tabProps} role="tab">
       <Icon as={isSelected ? IoMegaphoneSharp : IoMegaphoneOutline} mr="2" />
-      {tabProps.children}
+      <span style={{ fontSize: '14px' }}>{tabProps.children}</span>
     </Button>
   );
 });
