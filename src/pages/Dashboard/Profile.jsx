@@ -23,7 +23,7 @@ export default function Profile() {
   return (
     <Flex justify="center" align="center" direction="column">
       <ProfileHeader />
-      <Tabs>
+      <Tabs align="center">
         <TabList>
           <PostTab>Posts</PostTab>
           <StatusTab>Statuses</StatusTab>
