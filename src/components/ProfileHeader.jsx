@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Avatar,
   Button,
@@ -12,6 +12,7 @@ import { Link, useLocation } from 'react-router-dom';
 import FollowModal from './FollowModal';
 
 export default function ProfileHeader({ profile }) {
+  const [isFollowing, setIsFollowing] = useState(false);
   const {
     username,
     name,
@@ -37,6 +38,10 @@ export default function ProfileHeader({ profile }) {
   const { search } = useLocation();
   const searchedUsername = new URLSearchParams(search).get('username');
 
+  const toggleIsFollowing = () => {
+    setIsFollowing(!isFollowing);
+  };
+
   return (
     <Flex mb={2}>
       <Avatar size="xl" mr={5} src={picture} />
@@ -51,7 +56,15 @@ export default function ProfileHeader({ profile }) {
                 Edit Profile
               </Button>
             </Link>
-          ) : null}
+          ) : (
+            <Button
+              onClick={toggleIsFollowing}
+              colorScheme={isFollowing ? 'gray' : 'blue'}
+              size="xs"
+            >
+              {isFollowing ? 'Following' : 'Follow'}
+            </Button>
+          )}
         </Stack>
 
         <Stack direction="row" gap={8} mt={2}>
