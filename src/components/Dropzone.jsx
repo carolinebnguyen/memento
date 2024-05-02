@@ -56,12 +56,12 @@ export default function DropZone({ setFile }) {
           <FaImage size={22} />
           <Text fontSize="md" mt={10}>
             Drag and drop an image here or
-            <Text
-              color="blue.400"
-              _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
-            >
-              browse
-            </Text>
+          </Text>
+          <Text
+            color="blue.400"
+            _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
+          >
+            browse
           </Text>
           <Text fontSize="sm" color="gray.500" mt={2}>
             Accepted file types: JPEG, JPG, PNG

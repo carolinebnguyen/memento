@@ -70,7 +70,7 @@ export default function ChangePictureModal({ isOpen, onClose, setAvatarSrc }) {
                 <IconButton
                   onClick={removeFile}
                   colorScheme="gray"
-                  as={IoMdClose}
+                  icon={<IoMdClose />}
                   size="sm"
                   isRound={true}
                   aria-label="Remove Picture"
@@ -78,9 +78,7 @@ export default function ChangePictureModal({ isOpen, onClose, setAvatarSrc }) {
                   right="30px"
                   top="80px"
                   opacity="80%"
-                >
-                  X
-                </IconButton>
+                />
                 <HStack gap={3} mt={5} justify="center">
                   <Button onClick={handleCancel}>Cancel</Button>
                   <Button onClick={onSubmit} colorScheme="blue">
