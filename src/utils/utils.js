@@ -14,11 +14,11 @@ const formatDate = (dateToFormat) => {
 };
 
 /*
-Minimum 8 characters
-- At least one lower case alphabetic
-- At least one upper case alphabetic
-- At least one number
-- At least one special character
+- at least 8 characters
+- at least 1 lowercase letter
+- at least 1 uppercase letter
+- at least 1 number
+- at least 1 special character
 */
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -27,13 +27,30 @@ const passwordErrorMessage = `Password requires:
 - at least 8 characters
 - at least 1 lowercase letter
 - at least 1 uppercase letter
-- at least 1 symbol
-- at least 1 number`;
+- at least 1 number
+- at least 1 special character`;
 
 const NotificationType = {
   LIKE: 'like',
   FOLLOW: 'follow',
   COMMENT: 'comment',
+};
+
+const notificationGroupToHeadingMap = {
+  today: 'Today',
+  thisWeek: 'This Week',
+  thisMonth: 'This Month',
+  earlier: 'Earlier',
+};
+
+const notificationTypeToMessageMap = {
+  [NotificationType.LIKE]: 'liked your post',
+  [NotificationType.FOLLOW]: 'started following you',
+  [NotificationType.COMMENT]: 'commented: ',
+};
+
+const getNotificationMessage = (type) => {
+  return notificationTypeToMessageMap[type];
 };
 
 export {
@@ -42,4 +59,6 @@ export {
   passwordRegex,
   passwordErrorMessage,
   NotificationType,
+  notificationGroupToHeadingMap,
+  getNotificationMessage,
 };

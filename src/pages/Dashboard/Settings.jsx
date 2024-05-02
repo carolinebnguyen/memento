@@ -17,7 +17,7 @@ export default function Settings() {
     <Flex w="100%">
       <Card w={{ sm: '100vw', md: '60vw', xl: '40vw' }}>
         <CardHeader textAlign="center">
-          <Heading as="h1" size="md">
+          <Heading as="h1" size="lg">
             Settings
           </Heading>
         </CardHeader>
