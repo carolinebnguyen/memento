@@ -7,6 +7,7 @@ import {
   HStack,
   Stack,
   Divider,
+  Icon,
 } from '@chakra-ui/react';
 import {
   MdOutlineHome,
@@ -19,11 +20,12 @@ import {
 import { FaRegBell, FaBell, FaRegUser, FaUser, FaSearch } from 'react-icons/fa';
 import { FiPlusCircle } from 'react-icons/fi';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import logo from '../../assets/logoBlack.png';
 import StyledNavLink from '../StyledNavLink/StyledNavLink';
 import BottomNav from '../BottomNav/BottomNav';
 import styles from './Sidebar.module.css';
+import linkStyles from '../StyledNavLink/StyledNavLink.module.css';
 import { sidebarWidth } from '../../utils/constants';
 import Header from '../Header/Header';
 import CompactSidebar from '../CompactSidebar';
@@ -68,6 +70,9 @@ function FullSidebar() {
 }
 
 function SidebarContent() {
+  const { search } = useLocation();
+  const username = new URLSearchParams(search).get('username');
+
   return (
     <>
       <Flex direction="column" justify="space-between" h="100%">
@@ -96,12 +101,30 @@ function SidebarContent() {
             filledIcon={FaBell}
             label="Notifications"
           />
-          <StyledNavLink
+          <NavLink
             to="/profile?username=carolibn"
-            icon={FaRegUser}
-            filledIcon={FaUser}
-            label="Profile"
-          />
+            className={({ isActive }) =>
+              isActive && username === 'carolibn'
+                ? linkStyles['nav-link-active']
+                : linkStyles['nav-link']
+            }
+          >
+            {({ isActive }) => (
+              <HStack p={2}>
+                <Icon
+                  as={isActive && username === 'carolibn' ? FaUser : FaRegUser}
+                  boxSize={22}
+                />
+                <Text
+                  fontWeight={
+                    isActive && username === 'carolibn' ? 'bold' : 'normal'
+                  }
+                >
+                  Profile
+                </Text>
+              </HStack>
+            )}
+          </NavLink>
           <Divider />
           <StyledNavLink
             to="/settings"

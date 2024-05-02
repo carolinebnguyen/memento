@@ -1,6 +1,6 @@
 import React from 'react';
 import { Icon, IconButton } from '@chakra-ui/react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import styles from './CompactNavLink.module.css';
 
 function CompactNavLink({ to, icon, filledIcon }) {
@@ -8,6 +8,22 @@ function CompactNavLink({ to, icon, filledIcon }) {
     <NavLink to={to} className={styles['compact-nav-link']}>
       {({ isActive }) => (
         <Icon as={isActive ? filledIcon : icon} boxSize={22} />
+      )}
+    </NavLink>
+  );
+}
+
+function CompactProfileNavLink({ to, icon, filledIcon }) {
+  const { search } = useLocation();
+  const username = new URLSearchParams(search).get('username');
+
+  return (
+    <NavLink to={to} className={styles['compact-nav-link']}>
+      {({ isActive }) => (
+        <Icon
+          as={isActive && username === 'carolibn' ? filledIcon : icon}
+          boxSize={22}
+        />
       )}
     </NavLink>
   );
@@ -26,4 +42,5 @@ function CompactIconButton({ to, icon, filledIcon }) {
     </NavLink>
   );
 }
-export { CompactNavLink, CompactIconButton };
+
+export { CompactNavLink, CompactProfileNavLink, CompactIconButton };

@@ -15,7 +15,10 @@ import { NavLink } from 'react-router-dom';
 import { compactSidebarWidth } from '../utils/constants';
 import FooterMenu from './FooterMenu/FooterMenu';
 import logoLetter from '../assets/mementoLetter.png';
-import { CompactNavLink } from './CompactNavLink/CompactNavLink';
+import {
+  CompactNavLink,
+  CompactProfileNavLink,
+} from './CompactNavLink/CompactNavLink';
 
 export default function CompactSidebar() {
   return (
@@ -60,7 +63,7 @@ function CompactSidebarContent() {
             icon={FaRegBell}
             filledIcon={FaBell}
           />
-          <CompactNavLink
+          <CompactProfileNavLink
             to="/profile?username=carolibn"
             icon={FaRegUser}
             filledIcon={FaUser}

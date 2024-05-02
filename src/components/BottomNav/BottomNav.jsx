@@ -30,8 +30,8 @@ import styles from './BottomNav.module.css';
 
 export default function BottomNav() {
   const isWide = useBreakpointValue({ base: false, md: true });
-  const location = useLocation();
-  const isProfilePage = location.pathname === '/profile';
+  const { search } = useLocation();
+  const username = new URLSearchParams(search).get('username');
 
   return (
     <Flex
@@ -66,7 +66,7 @@ export default function BottomNav() {
       <Menu>
         <MenuButton
           as={IconButton}
-          icon={isProfilePage ? <FaUser /> : <FaRegUser />}
+          icon={username === 'carolibn' ? <FaUser /> : <FaRegUser />}
           cursor="pointer"
           variant="ghost"
         />

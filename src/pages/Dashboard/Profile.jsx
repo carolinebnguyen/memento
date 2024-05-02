@@ -8,9 +8,8 @@ import { getProfile } from '../../utils/testData';
 import { useLocation } from 'react-router-dom';
 
 export default function Profile() {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const username = searchParams.get('username');
+  const { search } = useLocation();
+  const username = new URLSearchParams(search).get('username');
   const profile = getProfile(username);
 
   return (
