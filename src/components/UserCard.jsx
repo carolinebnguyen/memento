@@ -5,7 +5,7 @@ export default function UserCard({ user }) {
   const { username, name, picture } = user;
 
   return (
-    <Flex justify="space-between">
+    <Flex justify="space-between" align="center">
       <HStack>
         <Avatar size="md" src={picture} />
         <Stack direction="column" gap={0}>

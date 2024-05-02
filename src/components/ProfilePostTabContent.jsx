@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Grid } from '@chakra-ui/react';
+import { Text, Grid, Box } from '@chakra-ui/react';
 import ProfilePostCard from './ProfilePostCard';
 
 export default function ProfilePostTabContent({ user }) {
@@ -11,7 +11,11 @@ export default function ProfilePostTabContent({ user }) {
         posts
           .slice()
           .reverse()
-          .map((post) => <ProfilePostCard post={post} />)
+          .map((post) => (
+            <Box key={post.id}>
+              <ProfilePostCard post={post} />
+            </Box>
+          ))
       ) : (
         <Text>No posts to display</Text>
       )}

@@ -11,6 +11,7 @@ const carolineProfile = {
   followingList: [],
   posts: [
     {
+      id: 1,
       imageSrc:
         'https://m.media-amazon.com/images/I/51b0f7Fz4KL._AC_UF1000,1000_QL80_.jpg',
       likes: 1,
@@ -23,6 +24,7 @@ const carolineProfile = {
       postedAt: new Date('2024-04-29T00:00:00Z'),
     },
     {
+      id: 2,
       imageSrc:
         'https://ih1.redbubble.net/image.3787621272.3825/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg',
       likes: 0,
@@ -32,6 +34,7 @@ const carolineProfile = {
   ],
   statuses: [
     {
+      id: 1,
       content: 'This is my first status',
       likes: 1,
       comments: [
@@ -43,12 +46,14 @@ const carolineProfile = {
       postedAt: new Date('2024-03-29T00:00:00Z'),
     },
     {
+      id: 2,
       content: 'This is my second status! :)',
       likes: 0,
       comments: [],
       postedAt: new Date('2024-04-29T00:00:00Z'),
     },
     {
+      id: 3,
       content:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor doloribus voluptate modi libero sequi rerum asperiores laboriosam, dolore inventore molestias tempore eveniet dignissimos? Beatae iusto quibusdam repudiandae blanditiis voluptatum odio?',
       likes: 0,
