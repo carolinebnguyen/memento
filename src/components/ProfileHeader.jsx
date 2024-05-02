@@ -12,8 +12,16 @@ import { Link } from 'react-router-dom';
 import FollowModal from './FollowModal';
 
 export default function ProfileHeader({ profile }) {
-  const { username, name, picture, bio, followersList, followingList } =
-    profile;
+  const {
+    username,
+    name,
+    picture,
+    bio,
+    followersList,
+    followingList,
+    posts,
+    statuses,
+  } = profile;
 
   const {
     isOpen: isOpenFollower,
@@ -41,17 +49,29 @@ export default function ProfileHeader({ profile }) {
           </Link>
         </Stack>
 
-        <Stack direction="row" gap={10} mt={2}>
+        <Stack direction="row" gap={8} mt={2}>
           <Stack
             direction={{ base: 'column', sm: 'row' }}
             gap={{ base: 0, sm: 1 }}
             align="center"
           >
             <Text as="b" fontSize="sm">
-              4
+              {posts.length}
             </Text>
             <Text fontSize="sm" fontWeight={500}>
-              posts
+              {posts.length === 1 ? 'post' : 'posts'}
+            </Text>
+          </Stack>
+          <Stack
+            direction={{ base: 'column', sm: 'row' }}
+            gap={{ base: 0, sm: 1 }}
+            align="center"
+          >
+            <Text as="b" fontSize="sm">
+              {statuses.length}
+            </Text>
+            <Text fontSize="sm" fontWeight={500}>
+              {statuses.length === 1 ? 'status' : 'statuses'}
             </Text>
           </Stack>
           <Stack
