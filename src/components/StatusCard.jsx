@@ -3,7 +3,7 @@ import { Flex, Button, Text, Avatar, Heading, Stack } from '@chakra-ui/react';
 import { FaRegHeart, FaRegComment, FaEllipsis } from 'react-icons/fa6';
 import { MdOutlineIosShare } from 'react-icons/md';
 
-export default function StatusCard({ username, picture }) {
+export default function StatusCard({ username, picture, status }) {
   return (
     <Flex direction="column">
       <Flex justify="space-between">
@@ -19,10 +19,7 @@ export default function StatusCard({ username, picture }) {
         </Button>
       </Flex>
       <Text fontSize="sm" my={2} textAlign="left">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora quasi,
-        nemo, quos at beatae corrupti aspernatur ab fugit, laudantium magni
-        velit necessitatibus perspiciatis placeat totam quisquam. Quo provident
-        eaque nihil.
+        {status.content}
       </Text>
       <Stack direction="row" gap={0}>
         <Button size="xs" colorScheme="whiteAlpha">

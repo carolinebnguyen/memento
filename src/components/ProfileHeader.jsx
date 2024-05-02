@@ -62,10 +62,10 @@ export default function ProfileHeader({ profile }) {
             onClick={onOpenFollower}
           >
             <Text as="b" fontSize="sm">
-              1,234
+              {followersList.length}
             </Text>
             <Text fontSize="sm" fontWeight={500}>
-              followers
+              {followersList.length === 1 ? 'follower' : 'followers'}
             </Text>
             <FollowModal
               isOpen={isOpenFollower}
@@ -82,7 +82,7 @@ export default function ProfileHeader({ profile }) {
             onClick={onOpenFollowing}
           >
             <Text as="b" fontSize="sm">
-              56
+              {followingList.length}
             </Text>
             <Text fontSize="sm" fontWeight={500}>
               following

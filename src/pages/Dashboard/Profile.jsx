@@ -8,19 +8,16 @@ import {
   TabList,
   TabPanels,
   TabPanel,
-  Divider,
 } from '@chakra-ui/react';
 import { PostTab, StatusTab } from '../../components/Tabs';
 import ProfileHeader from '../../components/ProfileHeader';
-import StatusCard from '../../components/StatusCard';
-import { testProfile } from '../../utils/testData';
+import StatusTabContent from '../../components/StatusTabContent';
+import { carolineProfile } from '../../utils/testData';
 
 export default function Profile() {
-  const { username, picture } = testProfile;
-
   return (
     <Flex justify="center" align="center" direction="column">
-      <ProfileHeader profile={testProfile} />
+      <ProfileHeader profile={carolineProfile} />
       <Tabs align="center" w="100%">
         <TabList role="tablist">
           <PostTab>Posts</PostTab>
@@ -60,13 +57,7 @@ export default function Profile() {
             </Grid>
           </TabPanel>
           <TabPanel role="tabpanel">
-            <StatusCard username={username} picture={picture} />
-            <Divider my={3} />
-            <StatusCard username={username} picture={picture} />
-            <Divider my={3} />
-            <StatusCard username={username} picture={picture} />
-            <Divider my={3} />
-            <StatusCard username={username} picture={picture} />
+            <StatusTabContent user={carolineProfile} />
           </TabPanel>
         </TabPanels>
       </Tabs>
