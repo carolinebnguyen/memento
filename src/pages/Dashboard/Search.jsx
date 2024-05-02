@@ -12,7 +12,8 @@ import {
 } from '@chakra-ui/react';
 import { MdOutlineSearch } from 'react-icons/md';
 import { IoMdClose } from 'react-icons/io';
-import { usernameToProfileMap } from '../../utils/testData';
+import { usernameToProfileMap, getProfile } from '../../utils/testData';
+import UserCard from '../../components/UserCard';
 
 export default function Search() {
   const [query, setQuery] = useState('');
@@ -30,7 +31,6 @@ export default function Search() {
   };
 
   const handleClearSearch = () => {
-    setSearched(false);
     setQuery('');
   };
 
@@ -66,10 +66,12 @@ export default function Search() {
         </InputRightElement>
       </InputGroup>
       {searched && (
-        <Flex direction="column" mt={4}>
+        <Flex direction="column" mt={4} w="full">
           {searchResults.length > 0 ? (
             searchResults.map((username) => (
-              <Box key={username}>{username}</Box>
+              <Box key={username} mb={4}>
+                <UserCard user={getProfile(username)} />
+              </Box>
             ))
           ) : (
             <Text>No results found</Text>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Flex,
   Text,
@@ -11,12 +11,19 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 export default function UserCard({ user, handleClose }) {
+  const [isFollowing, setIsFollowing] = useState(false);
   const { username, name, picture } = user;
   const navigate = useNavigate();
 
   const handleNavigation = () => {
-    handleClose();
+    if (handleClose) {
+      handleClose();
+    }
     navigate(`/profile?username=${username}`);
+  };
+
+  const toggleIsFollowing = () => {
+    setIsFollowing(!isFollowing);
   };
 
   return (
@@ -32,7 +39,12 @@ export default function UserCard({ user, handleClose }) {
           </Text>
         </Stack>
       </HStack>
-      <Button>Follow</Button>
+      <Button
+        onClick={toggleIsFollowing}
+        colorScheme={isFollowing ? 'gray' : 'blue'}
+      >
+        {isFollowing ? 'Following' : 'Follow'}
+      </Button>
     </Flex>
   );
 }
