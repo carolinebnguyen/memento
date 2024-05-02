@@ -39,12 +39,14 @@ export default function UserCard({ user, handleClose }) {
           </Text>
         </Stack>
       </HStack>
-      <Button
-        onClick={toggleIsFollowing}
-        colorScheme={isFollowing ? 'gray' : 'blue'}
-      >
-        {isFollowing ? 'Following' : 'Follow'}
-      </Button>
+      {username === 'carolibn' ? null : (
+        <Button
+          onClick={toggleIsFollowing}
+          colorScheme={isFollowing ? 'gray' : 'blue'}
+        >
+          {isFollowing ? 'Following' : 'Follow'}
+        </Button>
+      )}
     </Flex>
   );
 }
