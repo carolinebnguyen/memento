@@ -24,16 +24,14 @@ export default function Signup() {
 
   const initialValues = {
     email: '',
-    firstName: '',
-    lastName: '',
+    name: '',
     username: '',
     password: '',
   };
 
   const validationSchema = yup.object({
     email: yup.string().email().required('Email is required'),
-    firstName: yup.string().required('First name is required'),
-    lastName: yup.string().required('Last name is required'),
+    name: yup.string().required('Name is required'),
     username: yup.string().required('Username is required'),
     password: yup.string().required('Password is required'),
   });
@@ -92,37 +90,19 @@ export default function Signup() {
 
                     <FormControl
                       isRequired
-                      isInvalid={errors.firstName && touched.firstName}
+                      isInvalid={errors.name && touched.name}
                     >
                       <FormLabel fontSize="16px" mt={5}>
-                        First Name
+                        Full Name
                       </FormLabel>
                       <Field
                         as={Input}
                         type="text"
-                        name="firstName"
-                        id="firstName"
+                        name="name"
+                        id="name"
                         mb={2}
                       />
-                      <ErrorMessage name="firstName">
-                        {(msg) => <Text color="red">{msg}</Text>}
-                      </ErrorMessage>
-                    </FormControl>
-                    <FormControl
-                      isRequired
-                      isInvalid={errors.lastName && touched.lastName}
-                    >
-                      <FormLabel fontSize="16px" mt={5}>
-                        Last Name
-                      </FormLabel>
-                      <Field
-                        as={Input}
-                        type="text"
-                        name="lastName"
-                        id="lastName"
-                        mb={2}
-                      />
-                      <ErrorMessage name="lastName">
+                      <ErrorMessage name="name">
                         {(msg) => <Text color="red">{msg}</Text>}
                       </ErrorMessage>
                     </FormControl>

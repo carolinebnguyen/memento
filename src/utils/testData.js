@@ -4,6 +4,7 @@ import snowie from '../assets/snowieAvatar.png';
 const carolineProfile = {
   username: 'carolibn',
   name: 'Caroline Nguyen',
+  email: 'test@email.com',
   picture: caroline,
   bio: 'Developer \n Software Engineering Major',
   followersList: [],
