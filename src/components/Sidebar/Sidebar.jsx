@@ -52,20 +52,18 @@ export default function Sidebar() {
 
 function FullSidebar() {
   return (
-    <>
-      <Flex
-        direction="column"
-        boxShadow="md"
-        p={3}
-        w={sidebarWidth}
-        zIndex="9999"
-      >
-        <NavLink to="/home">
-          <Image src={logo} alt="Memento logo" p={3} />
-        </NavLink>
-        <SidebarContent />
-      </Flex>
-    </>
+    <Flex
+      direction="column"
+      boxShadow="md"
+      p={3}
+      w={sidebarWidth}
+      zIndex="9999"
+    >
+      <NavLink to="/home">
+        <Image src={logo} alt="Memento logo" p={3} />
+      </NavLink>
+      <SidebarContent />
+    </Flex>
   );
 }
 
@@ -74,77 +72,75 @@ function SidebarContent() {
   const username = new URLSearchParams(search).get('username');
 
   return (
-    <>
-      <Flex direction="column" justify="space-between" h="100%">
-        <Stack gap={5} mt={5}>
-          <StyledNavLink
-            to="/home"
-            icon={MdOutlineHome}
-            filledIcon={MdHome}
-            label="Home"
-          />
-          <StyledNavLink
-            to="/search"
-            icon={MdOutlineSearch}
-            filledIcon={FaSearch}
-            label="Search"
-          />
-          <StyledNavLink
-            to="/create"
-            icon={FiPlusCircle}
-            filledIcon={AiFillPlusCircle}
-            label="Create"
-          />
-          <StyledNavLink
-            to="/notifications"
-            icon={FaRegBell}
-            filledIcon={FaBell}
-            label="Notifications"
-          />
-          <NavLink
-            to="/profile?username=carolibn"
-            className={({ isActive }) =>
-              isActive && username === 'carolibn'
-                ? linkStyles['nav-link-active']
-                : linkStyles['nav-link']
-            }
-          >
-            {({ isActive }) => (
-              <HStack p={2}>
-                <Icon
-                  as={isActive && username === 'carolibn' ? FaUser : FaRegUser}
-                  boxSize={22}
-                />
-                <Text
-                  fontWeight={
-                    isActive && username === 'carolibn' ? 'bold' : 'normal'
-                  }
-                >
-                  Profile
-                </Text>
-              </HStack>
-            )}
-          </NavLink>
-          <Divider />
-          <StyledNavLink
-            to="/settings"
-            icon={MdOutlineSettings}
-            filledIcon={MdSettings}
-            label="Settings"
-          />
-          <StyledNavLink to="/" icon={MdLogout} label="Log Out" />
-        </Stack>
-        <Stack fontSize={12} p={3}>
-          <Text>© 2024 Memento</Text>
-          <HStack justify="space-between">
-            <FooterNavLink to="/about" label="About" />
-            <FooterNavLink to="/terms" label="Terms" />
-            <FooterNavLink to="/privacy" label="Privacy" />
-            <FooterNavLink to="/contact" label="Contact" />
-          </HStack>
-        </Stack>
-      </Flex>
-    </>
+    <Flex direction="column" justify="space-between" h="100%">
+      <Stack gap={5} mt={5}>
+        <StyledNavLink
+          to="/home"
+          icon={MdOutlineHome}
+          filledIcon={MdHome}
+          label="Home"
+        />
+        <StyledNavLink
+          to="/search"
+          icon={MdOutlineSearch}
+          filledIcon={FaSearch}
+          label="Search"
+        />
+        <StyledNavLink
+          to="/create"
+          icon={FiPlusCircle}
+          filledIcon={AiFillPlusCircle}
+          label="Create"
+        />
+        <StyledNavLink
+          to="/notifications"
+          icon={FaRegBell}
+          filledIcon={FaBell}
+          label="Notifications"
+        />
+        <NavLink
+          to="/profile?username=carolibn"
+          className={({ isActive }) =>
+            isActive && username === 'carolibn'
+              ? linkStyles['nav-link-active']
+              : linkStyles['nav-link']
+          }
+        >
+          {({ isActive }) => (
+            <HStack p={2}>
+              <Icon
+                as={isActive && username === 'carolibn' ? FaUser : FaRegUser}
+                boxSize={22}
+              />
+              <Text
+                fontWeight={
+                  isActive && username === 'carolibn' ? 'bold' : 'normal'
+                }
+              >
+                Profile
+              </Text>
+            </HStack>
+          )}
+        </NavLink>
+        <Divider />
+        <StyledNavLink
+          to="/settings"
+          icon={MdOutlineSettings}
+          filledIcon={MdSettings}
+          label="Settings"
+        />
+        <StyledNavLink to="/" icon={MdLogout} label="Log Out" />
+      </Stack>
+      <Stack fontSize={12} p={3}>
+        <Text>© 2024 Memento</Text>
+        <HStack justify="space-between">
+          <FooterNavLink to="/about" label="About" />
+          <FooterNavLink to="/terms" label="Terms" />
+          <FooterNavLink to="/privacy" label="Privacy" />
+          <FooterNavLink to="/contact" label="Contact" />
+        </HStack>
+      </Stack>
+    </Flex>
   );
 }
 

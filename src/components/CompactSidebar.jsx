@@ -22,62 +22,58 @@ import {
 
 export default function CompactSidebar() {
   return (
-    <>
-      <Flex
-        direction="column"
-        boxShadow="md"
-        w={compactSidebarWidth}
-        zIndex="9999"
-        minH="100vh"
-        h="100%"
-        position="fixed"
-      >
-        <NavLink to="/home">
-          <Image src={logoLetter} alt="Letter M" mb={5} p={3} />
-        </NavLink>
-        <Divider />
-        <CompactSidebarContent />
-      </Flex>
-    </>
+    <Flex
+      direction="column"
+      boxShadow="md"
+      w={compactSidebarWidth}
+      zIndex="9999"
+      minH="100vh"
+      h="100%"
+      position="fixed"
+    >
+      <NavLink to="/home">
+        <Image src={logoLetter} alt="Letter M" mb={5} p={3} />
+      </NavLink>
+      <Divider />
+      <CompactSidebarContent />
+    </Flex>
   );
 }
 
 function CompactSidebarContent() {
   return (
-    <>
-      <Flex direction="column" justify="space-between" h="100%">
-        <Stack gap={5} mt={5} p={3}>
-          <CompactNavLink to="/home" icon={MdOutlineHome} filledIcon={MdHome} />
-          <CompactNavLink
-            to="/search"
-            icon={MdOutlineSearch}
-            filledIcon={FaSearch}
-          />
-          <CompactNavLink
-            to="/create"
-            icon={FiPlusCircle}
-            filledIcon={AiFillPlusCircle}
-          />
-          <CompactNavLink
-            to="/notifications"
-            icon={FaRegBell}
-            filledIcon={FaBell}
-          />
-          <CompactProfileNavLink
-            to="/profile?username=carolibn"
-            icon={FaRegUser}
-            filledIcon={FaUser}
-          />
-          <Divider />
-          <CompactNavLink
-            to="/settings"
-            icon={MdOutlineSettings}
-            filledIcon={MdSettings}
-          />
-          <CompactNavLink to="/" icon={MdLogout} />
-        </Stack>
-        <FooterMenu />
-      </Flex>
-    </>
+    <Flex direction="column" justify="space-between" h="100%">
+      <Stack gap={5} mt={5} p={3}>
+        <CompactNavLink to="/home" icon={MdOutlineHome} filledIcon={MdHome} />
+        <CompactNavLink
+          to="/search"
+          icon={MdOutlineSearch}
+          filledIcon={FaSearch}
+        />
+        <CompactNavLink
+          to="/create"
+          icon={FiPlusCircle}
+          filledIcon={AiFillPlusCircle}
+        />
+        <CompactNavLink
+          to="/notifications"
+          icon={FaRegBell}
+          filledIcon={FaBell}
+        />
+        <CompactProfileNavLink
+          to="/profile?username=carolibn"
+          icon={FaRegUser}
+          filledIcon={FaUser}
+        />
+        <Divider />
+        <CompactNavLink
+          to="/settings"
+          icon={MdOutlineSettings}
+          filledIcon={MdSettings}
+        />
+        <CompactNavLink to="/" icon={MdLogout} />
+      </Stack>
+      <FooterMenu />
+    </Flex>
   );
 }
