@@ -7,14 +7,31 @@ import {
   InputGroup,
   InputLeftElement,
   Icon,
+  Box,
+  Text,
+  InputRightElement,
+  IconButton,
 } from '@chakra-ui/react';
 import { MdOutlineSearch } from 'react-icons/md';
+import { IoMdClose } from 'react-icons/io';
+import { usernameToProfileMap } from '../../utils/testData';
 
 export default function Search() {
   const [query, setQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [searched, setSearched] = useState(false);
 
   const handleSearch = () => {
-    console.log(`Searched ${query}`);
+    setSearched(true);
+    const results = Object.keys(usernameToProfileMap).filter((username) =>
+      username.toLowerCase().includes(query.toLowerCase())
+    );
+    setSearchResults(results);
+  };
+
+  const handleClearSearch = () => {
+    setSearched(false);
+    setQuery('');
   };
 
   const isSearchDisabled = query.trim() === '';
@@ -32,6 +49,17 @@ export default function Search() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
+          {query ? (
+            <InputRightElement>
+              <IconButton
+                size="sm"
+                icon={<IoMdClose />}
+                variant="ghost"
+                isRound={true}
+                onClick={handleClearSearch}
+              />
+            </InputRightElement>
+          ) : null}
         </InputGroup>
         <Button
           colorScheme="blue"
@@ -41,6 +69,17 @@ export default function Search() {
           Search
         </Button>
       </HStack>
+      {searched && (
+        <Flex direction="column" mt={4}>
+          {searchResults.length > 0 ? (
+            searchResults.map((username) => (
+              <Box key={username}>{username}</Box>
+            ))
+          ) : (
+            <Text>No results found</Text>
+          )}
+        </Flex>
+      )}
     </Flex>
   );
 }

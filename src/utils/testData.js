@@ -89,4 +89,4 @@ const getProfile = (username) => {
   return usernameToProfileMap[username];
 };
 
-export { carolineProfile, snowieProfile, getProfile };
+export { carolineProfile, snowieProfile, usernameToProfileMap, getProfile };
