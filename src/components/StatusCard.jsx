@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Flex,
   Button,
@@ -7,12 +7,19 @@ import {
   Heading,
   Stack,
   Tooltip,
+  Icon,
 } from '@chakra-ui/react';
-import { FaRegHeart, FaRegComment, FaEllipsis } from 'react-icons/fa6';
-import { MdOutlineIosShare } from 'react-icons/md';
+import { FaRegHeart, FaHeart, FaRegComment, FaEllipsis } from 'react-icons/fa6';
 import { formatDateDistanceToNow, formatDate } from '../utils/utils';
 
 export default function StatusCard({ username, picture, status }) {
+  const [isLiked, setIsLiked] = useState(false);
+  const { content, postedAt } = status;
+
+  const toggleIsLiked = () => {
+    setIsLiked(!isLiked);
+  };
+
   return (
     <Flex direction="column">
       <Flex justify="space-between">
@@ -22,12 +29,12 @@ export default function StatusCard({ username, picture, status }) {
             {username}
           </Heading>
           <Tooltip
-            label={formatDate(status.postedAt)}
+            label={formatDate(postedAt)}
             placement="bottom"
             openDelay={500}
           >
-            <Text fontSize="xs">
-              {formatDateDistanceToNow(status.postedAt)}
+            <Text fontSize="xs" color="gray">
+              {formatDateDistanceToNow(postedAt)}
             </Text>
           </Tooltip>
         </Stack>
@@ -36,17 +43,24 @@ export default function StatusCard({ username, picture, status }) {
         </Button>
       </Flex>
       <Text fontSize="sm" my={2} textAlign="left">
-        {status.content}
+        {content}
       </Text>
       <Stack direction="row" gap={0}>
-        <Button size="xs" colorScheme="whiteAlpha">
-          <FaRegHeart size={16} color="gray" />
+        <Button size="xs" colorScheme="whiteAlpha" onClick={toggleIsLiked}>
+          <Icon
+            as={isLiked ? FaHeart : FaRegHeart}
+            boxSize={18}
+            color={isLiked ? 'skyblue' : 'gray'}
+            _hover={{ opacity: '50%' }}
+          />
         </Button>
         <Button size="xs" colorScheme="whiteAlpha">
-          <FaRegComment size={16} color="gray" />
-        </Button>
-        <Button size="xs" colorScheme="whiteAlpha">
-          <MdOutlineIosShare size={16} color="gray" />
+          <Icon
+            as={FaRegComment}
+            boxSize={18}
+            color="gray"
+            _hover={{ opacity: '50%' }}
+          />
         </Button>
       </Stack>
     </Flex>
