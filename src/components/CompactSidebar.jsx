@@ -60,7 +60,11 @@ function CompactSidebarContent() {
             icon={FaRegBell}
             filledIcon={FaBell}
           />
-          <CompactNavLink to="/profile" icon={FaRegUser} filledIcon={FaUser} />
+          <CompactNavLink
+            to="/profile?username=carolibn"
+            icon={FaRegUser}
+            filledIcon={FaUser}
+          />
           <Divider />
           <CompactNavLink
             to="/settings"

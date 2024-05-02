@@ -71,7 +71,11 @@ export default function BottomNav() {
           variant="ghost"
         />
         <MenuList>
-          <MenuItem as="a" href="/profile" className={styles['menu-link']}>
+          <MenuItem
+            as="a"
+            href="/profile?username=carolibn"
+            className={styles['menu-link']}
+          >
             <Image
               boxSize="3rem"
               borderRadius="full"

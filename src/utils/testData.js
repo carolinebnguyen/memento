@@ -77,4 +77,16 @@ const snowieProfile = {
 carolineProfile.followersList.push(snowieProfile);
 carolineProfile.followingList.push(snowieProfile);
 
-export { carolineProfile, snowieProfile };
+const usernameToProfileMap = {
+  carolibn: carolineProfile,
+  snowie: snowieProfile,
+};
+
+const getProfile = (username) => {
+  if (!(username in usernameToProfileMap)) {
+    return usernameToProfileMap['carolibn'];
+  }
+  return usernameToProfileMap[username];
+};
+
+export { carolineProfile, snowieProfile, getProfile };

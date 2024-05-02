@@ -2,8 +2,8 @@ import React from 'react';
 import { Flex, Divider, Text, Box } from '@chakra-ui/react';
 import StatusCard from './StatusCard';
 
-export default function StatusTabContent({ user }) {
-  const { username, picture, statuses } = user;
+export default function StatusTabContent({ profile }) {
+  const { username, picture, statuses } = profile;
 
   return (
     <Flex direction="column" w="full">
@@ -22,7 +22,7 @@ export default function StatusTabContent({ user }) {
             </Box>
           ))
       ) : (
-        <Text>No posts to display</Text>
+        <Text>No statuses to display</Text>
       )}
     </Flex>
   );

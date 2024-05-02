@@ -97,7 +97,7 @@ function SidebarContent() {
             label="Notifications"
           />
           <StyledNavLink
-            to="/profile"
+            to="/profile?username=carolibn"
             icon={FaRegUser}
             filledIcon={FaUser}
             label="Profile"
