@@ -30,9 +30,16 @@ const passwordErrorMessage = `Password requires:
 - at least 1 symbol
 - at least 1 number`;
 
+const NotificationType = {
+  LIKE: 'like',
+  FOLLOW: 'follow',
+  COMMENT: 'comment',
+};
+
 export {
   formatDateDistanceToNow,
   formatDate,
   passwordRegex,
   passwordErrorMessage,
+  NotificationType,
 };
