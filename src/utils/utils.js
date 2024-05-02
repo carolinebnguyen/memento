@@ -13,20 +13,22 @@ const formatDate = (dateToFormat) => {
   });
 };
 
-// Minimum 8 characters
-// - At least one lower case alphabetic
-// - At least one upper case alphabetic
-// - At least one number
-// - At least one special character
+/*
+Minimum 8 characters
+- At least one lower case alphabetic
+- At least one upper case alphabetic
+- At least one number
+- At least one special character
+*/
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 const passwordErrorMessage = `Password requires:
-- at least 8 characters,
-- at least 1 lowercase letter,
-- 1 uppercase letter,
-- 1 symbol, and
-- 1 number`;
+- at least 8 characters
+- at least 1 lowercase letter
+- at least 1 uppercase letter
+- at least 1 symbol
+- at least 1 number`;
 
 export {
   formatDateDistanceToNow,
