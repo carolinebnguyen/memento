@@ -1,7 +1,16 @@
 import React from 'react';
-import { Flex, Button, Text, Avatar, Heading, Stack } from '@chakra-ui/react';
+import {
+  Flex,
+  Button,
+  Text,
+  Avatar,
+  Heading,
+  Stack,
+  Tooltip,
+} from '@chakra-ui/react';
 import { FaRegHeart, FaRegComment, FaEllipsis } from 'react-icons/fa6';
 import { MdOutlineIosShare } from 'react-icons/md';
+import { formatDateDistanceToNow, formatDate } from '../utils/utils';
 
 export default function StatusCard({ username, picture, status }) {
   return (
@@ -12,7 +21,15 @@ export default function StatusCard({ username, picture, status }) {
           <Heading as="h2" size="xs" noOfLines={1}>
             {username}
           </Heading>
-          <Text fontSize="xs">2 days ago</Text>
+          <Tooltip
+            label={formatDate(status.postedAt)}
+            placement="bottom"
+            openDelay={500}
+          >
+            <Text fontSize="xs">
+              {formatDateDistanceToNow(status.postedAt)}
+            </Text>
+          </Tooltip>
         </Stack>
         <Button size="xs" colorScheme="whiteAlpha">
           <FaEllipsis size={16} color="gray" />

@@ -19,20 +19,20 @@ const carolineProfile = {
           comment: 'Hello there!',
         },
       ],
-      postedAt: new Date('2024-04-30T00:00:00Z'),
+      postedAt: new Date('2024-03-29T00:00:00Z'),
     },
     {
       content: 'This is my second status! :)',
       likes: 0,
       comments: [],
-      postedAt: new Date(Date.now()),
+      postedAt: new Date('2024-04-29T00:00:00Z'),
     },
     {
       content:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor doloribus voluptate modi libero sequi rerum asperiores laboriosam, dolore inventore molestias tempore eveniet dignissimos? Beatae iusto quibusdam repudiandae blanditiis voluptatum odio?',
       likes: 0,
       comments: [],
-      postedAt: new Date(Date.now()),
+      postedAt: new Date('2024-05-01T00:00:00Z'),
     },
   ],
 };
