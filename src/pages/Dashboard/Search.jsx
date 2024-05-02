@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import {
   Flex,
   Input,
-  Button,
-  HStack,
   InputGroup,
   InputLeftElement,
   Icon,
@@ -22,11 +20,13 @@ export default function Search() {
   const [searched, setSearched] = useState(false);
 
   const handleSearch = () => {
-    setSearched(true);
-    const results = Object.keys(usernameToProfileMap).filter((username) =>
-      username.toLowerCase().includes(query.toLowerCase())
-    );
-    setSearchResults(results);
+    if (query.trim() !== '') {
+      setSearched(true);
+      const results = Object.keys(usernameToProfileMap).filter((username) =>
+        username.toLowerCase().includes(query.toLowerCase())
+      );
+      setSearchResults(results);
+    }
   };
 
   const handleClearSearch = () => {
@@ -34,41 +34,37 @@ export default function Search() {
     setQuery('');
   };
 
-  const isSearchDisabled = query.trim() === '';
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   return (
     <Flex align="center" justify="center" direction="column">
-      <HStack>
-        <InputGroup>
-          <InputLeftElement pointerEvents="none">
-            <Icon as={MdOutlineSearch} color="gray.300" boxSize={22} />
-          </InputLeftElement>
-          <Input
-            type="text"
-            placeholder="Search Memento"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
+      <InputGroup>
+        <InputLeftElement pointerEvents="none">
+          <Icon as={MdOutlineSearch} color="gray.300" boxSize={22} />
+        </InputLeftElement>
+        <Input
+          type="text"
+          placeholder="Search Memento"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+        <InputRightElement>
           {query ? (
-            <InputRightElement>
-              <IconButton
-                size="sm"
-                icon={<IoMdClose />}
-                variant="ghost"
-                isRound={true}
-                onClick={handleClearSearch}
-              />
-            </InputRightElement>
+            <IconButton
+              size="sm"
+              icon={<IoMdClose />}
+              variant="ghost"
+              isRound={true}
+              onClick={handleClearSearch}
+            />
           ) : null}
-        </InputGroup>
-        <Button
-          colorScheme="blue"
-          onClick={handleSearch}
-          isDisabled={isSearchDisabled}
-        >
-          Search
-        </Button>
-      </HStack>
+        </InputRightElement>
+      </InputGroup>
       {searched && (
         <Flex direction="column" mt={4}>
           {searchResults.length > 0 ? (
