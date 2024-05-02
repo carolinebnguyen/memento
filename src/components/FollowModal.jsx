@@ -7,9 +7,8 @@ import {
   ModalBody,
   ModalCloseButton,
   Center,
-  Box,
-  Text,
 } from '@chakra-ui/react';
+import UserCard from './UserCard';
 
 export default function FollowModal({ isOpen, onClose, title, usersList }) {
   return (
@@ -17,7 +16,7 @@ export default function FollowModal({ isOpen, onClose, title, usersList }) {
       <Modal
         isOpen={isOpen}
         onClose={onClose}
-        size="lg"
+        size="md"
         scrollBehavior="inside"
       >
         <ModalOverlay />
@@ -26,11 +25,7 @@ export default function FollowModal({ isOpen, onClose, title, usersList }) {
           <ModalCloseButton />
           <ModalBody mb={3}>
             {usersList.length > 0 ? (
-              <Box>
-                {usersList.map((user, index) => (
-                  <Text key={index}>{user.username}</Text>
-                ))}
-              </Box>
+              usersList.map((user, index) => <UserCard user={user} />)
             ) : (
               <Center>No users to show</Center>
             )}
