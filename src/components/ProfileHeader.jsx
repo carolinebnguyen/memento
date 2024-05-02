@@ -20,7 +20,7 @@ export default function ProfileHeader({ profile }) {
     bio,
     followersList,
     followingList,
-    posts,
+    photos,
     statuses,
   } = profile;
 
@@ -74,10 +74,10 @@ export default function ProfileHeader({ profile }) {
             align="center"
           >
             <Text as="b" fontSize="sm">
-              {posts.length}
+              {photos.length}
             </Text>
             <Text fontSize="sm" fontWeight={500}>
-              {posts.length === 1 ? 'post' : 'posts'}
+              {photos.length === 1 ? 'photo' : 'photos'}
             </Text>
           </Stack>
           <Stack

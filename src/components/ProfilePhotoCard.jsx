@@ -1,8 +1,8 @@
 import React from 'react';
 import { GridItem, Image } from '@chakra-ui/react';
 
-export default function ProfilePostCard({ post }) {
-  const { imageSrc } = post;
+export default function ProfilePhotoCard({ photo }) {
+  const { imageSrc } = photo;
 
   return (
     <GridItem border="2px" borderColor="gray.200">

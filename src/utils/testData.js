@@ -9,7 +9,7 @@ const carolineProfile = {
   bio: 'Developer \n Software Engineering Major',
   followersList: [],
   followingList: [],
-  posts: [
+  photos: [
     {
       id: 1,
       imageSrc:
@@ -19,6 +19,7 @@ const carolineProfile = {
         {
           user: 'snowie',
           comment: 'Nice pic!',
+          postedAt: new Date('2024-04-29T02:00:00Z'),
         },
       ],
       postedAt: new Date('2024-04-29T00:00:00Z'),
@@ -41,6 +42,7 @@ const carolineProfile = {
         {
           user: 'snowie',
           comment: 'Hello there!',
+          postedAt: new Date('2024-03-30T00:00:00Z'),
         },
       ],
       postedAt: new Date('2024-03-29T00:00:00Z'),
@@ -70,12 +72,22 @@ const snowieProfile = {
   bio: 'Pom',
   followersList: [carolineProfile],
   followingList: [carolineProfile],
-  posts: [],
+  photos: [],
   statuses: [],
 };
 
 carolineProfile.followersList.push(snowieProfile);
 carolineProfile.followingList.push(snowieProfile);
+
+const notifications = [
+  {
+    user: snowieProfile,
+    postId: 1,
+    engagement: 'comment',
+    content: 'Nice pic!',
+    postedAt: new Date('2024-04-29T02:00:00Z'),
+  },
+];
 
 const usernameToProfileMap = {
   carolibn: carolineProfile,
@@ -89,4 +101,10 @@ const getProfile = (username) => {
   return usernameToProfileMap[username];
 };
 
-export { carolineProfile, snowieProfile, usernameToProfileMap, getProfile };
+export {
+  carolineProfile,
+  snowieProfile,
+  notifications,
+  usernameToProfileMap,
+  getProfile,
+};

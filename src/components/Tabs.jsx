@@ -18,7 +18,7 @@ const AllTab = React.forwardRef((props, ref) => {
   );
 });
 
-const PostTab = React.forwardRef((props, ref) => {
+const PhotoTab = React.forwardRef((props, ref) => {
   const tabProps = useTab({ ...props, ref });
   const isSelected = !!tabProps['aria-selected'];
 
@@ -46,4 +46,4 @@ const StatusTab = React.forwardRef((props, ref) => {
   );
 });
 
-export { AllTab, PostTab, StatusTab };
+export { AllTab, PhotoTab, StatusTab };
