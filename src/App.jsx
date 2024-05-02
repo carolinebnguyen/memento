@@ -10,7 +10,6 @@ import Contact from './pages/Footer/Contact';
 import Home from './pages/Dashboard/Home';
 import Search from './pages/Dashboard/Search';
 import Create from './pages/Dashboard/Create';
-import Messages from './pages/Dashboard/Messages';
 import Notifications from './pages/Dashboard/Notifications';
 import Profile from './pages/Dashboard/Profile';
 import Settings from './pages/Dashboard/Settings';
@@ -52,11 +51,6 @@ const router = createBrowserRouter([
       { path: 'profile', element: <Profile /> },
       { path: 'settings', element: <Settings /> },
     ],
-  },
-  {
-    path: '/messages',
-    element: <Messages />,
-    errorElement: <ErrorPage />,
   },
 ]);
 

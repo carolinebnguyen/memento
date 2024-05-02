@@ -16,16 +16,14 @@ import {
   MdOutlineHome,
   MdHome,
   MdOutlineSearch,
-  MdOutlineMail,
-  MdMail,
   MdLogout,
   MdOutlineSettings,
 } from 'react-icons/md';
-import { FaRegUser, FaUser, FaSearch } from 'react-icons/fa';
+import { FaRegUser, FaUser, FaSearch, FaRegBell, FaBell } from 'react-icons/fa';
 import { FiPlusCircle } from 'react-icons/fi';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { useLocation } from 'react-router-dom';
-import caroline from '../../assets/carolineAvatar.png';
+import caroline from '../../assets/placeholders/carolineAvatarClear.png';
 import { CompactIconButton } from '../CompactNavLink/CompactNavLink';
 import { headerHeight, sidebarWidth } from '../../utils/constants';
 import styles from './BottomNav.module.css';
@@ -45,7 +43,6 @@ export default function BottomNav() {
       borderTopWidth="1px"
       borderColor="blackAlpha.300"
       h={headerHeight}
-      ml={isWide ? sidebarWidth : 0}
       position="fixed"
       bottom="0"
       bgColor="white"
@@ -62,9 +59,9 @@ export default function BottomNav() {
         filledIcon={AiFillPlusCircle}
       />
       <CompactIconButton
-        to="/messages"
-        icon={MdOutlineMail}
-        filledIcon={MdMail}
+        to="/notifications"
+        icon={FaRegBell}
+        filledIcon={FaBell}
       />
       <Menu>
         <MenuButton
