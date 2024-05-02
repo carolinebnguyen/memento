@@ -13,16 +13,14 @@ import {
 import { PostTab, StatusTab } from '../../components/Tabs';
 import ProfileHeader from '../../components/ProfileHeader';
 import StatusCard from '../../components/StatusCard';
-import caroline from '../../assets/placeholders/carolineAvatarClear.png';
+import { testProfile } from '../../utils/testData';
 
 export default function Profile() {
+  const { username, picture } = testProfile;
+
   return (
     <Flex justify="center" align="center" direction="column">
-      <ProfileHeader
-        username="carolibn"
-        name="Caroline Nguyen"
-        picture={caroline}
-      />
+      <ProfileHeader profile={testProfile} />
       <Tabs align="center" w="100%">
         <TabList role="tablist">
           <PostTab>Posts</PostTab>
@@ -62,13 +60,13 @@ export default function Profile() {
             </Grid>
           </TabPanel>
           <TabPanel role="tabpanel">
-            <StatusCard username="carolibn" picture={caroline} />
+            <StatusCard username={username} picture={picture} />
             <Divider my={3} />
-            <StatusCard username="carolibn" picture={caroline} />
+            <StatusCard username={username} picture={picture} />
             <Divider my={3} />
-            <StatusCard username="carolibn" picture={caroline} />
+            <StatusCard username={username} picture={picture} />
             <Divider my={3} />
-            <StatusCard username="carolibn" picture={caroline} />
+            <StatusCard username={username} picture={picture} />
           </TabPanel>
         </TabPanels>
       </Tabs>

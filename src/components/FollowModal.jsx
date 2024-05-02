@@ -6,9 +6,12 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
+  Center,
+  Box,
+  Text,
 } from '@chakra-ui/react';
 
-export default function FollowModal({ isOpen, onClose, title }) {
+export default function FollowModal({ isOpen, onClose, title, usersList }) {
   return (
     <>
       <Modal
@@ -22,10 +25,15 @@ export default function FollowModal({ isOpen, onClose, title }) {
           <ModalHeader textAlign="center">{title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody mb={3}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore ab
-            in totam est exercitationem? Tenetur laborum voluptas similique
-            possimus quos dolore ducimus hic eveniet autem accusantium. Dolorum
-            soluta est expedita!
+            {usersList.length > 0 ? (
+              <Box>
+                {usersList.map((user, index) => (
+                  <Text key={index}>{user.username}</Text>
+                ))}
+              </Box>
+            ) : (
+              <Center>No users to show</Center>
+            )}
           </ModalBody>
         </ModalContent>
       </Modal>

@@ -11,7 +11,10 @@ import {
 import { Link } from 'react-router-dom';
 import FollowModal from './FollowModal';
 
-export default function ProfileHeader({ username, name, picture }) {
+export default function ProfileHeader({ profile }) {
+  const { username, name, picture, bio, followersList, followingList } =
+    profile;
+
   const {
     isOpen: isOpenFollower,
     onOpen: onOpenFollower,
@@ -58,13 +61,17 @@ export default function ProfileHeader({ username, name, picture }) {
             _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
             onClick={onOpenFollower}
           >
-            <Text fontSize="sm">
-              <Text as="b">1,234</Text> followers
+            <Text as="b" fontSize="sm">
+              1,234
+            </Text>
+            <Text fontSize="sm" fontWeight={500}>
+              followers
             </Text>
             <FollowModal
               isOpen={isOpenFollower}
               onClose={onCloseFollower}
               title="Followers"
+              usersList={followersList}
             />
           </Stack>
           <Stack
@@ -74,14 +81,18 @@ export default function ProfileHeader({ username, name, picture }) {
             _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
             onClick={onOpenFollowing}
           >
-            <Text fontSize="sm">
-              <Text as="b">56</Text> following
+            <Text as="b" fontSize="sm">
+              56
+            </Text>
+            <Text fontSize="sm" fontWeight={500}>
+              following
             </Text>
           </Stack>
           <FollowModal
             isOpen={isOpenFollowing}
             onClose={onCloseFollowing}
             title="Following"
+            usersList={followingList}
           />
         </Stack>
 
@@ -89,11 +100,8 @@ export default function ProfileHeader({ username, name, picture }) {
           {name}
         </Heading>
 
-        <Text fontSize="sm">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora
-          quasi, nemo, quos at beatae corrupti aspernatur ab fugit, laudantium
-          magni velit necessitatibus perspiciatis placeat totam quisquam. Quo
-          provident eaque nihil.
+        <Text fontSize="sm" whiteSpace="pre-line">
+          {bio}
         </Text>
       </Stack>
     </Flex>
