@@ -28,7 +28,7 @@ export default function FollowModal({ isOpen, onClose, title, usersList }) {
             {usersList.length > 0 ? (
               usersList.map((user, index) => (
                 <Box key={user.username}>
-                  <UserCard user={user} />
+                  <UserCard user={user} handleClose={onClose} />
                 </Box>
               ))
             ) : (
