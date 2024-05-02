@@ -15,17 +15,22 @@ import {
   FormLabel,
   Input,
   Textarea,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { MdOutlinePhotoCamera } from 'react-icons/md';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import { carolineProfile } from '../utils/testData';
+import ChangePictureModal from './ChangePictureModal';
 
 export default function ProfileInfoCard() {
   const { picture } = carolineProfile;
   const [isEditable, setIsEditable] = useState(false);
   const [editedProfileInfo, setEditedProfileInfo] = useState(carolineProfile);
+  const [avatarSrc, setAvatarSrc] = useState(picture);
   const toast = useToast();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const initialValues = {
     email: editedProfileInfo.email,
@@ -43,6 +48,10 @@ export default function ProfileInfoCard() {
 
   const toggleEditMode = () => {
     setIsEditable(!isEditable);
+  };
+
+  const handleSetAvatarSrc = (src) => {
+    setAvatarSrc(src);
   };
 
   const onSubmit = (values, { setSubmitting }) => {
@@ -70,7 +79,7 @@ export default function ProfileInfoCard() {
           Profile
         </Heading>
         <Stack direction="row" justifyContent="space-between" px={5} mt={5}>
-          <Avatar size="2xl" src={picture}>
+          <Avatar size="2xl" src={avatarSrc}>
             <AvatarBadge
               as={IconButton}
               size="md"
@@ -79,8 +88,14 @@ export default function ProfileInfoCard() {
               colorScheme="gray"
               aria-label="Change Profile Picture"
               icon={<MdOutlinePhotoCamera />}
+              onClick={onOpen}
             />
           </Avatar>
+          <ChangePictureModal
+            isOpen={isOpen}
+            onClose={onClose}
+            setAvatarSrc={handleSetAvatarSrc}
+          />
           {isEditable ? (
             <Flex direction="column" w="50%" justify="center">
               <Formik
