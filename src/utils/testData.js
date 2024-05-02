@@ -8,7 +8,20 @@ const carolineProfile = {
   bio: 'Developer \n Software Engineering Major',
   followersList: [],
   followingList: [],
-  posts: [],
+  posts: [
+    {
+      imageSrc:
+        'https://m.media-amazon.com/images/I/51b0f7Fz4KL._AC_UF1000,1000_QL80_.jpg',
+      likes: 1,
+      comments: [
+        {
+          user: 'snowie',
+          comment: 'Nice pic!',
+        },
+      ],
+      postedAt: new Date('2024-04-29T00:00:00Z'),
+    },
+  ],
   statuses: [
     {
       content: 'This is my first status',
