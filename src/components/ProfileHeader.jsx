@@ -8,7 +8,7 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import FollowModal from './FollowModal';
 
 export default function ProfileHeader({ profile }) {
@@ -34,6 +34,9 @@ export default function ProfileHeader({ profile }) {
     onClose: onCloseFollowing,
   } = useDisclosure();
 
+  const { search } = useLocation();
+  const searchedUsername = new URLSearchParams(search).get('username');
+
   return (
     <Flex mb={2}>
       <Avatar size="xl" mr={5} src={picture} />
@@ -42,11 +45,13 @@ export default function ProfileHeader({ profile }) {
           <Heading as="h1" size="md" noOfLines={1}>
             {username}
           </Heading>
-          <Link to="/settings">
-            <Button colorScheme="blue" size="xs">
-              Edit Profile
-            </Button>
-          </Link>
+          {searchedUsername === 'carolibn' ? (
+            <Link to="/settings">
+              <Button colorScheme="blue" size="xs">
+                Edit Profile
+              </Button>
+            </Link>
+          ) : null}
         </Stack>
 
         <Stack direction="row" gap={8} mt={2}>
