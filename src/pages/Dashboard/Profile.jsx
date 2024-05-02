@@ -2,7 +2,7 @@ import React from 'react';
 import { Flex, Tabs, TabList, TabPanels, TabPanel } from '@chakra-ui/react';
 import { PostTab, StatusTab } from '../../components/Tabs';
 import ProfileHeader from '../../components/ProfileHeader';
-import PostTabContent from '../../components/PostTabContent';
+import ProfilePostTabContent from '../../components/ProfilePostTabContent';
 import StatusTabContent from '../../components/StatusTabContent';
 import { carolineProfile } from '../../utils/testData';
 
@@ -17,7 +17,7 @@ export default function Profile() {
         </TabList>
         <TabPanels>
           <TabPanel role="tabpanel">
-            <PostTabContent user={carolineProfile} />
+            <ProfilePostTabContent user={carolineProfile} />
           </TabPanel>
           <TabPanel role="tabpanel">
             <StatusTabContent user={carolineProfile} />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Divider } from '@chakra-ui/react';
+import { Flex, Divider, Text } from '@chakra-ui/react';
 import StatusCard from './StatusCard';
 
 export default function StatusTabContent({ user }) {
@@ -22,7 +22,7 @@ export default function StatusTabContent({ user }) {
             </>
           ))
       ) : (
-        <p>No statuses to display</p>
+        <Text>No posts to display</Text>
       )}
     </Flex>
   );
