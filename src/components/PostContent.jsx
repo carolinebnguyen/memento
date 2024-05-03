@@ -16,7 +16,11 @@ export default function PostContent({ post }) {
       )}
       {comments.length > 0
         ? comments.map((comment, index) => (
-            <Box key={id} w="full" mt={index === 0 ? 3 : 0}>
+            <Box
+              key={`${id}-${type}-${index}`}
+              w="full"
+              mt={index === 0 ? 3 : 0}
+            >
               <CommentCard poster={postedBy} comment={comment} />
             </Box>
           ))
