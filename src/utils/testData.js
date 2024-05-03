@@ -1,14 +1,15 @@
 import caroline from '../assets/placeholders/carolineAvatarClear.png';
 import snowie from '../assets/snowieAvatar.png';
 import brownPomeranian from '../assets/placeholders/brownPomeranian.jpg';
+import bears1 from '../assets/placeholders/carolibnPhoto1.jpg';
+import bears2 from '../assets/placeholders/carolibnPhoto2.jpg';
 import { NotificationType, PostType } from './utils';
 
 const carolibnPhoto1 = {
   id: 2,
   postedBy: 'carolibn',
   type: PostType.PHOTO,
-  imageSrc:
-    'https://m.media-amazon.com/images/I/51b0f7Fz4KL._AC_UF1000,1000_QL80_.jpg',
+  imageSrc: bears1,
   likes: [],
   comments: [
     {
@@ -25,8 +26,7 @@ const carolibnPhoto2 = {
   id: 4,
   postedBy: 'carolibn',
   type: PostType.PHOTO,
-  imageSrc:
-    'https://ih1.redbubble.net/image.3787621272.3825/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg',
+  imageSrc: bears2,
   likes: 0,
   comments: [],
   postedAt: new Date('2024-04-30T00:00:00Z'),
