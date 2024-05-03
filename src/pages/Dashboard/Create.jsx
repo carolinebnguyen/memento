@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   Flex,
   FormControl,
-  FormLabel,
   HStack,
   Heading,
   useToast,
@@ -14,6 +13,7 @@ import {
   IconButton,
   VStack,
   Textarea,
+  Select,
 } from '@chakra-ui/react';
 import { IoMdClose } from 'react-icons/io';
 import * as yup from 'yup';
@@ -50,13 +50,13 @@ export default function Create() {
   };
 
   const onSubmit = (values, { setSubmitting }) => {
-    console.log(values);
+    const type = values.type;
     setTimeout(() => {
       setSubmitting(false);
       navigate('/profile?username=carolibn');
       toast({
-        title: 'Post Created',
-        description: 'Your post has been created',
+        title: 'Post Published',
+        description: `Your ${type} has been published`,
         status: 'success',
         duration: 3000,
         position: 'top',
@@ -68,7 +68,7 @@ export default function Create() {
   };
 
   return (
-    <Flex direction="column" align="center" w="100%">
+    <Flex direction="column" align="center" w="100vw">
       <Heading as="h1" size="lg" mb={2}>
         Create a Post
       </Heading>
@@ -98,10 +98,10 @@ export default function Create() {
                   <VStack>
                     <Field
                       name="type"
-                      as="select"
+                      as={Select}
                       value={values.type}
                       onChange={handleChange}
-                      w="100px"
+                      bgColor="#f7f7f7"
                     >
                       <option value="status">Status</option>
                       <option value="photo">Photo</option>
@@ -148,15 +148,16 @@ export default function Create() {
                 </>
               )}
               <FormControl>
-                <FormLabel fontSize="16px" mt={5}>
-                  Text Content
-                </FormLabel>
                 <Field
                   as={Textarea}
                   name="text"
                   id="text"
                   isInvalid={errors.text && touched.text}
+                  mt={5}
                   mb={2}
+                  placeholder={`Write a ${
+                    values.type === 'photo' ? 'caption' : 'status'
+                  }...`}
                 />
                 <ErrorMessage name="text">
                   {(msg) => <Text color="red">{msg}</Text>}
