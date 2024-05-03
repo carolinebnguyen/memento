@@ -94,133 +94,135 @@ export default function CommentCard({ poster, comment }) {
   };
 
   return (
-    <Flex align="center" w="full" my={2}>
+    <>
       {isCommentVisible ? (
-        <Flex justify="space-between" w="100%">
-          <Stack direction="row">
-            {isEditable ? (
-              <>
-                <Formik
-                  initialValues={initialValues}
-                  onSubmit={onSubmit}
-                  enableReinitialize
-                >
-                  {({
-                    values,
-                    isSubmitting,
-                    resetForm,
-                    handleSubmit,
-                    errors,
-                    touched,
-                  }) => (
-                    <Form>
-                      <FormControl
-                        isInvalid={errors.content && touched.content}
-                      >
-                        <Field
-                          as={Textarea}
-                          type="text"
-                          name="content"
-                          id="content"
-                          mb={2}
-                        />
-                        <ErrorMessage name="content">
-                          {(msg) => <Text color="red">{msg}</Text>}
-                        </ErrorMessage>
-                      </FormControl>
-                      <HStack justify="center" mt={2} gap={3}>
-                        <Button onClick={toggleEditMode} size="xs">
-                          Cancel
-                        </Button>
-                        <Button colorScheme="blue" type="submit" size="xs">
-                          Save Changes
-                        </Button>
-                      </HStack>
-                    </Form>
-                  )}
-                </Formik>
-                <ConfirmationModal
-                  isOpen={isOpen}
-                  onClose={onClose}
-                  title="Delete this comment?"
-                  message="Are you sure you want to delete this comment? This action cannot be undone."
-                  buttonLabel="Delete"
-                  colorScheme="red"
-                  onConfirm={confirmDeleteComment}
-                />
-              </>
-            ) : (
-              <>
-                <Avatar size="sm" src={picture} mr={2} />
-                <Stack gap={0}>
-                  <HStack w="full" gap={1}>
-                    <Link color="black" onClick={handleUserNavigation}>
-                      <Text as="b" fontSize="sm">
-                        {username}
-                      </Text>
-                    </Link>
-                    <Text fontSize="sm" fontWeight={400}>
-                      {initialValues.content}
-                    </Text>
-                  </HStack>
-                  <Tooltip
-                    label={formatDate(postedAt)}
-                    placement="bottom"
-                    openDelay={500}
+        <Flex align="center" w="full" my={2}>
+          <Flex justify="space-between" w="100%">
+            <Stack direction="row">
+              {isEditable ? (
+                <>
+                  <Formik
+                    initialValues={initialValues}
+                    onSubmit={onSubmit}
+                    enableReinitialize
                   >
-                    <Text fontSize="xs" color="gray" fontWeight={500}>
-                      {formatDateDistanceToNow(postedAt)}
-                    </Text>
-                  </Tooltip>
-                </Stack>
+                    {({
+                      values,
+                      isSubmitting,
+                      resetForm,
+                      handleSubmit,
+                      errors,
+                      touched,
+                    }) => (
+                      <Form>
+                        <FormControl
+                          isInvalid={errors.content && touched.content}
+                        >
+                          <Field
+                            as={Textarea}
+                            type="text"
+                            name="content"
+                            id="content"
+                            mb={2}
+                          />
+                          <ErrorMessage name="content">
+                            {(msg) => <Text color="red">{msg}</Text>}
+                          </ErrorMessage>
+                        </FormControl>
+                        <HStack justify="center" mt={2} gap={3}>
+                          <Button onClick={toggleEditMode} size="xs">
+                            Cancel
+                          </Button>
+                          <Button colorScheme="blue" type="submit" size="xs">
+                            Save Changes
+                          </Button>
+                        </HStack>
+                      </Form>
+                    )}
+                  </Formik>
+                  <ConfirmationModal
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    title="Delete this comment?"
+                    message="Are you sure you want to delete this comment? This action cannot be undone."
+                    buttonLabel="Delete"
+                    colorScheme="red"
+                    onConfirm={confirmDeleteComment}
+                  />
+                </>
+              ) : (
+                <>
+                  <Avatar size="sm" src={picture} mr={2} />
+                  <Stack gap={0}>
+                    <HStack w="full" gap={1}>
+                      <Link color="black" onClick={handleUserNavigation}>
+                        <Text as="b" fontSize="sm">
+                          {username}
+                        </Text>
+                      </Link>
+                      <Text fontSize="sm" fontWeight={400}>
+                        {initialValues.content}
+                      </Text>
+                    </HStack>
+                    <Tooltip
+                      label={formatDate(postedAt)}
+                      placement="bottom"
+                      openDelay={500}
+                    >
+                      <Text fontSize="xs" color="gray" fontWeight={500}>
+                        {formatDateDistanceToNow(postedAt)}
+                      </Text>
+                    </Tooltip>
+                  </Stack>
+                </>
+              )}
+            </Stack>
+            {isEditable ? null : (
+              <>
+                {isCommentSelfPosted || isOwnPost ? (
+                  <Menu>
+                    <MenuButton
+                      as={IconButton}
+                      aria-label="Options"
+                      icon={<FaEllipsis />}
+                      variant="ghost"
+                      color="gray"
+                      size="xs"
+                    />
+                    <MenuList>
+                      {isCommentSelfPosted ? (
+                        <MenuItem
+                          icon={<EditIcon />}
+                          className={styles['menu-link']}
+                          onClick={toggleEditMode}
+                        >
+                          Edit Comment
+                        </MenuItem>
+                      ) : null}
+                      <MenuItem
+                        icon={<DeleteIcon />}
+                        onClick={onOpen}
+                        className={styles['menu-link']}
+                      >
+                        Delete Comment
+                      </MenuItem>
+                      <ConfirmationModal
+                        isOpen={isOpen}
+                        onClose={onClose}
+                        title="Delete this comment?"
+                        message="Are you sure you want to delete this comment? This action cannot be undone."
+                        buttonLabel="Delete"
+                        colorScheme="red"
+                        onConfirm={confirmDeleteComment}
+                      />
+                    </MenuList>
+                  </Menu>
+                ) : null}
               </>
             )}
-          </Stack>
-          {isEditable ? null : (
-            <>
-              {isCommentSelfPosted || isOwnPost ? (
-                <Menu>
-                  <MenuButton
-                    as={IconButton}
-                    aria-label="Options"
-                    icon={<FaEllipsis />}
-                    variant="ghost"
-                    color="gray"
-                    size="xs"
-                  />
-                  <MenuList>
-                    {isCommentSelfPosted ? (
-                      <MenuItem
-                        icon={<EditIcon />}
-                        className={styles['menu-link']}
-                        onClick={toggleEditMode}
-                      >
-                        Edit Comment
-                      </MenuItem>
-                    ) : null}
-                    <MenuItem
-                      icon={<DeleteIcon />}
-                      onClick={onOpen}
-                      className={styles['menu-link']}
-                    >
-                      Delete Comment
-                    </MenuItem>
-                    <ConfirmationModal
-                      isOpen={isOpen}
-                      onClose={onClose}
-                      title="Delete this comment?"
-                      message="Are you sure you want to delete this comment? This action cannot be undone."
-                      buttonLabel="Delete"
-                      colorScheme="red"
-                      onConfirm={confirmDeleteComment}
-                    />
-                  </MenuList>
-                </Menu>
-              ) : null}
-            </>
-          )}
+          </Flex>
         </Flex>
       ) : null}
-    </Flex>
+    </>
   );
 }
