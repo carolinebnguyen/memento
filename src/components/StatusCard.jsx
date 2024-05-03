@@ -51,14 +51,13 @@ export default function StatusCard({ status }) {
   };
 
   return (
-    <Flex direction="column">
+    <Flex direction="column" w="100%">
       <Flex justify="space-between" gap={20}>
         <Stack direction="row" align="center" gap={2}>
           <Avatar size="sm" src={picture} />
           <Heading
             as="h2"
             size="xs"
-            noOfLines={1}
             _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
             onClick={handleUserNavigate}
           >

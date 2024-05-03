@@ -41,7 +41,7 @@ export default function NotificationCard({ notification }) {
   };
 
   return (
-    <Flex align="center" w="full" my={2}>
+    <Flex align="center" w="full" p={2} _hover={{ backgroundColor: '#f5fbfc' }}>
       <Flex justify="space-between" w="100%" align="center" gap={8}>
         <Stack direction="row" display="flex" align="center">
           <Avatar size="md" src={picture} mr={2} />
@@ -71,7 +71,15 @@ export default function NotificationCard({ notification }) {
             </Tooltip>
           </Stack>
         </Stack>
-        {imageSrc && <Image src={imageSrc} boxSize={70} objectFit="cover" />}
+        {imageSrc && (
+          <Image
+            src={imageSrc}
+            boxSize={70}
+            objectFit="cover"
+            onClick={handlePostNavigation}
+            _hover={{ cursor: 'pointer' }}
+          />
+        )}
       </Flex>
     </Flex>
   );
