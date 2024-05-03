@@ -46,6 +46,8 @@ export default function PostCard({ post }) {
   const [isLiked, setIsLiked] = useState(false);
   const [modifiedLikes, setModifiedLikes] = useState(likes);
 
+  const isPhoto = type === PostType.PHOTO;
+
   const user = getProfile(postedBy);
   const { username, picture } = user;
   const isOwnPost = postedBy === 'carolibn';
@@ -96,15 +98,15 @@ export default function PostCard({ post }) {
   };
 
   const initialValues = {
-    content: editedStatus || '',
-    caption: editedCaption || '',
+    content: editedStatus,
+    caption: editedCaption,
   };
 
   const onSubmit = (values, { setSubmitting }) => {
-    if (type === PostType.PHOTO) {
+    if (isPhoto) {
       setEditedCaption(values.caption);
     } else {
-      setEditedStatus(values.status);
+      setEditedStatus(values.content);
     }
 
     setTimeout(() => {
@@ -148,90 +150,32 @@ export default function PostCard({ post }) {
         <Flex direction="column" w="100%">
           <Flex justify="space-between" gap={20} align="center">
             <Stack direction="row" align="center" gap={2}>
-              {isEditable ? (
-                <>
-                  <Formik
-                    initialValues={initialValues}
-                    onSubmit={onSubmit}
-                    enableReinitialize
-                  >
-                    {({
-                      values,
-                      isSubmitting,
-                      resetForm,
-                      handleSubmit,
-                      errors,
-                      touched,
-                    }) => (
-                      <Form>
-                        <FormControl
-                          isInvalid={errors.content && touched.content}
-                        >
-                          <Field
-                            as={Textarea}
-                            type="text"
-                            name="content"
-                            id="content"
-                            mb={2}
-                            size="sm"
-                            borderRadius={5}
-                            rows="1"
-                          />
-                          <ErrorMessage name="content">
-                            {(msg) => <Text color="red">{msg}</Text>}
-                          </ErrorMessage>
-                        </FormControl>
-                        <HStack justify="center" mt={2} gap={3}>
-                          <Button onClick={toggleEditMode} size="xs">
-                            Cancel
-                          </Button>
-                          <Button colorScheme="blue" type="submit" size="xs">
-                            Save Changes
-                          </Button>
-                        </HStack>
-                      </Form>
-                    )}
-                  </Formik>
-                  <ConfirmationModal
-                    isOpen={isOpenConfirmation}
-                    onClose={onCloseConfirmation}
-                    title="Delete this post?"
-                    message="Are you sure you want to delete this post? This action cannot be undone."
-                    buttonLabel="Delete"
-                    colorScheme="red"
-                    onConfirm={confirmDeletePost}
-                  />
-                </>
-              ) : (
-                <>
-                  <Avatar size="sm" src={picture} />
-                  <Heading
-                    as="h2"
-                    size="xs"
-                    _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
-                    onClick={handleUserNavigate}
-                  >
-                    {username}
-                  </Heading>
-                  <Tooltip
-                    label={formatDate(postedAt)}
-                    placement="bottom"
-                    openDelay={500}
-                  >
-                    <Text
-                      fontSize="xs"
-                      color="gray"
-                      _hover={{
-                        textDecoration: 'underline',
-                        cursor: 'pointer',
-                      }}
-                      onClick={handlePostNavigate}
-                    >
-                      {formatDateDistanceToNow(postedAt)}
-                    </Text>
-                  </Tooltip>
-                </>
-              )}
+              <Avatar size="sm" src={picture} />
+              <Heading
+                as="h2"
+                size="xs"
+                _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
+                onClick={handleUserNavigate}
+              >
+                {username}
+              </Heading>
+              <Tooltip
+                label={formatDate(postedAt)}
+                placement="bottom"
+                openDelay={500}
+              >
+                <Text
+                  fontSize="xs"
+                  color="gray"
+                  _hover={{
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                  }}
+                  onClick={handlePostNavigate}
+                >
+                  {formatDateDistanceToNow(postedAt)}
+                </Text>
+              </Tooltip>
             </Stack>
             {isOwnPost ? (
               <Menu>
@@ -273,18 +217,79 @@ export default function PostCard({ post }) {
               </Menu>
             ) : null}
           </Flex>
-          {type === PostType.STATUS ? (
-            <Text fontSize="sm" my={2} textAlign="left">
-              {content}
-            </Text>
+          {isEditable ? (
+            <>
+              <Formik
+                initialValues={initialValues}
+                onSubmit={onSubmit}
+                enableReinitialize
+              >
+                {({
+                  values,
+                  isSubmitting,
+                  resetForm,
+                  handleSubmit,
+                  errors,
+                  touched,
+                }) => (
+                  <Form>
+                    <FormControl isRequired>
+                      <Field
+                        as={Textarea}
+                        type="text"
+                        name={isPhoto ? 'caption' : 'content'}
+                        id={isPhoto ? 'caption' : 'content'}
+                        mt={2}
+                        size="sm"
+                        borderRadius={5}
+                        rows="2"
+                      />
+                      <ErrorMessage name="content">
+                        {(msg) => <Text color="red">{msg}</Text>}
+                      </ErrorMessage>
+                    </FormControl>
+                    <HStack justify="center" mt={2} gap={3}>
+                      <Button onClick={toggleEditMode} size="xs">
+                        Cancel
+                      </Button>
+                      <Button colorScheme="blue" type="submit" size="xs">
+                        Save Changes
+                      </Button>
+                    </HStack>
+                  </Form>
+                )}
+              </Formik>
+              <ConfirmationModal
+                isOpen={isOpenConfirmation}
+                onClose={onCloseConfirmation}
+                title="Delete this post?"
+                message="Are you sure you want to delete this post? This action cannot be undone."
+                buttonLabel="Delete"
+                colorScheme="red"
+                onConfirm={confirmDeletePost}
+              />
+            </>
           ) : (
             <>
-              <Center>
-                <Image src={imageSrc} my={3} boxSize={500} objectFit="cover" />
-              </Center>
-              <Text fontSize="sm" mb={3} textAlign="left">
-                {caption}
-              </Text>
+              {isPhoto ? (
+                <>
+                  <Center>
+                    <Image
+                      src={imageSrc}
+                      my={3}
+                      boxSize={500}
+                      objectFit="cover"
+                    />
+                  </Center>
+                  <Text fontSize="sm" mb={3} textAlign="left">
+                    {initialValues.caption}
+                  </Text>
+                </>
+              ) : (
+                <Text fontSize="sm" my={2} textAlign="left">
+                  {initialValues.content}
+                </Text>
+              )}
             </>
           )}
           <Flex justify="space-between">
