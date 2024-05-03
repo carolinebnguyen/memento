@@ -32,17 +32,8 @@ import ConfirmationModal from './ConfirmationModal';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 export default function PostCard({ post }) {
-  const {
-    id,
-    postedBy,
-    type,
-    content,
-    imageSrc,
-    caption,
-    likes,
-    comments,
-    postedAt,
-  } = post;
+  const { id, postedBy, type, text, imageSrc, likes, comments, postedAt } =
+    post;
   const [isLiked, setIsLiked] = useState(false);
   const [modifiedLikes, setModifiedLikes] = useState(likes);
 
@@ -72,8 +63,7 @@ export default function PostCard({ post }) {
   } = useDisclosure();
   const toast = useToast();
   const [isEditable, setIsEditable] = useState(false);
-  const [editedStatus, setEditedStatus] = useState(content);
-  const [editedCaption, setEditedCaption] = useState(caption);
+  const [editedText, setEditedText] = useState(text);
 
   const confirmDeletePost = () => {
     setTimeout(() => {
@@ -98,16 +88,11 @@ export default function PostCard({ post }) {
   };
 
   const initialValues = {
-    content: editedStatus,
-    caption: editedCaption,
+    text: editedText,
   };
 
   const onSubmit = (values, { setSubmitting }) => {
-    if (isPhoto) {
-      setEditedCaption(values.caption);
-    } else {
-      setEditedStatus(values.content);
-    }
+    setEditedText(values.text);
 
     setTimeout(() => {
       setSubmitting(false);
@@ -237,8 +222,8 @@ export default function PostCard({ post }) {
                       <Field
                         as={Textarea}
                         type="text"
-                        name={isPhoto ? 'caption' : 'content'}
-                        id={isPhoto ? 'caption' : 'content'}
+                        name="text"
+                        id="text"
                         mt={2}
                         size="sm"
                         borderRadius={5}
@@ -272,24 +257,18 @@ export default function PostCard({ post }) {
           ) : (
             <>
               {isPhoto ? (
-                <>
-                  <Center>
-                    <Image
-                      src={imageSrc}
-                      my={3}
-                      boxSize={500}
-                      objectFit="cover"
-                    />
-                  </Center>
-                  <Text fontSize="sm" mb={3} textAlign="left">
-                    {initialValues.caption}
-                  </Text>
-                </>
-              ) : (
-                <Text fontSize="sm" my={2} textAlign="left">
-                  {initialValues.content}
-                </Text>
-              )}
+                <Center>
+                  <Image
+                    src={imageSrc}
+                    my={3}
+                    boxSize={500}
+                    objectFit="cover"
+                  />
+                </Center>
+              ) : null}
+              <Text fontSize="sm" my={2} textAlign="left">
+                {initialValues.text}
+              </Text>
             </>
           )}
           <Flex justify="space-between">

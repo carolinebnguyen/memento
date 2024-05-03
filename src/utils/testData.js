@@ -10,7 +10,7 @@ const carolibnPhoto1 = {
   postedBy: 'carolibn',
   type: PostType.PHOTO,
   imageSrc: bears1,
-  caption: 'First picture! Found this cute and wanted to share',
+  text: 'First picture! Found this cute and wanted to share',
   likes: [],
   comments: [
     {
@@ -28,8 +28,7 @@ const carolibnPhoto2 = {
   postedBy: 'carolibn',
   type: PostType.PHOTO,
   imageSrc: bears2,
-  caption:
-    'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam voluptate, sunt perspiciatis deleniti odit quo eos commodi esse id libero, optio, cumque voluptas exercitationem ipsam rerum amet ea iusto illo!',
+  text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam voluptate, sunt perspiciatis deleniti odit quo eos commodi esse id libero, optio, cumque voluptas exercitationem ipsam rerum amet ea iusto illo!',
   likes: [],
   comments: [],
   postedAt: new Date('2024-04-30T00:00:00Z'),
@@ -39,7 +38,7 @@ const carolibnStatus1 = {
   id: 1,
   postedBy: 'carolibn',
   type: PostType.STATUS,
-  content: 'This is my first status',
+  text: 'This is my first status',
   likes: [],
   comments: [
     {
@@ -62,7 +61,7 @@ const carolibnStatus2 = {
   id: 3,
   postedBy: 'carolibn',
   type: PostType.STATUS,
-  content: 'This is my second status! :)',
+  text: 'This is my second status! :)',
   likes: [],
   comments: [],
   postedAt: new Date('2024-04-29T01:00:00Z'),
@@ -72,8 +71,7 @@ const carolibnStatus3 = {
   id: 5,
   postedBy: 'carolibn',
   type: PostType.STATUS,
-  content:
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor doloribus voluptate modi libero sequi rerum asperiores laboriosam, dolore inventore molestias tempore eveniet dignissimos? Beatae iusto quibusdam repudiandae blanditiis voluptatum odio?',
+  text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor doloribus voluptate modi libero sequi rerum asperiores laboriosam, dolore inventore molestias tempore eveniet dignissimos? Beatae iusto quibusdam repudiandae blanditiis voluptatum odio?',
   likes: [],
   comments: [],
   postedAt: new Date('2024-05-01T01:00:00Z'),
@@ -84,7 +82,7 @@ const snowiePhoto1 = {
   postedBy: 'snowie',
   type: PostType.PHOTO,
   imageSrc: brownPomeranian,
-  caption: 'Dedicating my first photo to my sister, Brownie <3',
+  text: 'Dedicating my first photo to my sister, Brownie <3',
   likes: [],
   comments: [
     {
@@ -101,7 +99,7 @@ const snowieStatus1 = {
   id: 7,
   postedBy: 'snowie',
   type: PostType.STATUS,
-  content: 'Hi everyone, this is my first status!!',
+  text: 'Hi everyone, this is my first status!!',
   likes: [],
   comments: [
     {
