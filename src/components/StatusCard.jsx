@@ -13,22 +13,21 @@ import {
 import { FaRegHeart, FaHeart, FaRegComment, FaEllipsis } from 'react-icons/fa6';
 import UserModal from './UserModal';
 import { formatDateDistanceToNow, formatDate } from '../utils/utils';
-import { carolineProfile } from '../utils/testData';
+import { carolineProfile, getProfile } from '../utils/testData';
+import { useNavigate } from 'react-router-dom';
 
-export default function StatusCard({ username, picture, status }) {
-  const { content, likes, comments, postedAt } = status;
+export default function StatusCard({ status }) {
+  const { id, postedBy, content, likes, comments, postedAt } = status;
   const [isLiked, setIsLiked] = useState(false);
   const [modifiedLikes, setModifiedLikes] = useState(likes);
+  const user = getProfile(postedBy);
+  const { username, picture } = user;
+  const navigate = useNavigate();
 
   const {
     isOpen: isOpenLikes,
     onOpen: onOpenLikes,
     onClose: onCloseLikes,
-  } = useDisclosure();
-  const {
-    isOpen: isOpenComments,
-    onOpen: onOpenComments,
-    onClose: onCloseComments,
   } = useDisclosure();
 
   const toggleIsLiked = () => {
@@ -42,12 +41,26 @@ export default function StatusCard({ username, picture, status }) {
     setIsLiked(!isLiked);
   };
 
+  const handleUserNavigate = () => {
+    navigate(`/profile?username=${postedBy}`);
+  };
+
+  const handleStatusNavigate = () => {
+    navigate(`/post?id=${id}`);
+  };
+
   return (
     <Flex direction="column">
-      <Flex justify="space-between">
+      <Flex justify="space-between" gap={20}>
         <Stack direction="row" align="center" gap={2}>
           <Avatar size="xs" src={picture} />
-          <Heading as="h2" size="xs" noOfLines={1}>
+          <Heading
+            as="h2"
+            size="xs"
+            noOfLines={1}
+            _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
+            onClick={handleUserNavigate}
+          >
             {username}
           </Heading>
           <Tooltip
@@ -55,7 +68,12 @@ export default function StatusCard({ username, picture, status }) {
             placement="bottom"
             openDelay={500}
           >
-            <Text fontSize="xs" color="gray">
+            <Text
+              fontSize="xs"
+              color="gray"
+              _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
+              onClick={handleStatusNavigate}
+            >
               {formatDateDistanceToNow(postedAt)}
             </Text>
           </Tooltip>
@@ -108,7 +126,7 @@ export default function StatusCard({ username, picture, status }) {
           <Text
             fontSize="xs"
             _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
-            onClick={onOpenComments}
+            onClick={handleStatusNavigate}
           >
             {comments.length} {comments.length === 1 ? 'comment' : 'comments'}
           </Text>

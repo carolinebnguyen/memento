@@ -3,7 +3,7 @@ import { Flex, Divider, Text, Box } from '@chakra-ui/react';
 import StatusCard from './StatusCard';
 
 export default function StatusTabContent({ profile }) {
-  const { username, picture, statuses } = profile;
+  const { statuses } = profile;
   const sortedStatuses = statuses
     .slice()
     .sort((a, b) => b.postedAt - a.postedAt);
@@ -13,7 +13,7 @@ export default function StatusTabContent({ profile }) {
       {sortedStatuses.length > 0 ? (
         sortedStatuses.map((status, index, array) => (
           <Box key={status.id}>
-            <StatusCard username={username} picture={picture} status={status} />
+            <StatusCard status={status} />
             {index !== array.length - 1 && <Divider my={3} />}
           </Box>
         ))
