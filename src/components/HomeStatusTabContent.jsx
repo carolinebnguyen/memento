@@ -2,16 +2,11 @@ import React from 'react';
 import { Flex, Divider, Text, Box } from '@chakra-ui/react';
 import StatusCard from './StatusCard';
 
-export default function StatusTabContent({ profile }) {
-  const { statuses } = profile;
-  const sortedStatuses = statuses
-    .slice()
-    .sort((a, b) => b.postedAt - a.postedAt);
-
+export default function HomeStatusTabContent({ statusList }) {
   return (
     <Flex direction="column" w="full">
-      {sortedStatuses.length > 0 ? (
-        sortedStatuses.map((status, index, array) => (
+      {statusList.length > 0 ? (
+        statusList.map((status, index, array) => (
           <Box key={status.id}>
             <StatusCard status={status} />
             {index !== array.length - 1 && <Divider my={3} />}

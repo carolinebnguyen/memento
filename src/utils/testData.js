@@ -10,6 +10,7 @@ const carolibnPhoto1 = {
   postedBy: 'carolibn',
   type: PostType.PHOTO,
   imageSrc: bears1,
+  caption: 'First picture! Found this cute and wanted to share',
   likes: [],
   comments: [
     {
@@ -27,6 +28,8 @@ const carolibnPhoto2 = {
   postedBy: 'carolibn',
   type: PostType.PHOTO,
   imageSrc: bears2,
+  caption:
+    'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam voluptate, sunt perspiciatis deleniti odit quo eos commodi esse id libero, optio, cumque voluptas exercitationem ipsam rerum amet ea iusto illo!',
   likes: 0,
   comments: [],
   postedAt: new Date('2024-04-30T00:00:00Z'),
@@ -73,7 +76,7 @@ const carolibnStatus3 = {
     'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor doloribus voluptate modi libero sequi rerum asperiores laboriosam, dolore inventore molestias tempore eveniet dignissimos? Beatae iusto quibusdam repudiandae blanditiis voluptatum odio?',
   likes: [],
   comments: [],
-  postedAt: new Date('2024-05-01T00:00:00Z'),
+  postedAt: new Date('2024-05-01T01:00:00Z'),
 };
 
 const snowiePhoto1 = {
@@ -81,6 +84,7 @@ const snowiePhoto1 = {
   postedBy: 'snowie',
   type: PostType.PHOTO,
   imageSrc: brownPomeranian,
+  caption: 'Dedicating my first post to my sister, Brownie <3',
   likes: [],
   comments: [
     {
@@ -210,6 +214,19 @@ const getProfile = (username) => {
   return usernameToProfileMap[username];
 };
 
+const allPosts = Object.values(postIdToPostMap);
+
+const photoPosts = allPosts.filter((post) => post.type === PostType.PHOTO);
+const statusPosts = allPosts.filter((post) => post.type === PostType.STATUS);
+
+const sortReverseChronologicalOrder = (a, b) => b.postedAt - a.postedAt;
+
+const categorizedPosts = {
+  all: allPosts.sort(sortReverseChronologicalOrder),
+  photos: photoPosts.sort(sortReverseChronologicalOrder),
+  statuses: statusPosts.sort(sortReverseChronologicalOrder),
+};
+
 export {
   carolineProfile,
   snowieProfile,
@@ -218,4 +235,5 @@ export {
   getPost,
   usernameToProfileMap,
   getProfile,
+  categorizedPosts,
 };

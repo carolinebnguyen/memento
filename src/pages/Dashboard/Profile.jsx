@@ -3,7 +3,7 @@ import { Flex, Tabs, TabList, TabPanels, TabPanel } from '@chakra-ui/react';
 import { PhotoTab, StatusTab } from '../../components/Tabs';
 import ProfileHeader from '../../components/ProfileHeader';
 import ProfilePhotoTabContent from '../../components/ProfilePhotoTabContent';
-import StatusTabContent from '../../components/StatusTabContent';
+import ProfileStatusTabContent from '../../components/ProfileStatusTabContent';
 import { getProfile } from '../../utils/testData';
 import { useLocation } from 'react-router-dom';
 
@@ -26,7 +26,7 @@ export default function Profile() {
               <ProfilePhotoTabContent profile={profile} />
             </TabPanel>
             <TabPanel role="tabpanel">
-              <StatusTabContent profile={profile} />
+              <ProfileStatusTabContent profile={profile} />
             </TabPanel>
           </TabPanels>
         </Tabs>
