@@ -6,7 +6,7 @@ import StatusCard from './StatusCard';
 import CommentCard from './CommentCard';
 
 export default function PostContent({ post }) {
-  const { id, type, comments } = post;
+  const { id, postedBy, type, comments } = post;
   return (
     <Flex direction="column" justify="center" align="center" w="100%">
       {type === PostType.PHOTO ? (
@@ -17,7 +17,7 @@ export default function PostContent({ post }) {
       {comments.length > 0
         ? comments.map((comment, index) => (
             <Box key={id} w="full" mt={index === 0 ? 3 : 0}>
-              <CommentCard comment={comment} />
+              <CommentCard poster={postedBy} comment={comment} />
             </Box>
           ))
         : null}

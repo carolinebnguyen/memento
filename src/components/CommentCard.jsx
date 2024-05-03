@@ -7,18 +7,25 @@ import {
   Link,
   Tooltip,
   Text,
-  Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  IconButton,
 } from '@chakra-ui/react';
+import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import { FaEllipsis } from 'react-icons/fa6';
 import { getProfile } from '../utils/testData';
 import { formatDate, formatDateDistanceToNow } from '../utils/utils';
 import { useNavigate } from 'react-router-dom';
 
-export default function CommentCard({ comment }) {
+export default function CommentCard({ poster, comment }) {
   const { user, content, postedAt } = comment;
   const commenter = getProfile(user);
   const { username, picture } = commenter;
   const navigate = useNavigate();
+  const isCommentSelfPosted = username === 'carolibn';
+  const isOwnPost = poster === 'carolibn';
 
   const handleUserNavigation = () => {
     navigate(`/profile?username=${username}`);
@@ -51,9 +58,24 @@ export default function CommentCard({ comment }) {
             </Tooltip>
           </Stack>
         </Stack>
-        <Button size="xs" variant="ghost">
-          <FaEllipsis size={16} color="gray" />
-        </Button>
+        {isCommentSelfPosted || isOwnPost ? (
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              aria-label="Options"
+              icon={<FaEllipsis />}
+              variant="ghost"
+              color="gray"
+              size="xs"
+            />
+            <MenuList>
+              {isCommentSelfPosted ? (
+                <MenuItem icon={<EditIcon />}>Edit Comment</MenuItem>
+              ) : null}
+              <MenuItem icon={<DeleteIcon />}>Delete Comment</MenuItem>
+            </MenuList>
+          </Menu>
+        ) : null}
       </Flex>
     </Flex>
   );

@@ -93,6 +93,29 @@ const snowiePhoto1 = {
   postedAt: new Date('2024-05-03T00:00:00Z'),
 };
 
+const snowieStatus1 = {
+  id: 7,
+  postedBy: 'snowie',
+  type: PostType.STATUS,
+  content: 'Hi everyone, this is my first status!!',
+  likes: [],
+  comments: [
+    {
+      id: 5,
+      user: 'snowie',
+      content: 'Commenting for reach',
+      postedAt: new Date('2024-05-02T09:00:00Z'),
+    },
+    {
+      id: 6,
+      user: 'carolibn',
+      content: 'Hellooo',
+      postedAt: new Date('2024-05-02T09:05:00Z'),
+    },
+  ],
+  postedAt: new Date('2024-05-01T00:00:00Z'),
+};
+
 const carolineProfile = {
   username: 'carolibn',
   name: 'Caroline Nguyen',
@@ -113,7 +136,7 @@ const snowieProfile = {
   followersList: [carolineProfile],
   followingList: [carolineProfile],
   photos: [snowiePhoto1],
-  statuses: [],
+  statuses: [snowieStatus1],
 };
 
 carolineProfile.followersList.push(snowieProfile);
@@ -162,6 +185,7 @@ const postIdToPostMap = {
   4: carolibnPhoto2,
   5: carolibnStatus3,
   6: snowiePhoto1,
+  7: snowieStatus1,
 };
 
 const getPost = (postId) => {
