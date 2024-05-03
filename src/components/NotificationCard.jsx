@@ -7,47 +7,69 @@ import {
   Stack,
   Link,
   Tooltip,
+  Image,
 } from '@chakra-ui/react';
 import {
   formatDateDistanceToNow,
   formatDate,
   getNotificationMessage,
 } from '../utils/utils';
+import { getPost } from '../utils/testData';
 import { useNavigate } from 'react-router-dom';
 
 export default function NotificationCard({ notification }) {
-  const { user, type, createdAt, commentContent } = notification;
+  const {
+    user,
+    postId,
+    postType,
+    notificationType,
+    createdAt,
+    commentContent,
+  } = notification;
   const { username, picture } = user;
+  const post = getPost(postId);
+  const { imageSrc } = post;
   const navigate = useNavigate();
 
-  const handleNavigation = () => {
+  const handleUserNavigation = () => {
     navigate(`/profile?username=${username}`);
+  };
+
+  const handlePostNavigation = () => {
+    navigate(`/post?id=${postId}`);
   };
 
   return (
     <Flex align="center" w="full" my={2}>
-      <Avatar size="md" src={picture} mr={2} />
-      <Stack gap={0}>
-        <HStack w="full" gap={1}>
-          <Link color="black" onClick={handleNavigation}>
-            <Text as="b" fontSize="sm">
-              {username}
-            </Text>
-          </Link>
-          <Text fontSize="sm" color="gray" fontWeight={500}>
-            {getNotificationMessage(type)} {commentContent}
-          </Text>
-        </HStack>
-        <Tooltip
-          label={formatDate(createdAt)}
-          placement="bottom"
-          openDelay={500}
-        >
-          <Text fontSize="xs" color="gray" fontWeight={500}>
-            {formatDateDistanceToNow(createdAt)}
-          </Text>
-        </Tooltip>
-      </Stack>
+      <Flex justify="space-between" w="100%" align="center">
+        <Stack direction="row">
+          <Avatar size="md" src={picture} mr={2} />
+          <Stack gap={0}>
+            <HStack w="full" gap={1}>
+              <Link color="black" onClick={handleUserNavigation}>
+                <Text as="b" fontSize="sm">
+                  {username}
+                </Text>
+              </Link>
+              <Text fontSize="sm" color="gray" fontWeight={500}>
+                {getNotificationMessage(notificationType)}
+                <Link onClick={handlePostNavigation}>{postType}</Link>
+                {commentContent && `: ${commentContent}`}
+              </Text>
+            </HStack>
+            <Tooltip
+              label={formatDate(createdAt)}
+              placement="bottom"
+              openDelay={500}
+            >
+              <Text fontSize="xs" color="gray" fontWeight={500}>
+                {formatDateDistanceToNow(createdAt)}
+              </Text>
+            </Tooltip>
+          </Stack>
+        </Stack>
+        {imageSrc && <Image src={imageSrc} boxSize={70} objectFit="cover" />}
+      </Flex>
     </Flex>
   );
 }

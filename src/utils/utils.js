@@ -44,13 +44,13 @@ const notificationGroupToHeadingMap = {
 };
 
 const notificationTypeToMessageMap = {
-  [NotificationType.LIKE]: 'liked your post',
+  [NotificationType.LIKE]: 'liked your ',
   [NotificationType.FOLLOW]: 'started following you',
-  [NotificationType.COMMENT]: 'commented: ',
+  [NotificationType.COMMENT]: 'commented on your ',
 };
 
-const getNotificationMessage = (type) => {
-  return notificationTypeToMessageMap[type];
+const getNotificationMessage = (notificationType) => {
+  return notificationTypeToMessageMap[notificationType];
 };
 
 const PostType = {
