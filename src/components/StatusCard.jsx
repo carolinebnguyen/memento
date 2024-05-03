@@ -23,6 +23,7 @@ export default function StatusCard({ status }) {
   const user = getProfile(postedBy);
   const { username, picture } = user;
   const navigate = useNavigate();
+  const isOwnPost = postedBy === 'carolibn';
 
   const {
     isOpen: isOpenLikes,
@@ -78,9 +79,11 @@ export default function StatusCard({ status }) {
             </Text>
           </Tooltip>
         </Stack>
-        <Button size="xs" colorScheme="whiteAlpha">
-          <FaEllipsis size={16} color="gray" />
-        </Button>
+        {isOwnPost ? (
+          <Button size="xs" colorScheme="whiteAlpha">
+            <FaEllipsis size={16} color="gray" />
+          </Button>
+        ) : null}
       </Flex>
       <Text fontSize="sm" my={2} textAlign="left">
         {content}
