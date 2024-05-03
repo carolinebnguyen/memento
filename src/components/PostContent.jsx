@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Divider, Flex } from '@chakra-ui/react';
-import { PostType } from '../utils/utils';
-import PhotoCard from './PhotoCard';
-import StatusCard from './StatusCard';
+import PostCard from './PostCard';
 import CommentCard from './CommentCard';
 import CommentField from './CommentField';
 
@@ -16,11 +14,7 @@ export default function PostContent({ post }) {
 
   return (
     <Flex direction="column" justify="center" align="center" w="100%">
-      {type === PostType.PHOTO ? (
-        <PhotoCard photo={post} />
-      ) : (
-        <StatusCard status={post} />
-      )}
+      <PostCard post={post} />
       <Divider my={3} />
       <CommentField addComment={handleAddComment} />
       {comments.length > 0

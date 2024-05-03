@@ -56,6 +56,7 @@ const getNotificationMessage = (notificationType) => {
 const PostType = {
   PHOTO: 'photo',
   STATUS: 'status',
+  POST: 'post',
 };
 
 export {

@@ -1,23 +1,35 @@
 import React, { useState } from 'react';
 import {
   Flex,
-  Button,
   Text,
-  Avatar,
-  Heading,
   Stack,
-  Tooltip,
-  Icon,
+  Avatar,
   useDisclosure,
+  Heading,
+  Tooltip,
+  Button,
+  Icon,
+  Image,
+  Center,
 } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
+import { getProfile, carolineProfile } from '../utils/testData';
 import { FaRegHeart, FaHeart, FaRegComment, FaEllipsis } from 'react-icons/fa6';
 import UserModal from './UserModal';
-import { formatDateDistanceToNow, formatDate } from '../utils/utils';
-import { carolineProfile, getProfile } from '../utils/testData';
-import { useNavigate } from 'react-router-dom';
+import { formatDateDistanceToNow, formatDate, PostType } from '../utils/utils';
 
-export default function StatusCard({ status }) {
-  const { id, postedBy, content, likes, comments, postedAt } = status;
+export default function PostCard({ post }) {
+  const {
+    id,
+    postedBy,
+    type,
+    content,
+    imageSrc,
+    caption,
+    likes,
+    comments,
+    postedAt,
+  } = post;
   const [isLiked, setIsLiked] = useState(false);
   const [modifiedLikes, setModifiedLikes] = useState(likes);
   const user = getProfile(postedBy);
@@ -46,13 +58,13 @@ export default function StatusCard({ status }) {
     navigate(`/profile?username=${postedBy}`);
   };
 
-  const handleStatusNavigate = () => {
+  const handlePostNavigate = () => {
     navigate(`/post?id=${id}`);
   };
 
   return (
     <Flex direction="column" w="100%">
-      <Flex justify="space-between" gap={20}>
+      <Flex justify="space-between" gap={20} align="center">
         <Stack direction="row" align="center" gap={2}>
           <Avatar size="sm" src={picture} />
           <Heading
@@ -72,7 +84,7 @@ export default function StatusCard({ status }) {
               fontSize="xs"
               color="gray"
               _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
-              onClick={handleStatusNavigate}
+              onClick={handlePostNavigate}
             >
               {formatDateDistanceToNow(postedAt)}
             </Text>
@@ -84,9 +96,20 @@ export default function StatusCard({ status }) {
           </Button>
         ) : null}
       </Flex>
-      <Text fontSize="sm" my={2} textAlign="left">
-        {content}
-      </Text>
+      {type === PostType.STATUS ? (
+        <Text fontSize="sm" my={2} textAlign="left">
+          {content}
+        </Text>
+      ) : (
+        <>
+          <Center>
+            <Image src={imageSrc} my={3} boxSize={500} objectFit="cover" />
+          </Center>
+          <Text fontSize="sm" mb={3} textAlign="left">
+            {caption}
+          </Text>
+        </>
+      )}
       <Flex justify="space-between">
         <Stack direction="row" gap={0}>
           <Button size="xs" colorScheme="whiteAlpha" onClick={toggleIsLiked}>
@@ -128,7 +151,7 @@ export default function StatusCard({ status }) {
           <Text
             fontSize="xs"
             _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
-            onClick={handleStatusNavigate}
+            onClick={handlePostNavigate}
           >
             {comments.length} {comments.length === 1 ? 'comment' : 'comments'}
           </Text>

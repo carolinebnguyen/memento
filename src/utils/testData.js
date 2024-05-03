@@ -30,7 +30,7 @@ const carolibnPhoto2 = {
   imageSrc: bears2,
   caption:
     'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam voluptate, sunt perspiciatis deleniti odit quo eos commodi esse id libero, optio, cumque voluptas exercitationem ipsam rerum amet ea iusto illo!',
-  likes: 0,
+  likes: [],
   comments: [],
   postedAt: new Date('2024-04-30T00:00:00Z'),
 };
@@ -84,7 +84,7 @@ const snowiePhoto1 = {
   postedBy: 'snowie',
   type: PostType.PHOTO,
   imageSrc: brownPomeranian,
-  caption: 'Dedicating my first post to my sister, Brownie <3',
+  caption: 'Dedicating my first photo to my sister, Brownie <3',
   likes: [],
   comments: [
     {

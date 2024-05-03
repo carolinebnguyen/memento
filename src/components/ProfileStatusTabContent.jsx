@@ -1,6 +1,6 @@
 import React from 'react';
 import { Flex, Divider, Text, Box } from '@chakra-ui/react';
-import StatusCard from './StatusCard';
+import PostCard from './PostCard';
 
 export default function ProfileStatusTabContent({ profile }) {
   const { statuses } = profile;
@@ -13,7 +13,7 @@ export default function ProfileStatusTabContent({ profile }) {
       {sortedStatuses.length > 0 ? (
         sortedStatuses.map((status, index, array) => (
           <Box key={status.id}>
-            <StatusCard status={status} />
+            <PostCard post={status} />
             {index !== array.length - 1 && <Divider my={3} />}
           </Box>
         ))
