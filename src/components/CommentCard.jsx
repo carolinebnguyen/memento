@@ -51,8 +51,8 @@ export default function CommentCard({ poster, comment }) {
       setIsCommentVisible(false);
       onClose();
       toast({
-        title: 'Changes Saved',
-        description: 'Your comment has been deleted',
+        title: 'Comment Deleted',
+        description: 'The comment has been deleted',
         status: 'success',
         duration: 3000,
         position: 'top',
@@ -80,7 +80,7 @@ export default function CommentCard({ poster, comment }) {
         toggleEditMode();
         setEditedComment(values);
         toast({
-          title: 'Changes Saved',
+          title: 'Comment Edited',
           description: 'Your comment has been edited',
           status: 'success',
           duration: 3000,
@@ -124,6 +124,9 @@ export default function CommentCard({ poster, comment }) {
                             name="content"
                             id="content"
                             mb={2}
+                            size="sm"
+                            borderRadius={5}
+                            rows="1"
                           />
                           <ErrorMessage name="content">
                             {(msg) => <Text color="red">{msg}</Text>}
@@ -195,6 +198,7 @@ export default function CommentCard({ poster, comment }) {
                           icon={<EditIcon />}
                           className={styles['menu-link']}
                           onClick={toggleEditMode}
+                          fontSize="sm"
                         >
                           Edit Comment
                         </MenuItem>
@@ -203,6 +207,7 @@ export default function CommentCard({ poster, comment }) {
                         icon={<DeleteIcon />}
                         onClick={onOpen}
                         className={styles['menu-link']}
+                        fontSize="sm"
                       >
                         Delete Comment
                       </MenuItem>
