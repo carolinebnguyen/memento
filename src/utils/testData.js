@@ -82,6 +82,7 @@ const snowieProfile = {
 carolineProfile.followersList.push(snowieProfile);
 carolineProfile.followingList.push(snowieProfile);
 carolineProfile.photos[0].likes.push(snowieProfile);
+carolineProfile.statuses[0].likes.push(snowieProfile);
 
 const notifications = [
   {

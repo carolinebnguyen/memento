@@ -11,12 +11,21 @@ import {
 } from '@chakra-ui/react';
 import { FaRegHeart, FaHeart, FaRegComment, FaEllipsis } from 'react-icons/fa6';
 import { formatDateDistanceToNow, formatDate } from '../utils/utils';
+import { carolineProfile } from '../utils/testData';
 
 export default function StatusCard({ username, picture, status }) {
+  const { content, likes, comments, postedAt } = status;
   const [isLiked, setIsLiked] = useState(false);
-  const { content, postedAt } = status;
+  const [modifiedLikes, setModifiedLikes] = useState(likes);
 
   const toggleIsLiked = () => {
+    if (isLiked) {
+      setModifiedLikes(
+        modifiedLikes.filter((user) => user !== carolineProfile)
+      );
+    } else {
+      setModifiedLikes([...modifiedLikes, carolineProfile]);
+    }
     setIsLiked(!isLiked);
   };
 
@@ -45,24 +54,39 @@ export default function StatusCard({ username, picture, status }) {
       <Text fontSize="sm" my={2} textAlign="left">
         {content}
       </Text>
-      <Stack direction="row" gap={0}>
-        <Button size="xs" colorScheme="whiteAlpha" onClick={toggleIsLiked}>
-          <Icon
-            as={isLiked ? FaHeart : FaRegHeart}
-            boxSize={18}
-            color={isLiked ? 'skyblue' : 'gray'}
-            _hover={{ opacity: '50%' }}
-          />
-        </Button>
-        <Button size="xs" colorScheme="whiteAlpha">
-          <Icon
-            as={FaRegComment}
-            boxSize={18}
-            color="gray"
-            _hover={{ opacity: '50%' }}
-          />
-        </Button>
-      </Stack>
+      <Flex justify="space-between">
+        <Stack direction="row" gap={0}>
+          <Button size="xs" colorScheme="whiteAlpha" onClick={toggleIsLiked}>
+            <Icon
+              as={isLiked ? FaHeart : FaRegHeart}
+              boxSize={18}
+              color={isLiked ? 'skyblue' : 'gray'}
+              _hover={{ opacity: '50%' }}
+            />
+          </Button>
+          <Button size="xs" colorScheme="whiteAlpha">
+            <Icon
+              as={FaRegComment}
+              boxSize={18}
+              color="gray"
+              _hover={{ opacity: '50%' }}
+            />
+          </Button>
+        </Stack>
+        <Stack direction="row" gap={0}>
+          <Text fontSize="xs">
+            {modifiedLikes.length}{' '}
+            {modifiedLikes.length === 1 ? 'like' : 'likes'}
+          </Text>
+          <Text fontSize="xs" whiteSpace="pre">
+            {' '}
+            •{' '}
+          </Text>
+          <Text fontSize="xs">
+            {comments.length} {comments.length === 1 ? 'comment' : 'comments'}
+          </Text>
+        </Stack>
+      </Flex>
     </Flex>
   );
 }
