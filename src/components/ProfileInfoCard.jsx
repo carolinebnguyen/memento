@@ -166,7 +166,6 @@ export default function ProfileInfoCard() {
                       {(msg) => <Text color="red">{msg}</Text>}
                     </ErrorMessage>
                   </FormControl>
-
                   <FormControl>
                     <FormLabel fontSize="16px" mt={5}>
                       Biography
