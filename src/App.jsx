@@ -13,6 +13,7 @@ import Create from './pages/Dashboard/Create';
 import Notifications from './pages/Dashboard/Notifications';
 import Profile from './pages/Dashboard/Profile';
 import Settings from './pages/Dashboard/Settings';
+import Post from './pages/Dashboard/Post';
 
 import LandingLayout from './components/layouts/LandingLayout';
 import FooterLayout from './components/layouts/FooterLayout';
@@ -50,6 +51,7 @@ const router = createBrowserRouter([
       { path: 'notifications', element: <Notifications /> },
       { path: 'profile', element: <Profile /> },
       { path: 'settings', element: <Settings /> },
+      { path: 'post', element: <Post /> },
     ],
   },
 ]);
