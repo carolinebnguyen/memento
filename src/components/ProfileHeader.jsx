@@ -9,7 +9,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
-import FollowModal from './FollowModal';
+import UserModal from './UserModal';
 
 export default function ProfileHeader({ profile }) {
   const [isFollowing, setIsFollowing] = useState(false);
@@ -105,7 +105,7 @@ export default function ProfileHeader({ profile }) {
             <Text fontSize="sm" fontWeight={500}>
               {followersList.length === 1 ? 'follower' : 'followers'}
             </Text>
-            <FollowModal
+            <UserModal
               isOpen={isOpenFollower}
               onClose={onCloseFollower}
               title="Followers"
@@ -126,7 +126,7 @@ export default function ProfileHeader({ profile }) {
               following
             </Text>
           </Stack>
-          <FollowModal
+          <UserModal
             isOpen={isOpenFollowing}
             onClose={onCloseFollowing}
             title="Following"

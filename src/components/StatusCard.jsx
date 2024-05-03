@@ -8,8 +8,10 @@ import {
   Stack,
   Tooltip,
   Icon,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { FaRegHeart, FaHeart, FaRegComment, FaEllipsis } from 'react-icons/fa6';
+import UserModal from './UserModal';
 import { formatDateDistanceToNow, formatDate } from '../utils/utils';
 import { carolineProfile } from '../utils/testData';
 
@@ -17,6 +19,17 @@ export default function StatusCard({ username, picture, status }) {
   const { content, likes, comments, postedAt } = status;
   const [isLiked, setIsLiked] = useState(false);
   const [modifiedLikes, setModifiedLikes] = useState(likes);
+
+  const {
+    isOpen: isOpenLikes,
+    onOpen: onOpenLikes,
+    onClose: onCloseLikes,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenComments,
+    onOpen: onOpenComments,
+    onClose: onCloseComments,
+  } = useDisclosure();
 
   const toggleIsLiked = () => {
     if (isLiked) {
@@ -74,15 +87,29 @@ export default function StatusCard({ username, picture, status }) {
           </Button>
         </Stack>
         <Stack direction="row" gap={0}>
-          <Text fontSize="xs">
+          <Text
+            fontSize="xs"
+            _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
+            onClick={onOpenLikes}
+          >
             {modifiedLikes.length}{' '}
             {modifiedLikes.length === 1 ? 'like' : 'likes'}
           </Text>
+          <UserModal
+            isOpen={isOpenLikes}
+            onClose={onCloseLikes}
+            title="Liked By"
+            usersList={modifiedLikes}
+          />
           <Text fontSize="xs" whiteSpace="pre">
             {' '}
             •{' '}
           </Text>
-          <Text fontSize="xs">
+          <Text
+            fontSize="xs"
+            _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
+            onClick={onOpenComments}
+          >
             {comments.length} {comments.length === 1 ? 'comment' : 'comments'}
           </Text>
         </Stack>

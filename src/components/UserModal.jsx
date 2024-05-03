@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import UserCard from './UserCard';
 
-export default function FollowModal({ isOpen, onClose, title, usersList }) {
+export default function UserModal({ isOpen, onClose, title, usersList }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="md" scrollBehavior="inside">
       <ModalOverlay />
@@ -21,7 +21,10 @@ export default function FollowModal({ isOpen, onClose, title, usersList }) {
         <ModalBody mb={3}>
           {usersList.length > 0 ? (
             usersList.map((user, index) => (
-              <Box key={user.username}>
+              <Box
+                key={user.username}
+                mb={index !== usersList.length - 1 ? 3 : 0}
+              >
                 <UserCard user={user} handleClose={onClose} />
               </Box>
             ))
