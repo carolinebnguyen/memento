@@ -8,6 +8,7 @@ import {
   Link,
   Tooltip,
   Image,
+  Box,
 } from '@chakra-ui/react';
 import {
   formatDateDistanceToNow,
@@ -41,21 +42,23 @@ export default function NotificationCard({ notification }) {
 
   return (
     <Flex align="center" w="full" my={2}>
-      <Flex justify="space-between" w="100%" align="center">
-        <Stack direction="row">
+      <Flex justify="space-between" w="100%" align="center" gap={8}>
+        <Stack direction="row" display="flex" align="center">
           <Avatar size="md" src={picture} mr={2} />
           <Stack gap={0}>
             <HStack w="full" gap={1}>
-              <Link color="black" onClick={handleUserNavigation}>
-                <Text as="b" fontSize="sm">
-                  {username}
+              <Box>
+                <Link color="black" onClick={handleUserNavigation}>
+                  <Text as="b" fontSize="sm">
+                    {username}
+                  </Text>
+                </Link>
+                <Text fontSize="sm" color="gray" fontWeight={500}>
+                  {getNotificationMessage(notificationType)}
+                  <Link onClick={handlePostNavigation}>{postType}</Link>
+                  {commentContent && `: ${commentContent}`}
                 </Text>
-              </Link>
-              <Text fontSize="sm" color="gray" fontWeight={500}>
-                {getNotificationMessage(notificationType)}
-                <Link onClick={handlePostNavigation}>{postType}</Link>
-                {commentContent && `: ${commentContent}`}
-              </Text>
+              </Box>
             </HStack>
             <Tooltip
               label={formatDate(createdAt)}
