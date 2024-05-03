@@ -14,7 +14,7 @@ const carolibnPhoto1 = {
     {
       id: 1,
       user: 'snowie',
-      comment: 'Nice pic!',
+      content: 'Nice pic!',
       postedAt: new Date('2024-04-29T02:00:00Z'),
     },
   ],
@@ -42,8 +42,14 @@ const carolibnStatus1 = {
     {
       user: 'snowie',
       id: 2,
-      comment: 'Hello there!',
+      content: 'Hello there!',
       postedAt: new Date('2024-03-30T00:00:00Z'),
+    },
+    {
+      user: 'snowie',
+      id: 3,
+      content: 'Happy to have you :D',
+      postedAt: new Date('2024-03-30T00:00:05Z'),
     },
   ],
   postedAt: new Date('2024-03-29T00:00:00Z'),
@@ -78,9 +84,9 @@ const snowiePhoto1 = {
   likes: [],
   comments: [
     {
-      id: 3,
+      id: 4,
       user: 'carolibn',
-      comment: 'Cute! :)',
+      content: 'Cute! :)',
       postedAt: new Date('2024-05-03T09:00:00Z'),
     },
   ],

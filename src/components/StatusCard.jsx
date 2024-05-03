@@ -53,7 +53,7 @@ export default function StatusCard({ status }) {
     <Flex direction="column">
       <Flex justify="space-between" gap={20}>
         <Stack direction="row" align="center" gap={2}>
-          <Avatar size="xs" src={picture} />
+          <Avatar size="sm" src={picture} />
           <Heading
             as="h2"
             size="xs"
