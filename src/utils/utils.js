@@ -53,6 +53,11 @@ const getNotificationMessage = (type) => {
   return notificationTypeToMessageMap[type];
 };
 
+const PostType = {
+  PHOTO: 'photo',
+  STATUS: 'status',
+};
+
 export {
   formatDateDistanceToNow,
   formatDate,
@@ -61,4 +66,5 @@ export {
   NotificationType,
   notificationGroupToHeadingMap,
   getNotificationMessage,
+  PostType,
 };
