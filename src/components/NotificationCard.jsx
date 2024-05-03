@@ -53,9 +53,11 @@ export default function NotificationCard({ notification }) {
                     {username}
                   </Text>
                 </Link>
-                <Text fontSize="sm" color="gray" fontWeight={500}>
+                <Text fontSize="sm" fontWeight={400}>
                   {getNotificationMessage(notificationType)}
-                  <Link onClick={handlePostNavigation}>{postType}</Link>
+                  <Link onClick={handlePostNavigation} fontWeight={600}>
+                    {postType}
+                  </Link>
                   {commentContent && `: ${commentContent}`}
                 </Text>
               </Box>
