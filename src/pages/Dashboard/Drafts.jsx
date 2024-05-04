@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Flex,
   FormControl,
@@ -22,17 +22,23 @@ import DropZone from '../../components/Dropzone';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styles from '../../components/Sidebar/Sidebar.module.css';
 
-export default function Create() {
+export default function Drafts() {
   const [file, setFile] = useState(null);
   const toast = useToast();
   const navigate = useNavigate();
-  const draftPost = localStorage.getItem('draftPost');
+  const draftPostString = localStorage.getItem('draftPost');
+  const draftPost = draftPostString ? JSON.parse(draftPostString) : {};
+  const { type, imageSrc, text } = draftPost;
 
   const initialValues = {
-    type: 'status',
-    imageSrc: '',
-    text: '',
+    type: type || '',
+    imageSrc: imageSrc || '',
+    text: text || '',
   };
+
+  useEffect(() => {
+    console.log(imageSrc);
+  }, []);
 
   const validationSchema = yup.object({
     type: yup.string().required('Please select a type'),
@@ -70,39 +76,13 @@ export default function Create() {
   };
 
   const handleSaveDraft = (values) => {
-    if (!values.text) {
-      toast({
-        title: 'Error',
-        description: 'Please enter some text before saving your draft',
-        status: 'error',
-        duration: 3000,
-        position: 'top',
-        containerStyle: {
-          zIndex: '9999',
-        },
-      });
-      return;
-    }
-
-    localStorage.setItem('draftPost', JSON.stringify(values));
-    setTimeout(() => {
-      toast({
-        title: 'Draft Saved',
-        description: `Your draft ${values.type} has been saved`,
-        status: 'success',
-        duration: 3000,
-        position: 'top',
-        containerStyle: {
-          zIndex: '9999',
-        },
-      });
-    }, 1000);
+    localStorage.setItem('draftPost', values);
   };
 
   return (
     <Flex direction="column" align="center" w="100vw">
       <Heading as="h1" size="lg" mb={2}>
-        Create a Post
+        Edit Draft
       </Heading>
       <Formik
         initialValues={initialValues}
@@ -215,17 +195,15 @@ export default function Create() {
           );
         }}
       </Formik>
-      {draftPost && (
-        <Box mt={3}>
-          <NavLink
-            to={'/create/draft'}
-            className={styles['footer-link']}
-            style={{ color: 'steelblue' }}
-          >
-            View Draft
-          </NavLink>
-        </Box>
-      )}
+      <Box mt={3}>
+        <NavLink
+          to={'/create'}
+          className={styles['footer-link']}
+          style={{ color: 'steelblue' }}
+        >
+          Create New Post
+        </NavLink>
+      </Box>
     </Flex>
   );
 }
