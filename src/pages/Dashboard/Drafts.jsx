@@ -14,6 +14,7 @@ import {
   VStack,
   Textarea,
   Select,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { IoMdClose } from 'react-icons/io';
 import * as yup from 'yup';
@@ -21,6 +22,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import DropZone from '../../components/Dropzone';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styles from '../../components/Sidebar/Sidebar.module.css';
+import ConfirmationModal from '../../components/ConfirmationModal';
 
 export default function Drafts() {
   const toast = useToast();
@@ -29,6 +31,7 @@ export default function Drafts() {
   const draftPost = draftPostString ? JSON.parse(draftPostString) : {};
   const { type, text } = draftPost;
   const [file, setFile] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const initialValues = {
     type: type || '',
@@ -47,7 +50,7 @@ export default function Drafts() {
     if (type === 'photo') {
       loadImageLocally();
     }
-  }, []);
+  });
 
   const validationSchema = yup.object({
     type: yup.string().required('Please select a type'),
@@ -84,8 +87,71 @@ export default function Drafts() {
     }, 1000);
   };
 
+  const savePhotoLocally = (file) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const photoData = reader.result;
+      localStorage.setItem('draftPhoto', photoData);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSaveDraft = (values) => {
-    localStorage.setItem('draftPost', values);
+    if (!values.text) {
+      toast({
+        title: 'Error',
+        description: 'Please enter some text before saving your draft',
+        status: 'error',
+        duration: 3000,
+        position: 'top',
+        containerStyle: {
+          zIndex: '9999',
+        },
+      });
+      return;
+    }
+
+    if (values.imageSrc) {
+      savePhotoLocally(file);
+    }
+
+    localStorage.setItem('draftPost', JSON.stringify(values));
+    setTimeout(() => {
+      toast({
+        title: 'Draft Saved',
+        description: `Your draft ${values.type} has been saved`,
+        status: 'success',
+        duration: 3000,
+        position: 'top',
+        containerStyle: {
+          zIndex: '9999',
+        },
+      });
+    }, 1000);
+  };
+
+  const removeLocalDraft = () => {
+    localStorage.removeItem('draftPost');
+    localStorage.removeItem('draftImage');
+  };
+
+  const confirmDeleteDraft = () => {
+    removeLocalDraft();
+
+    setTimeout(() => {
+      onClose();
+      navigate('/create');
+      toast({
+        title: 'Draft Deleted',
+        description: 'Your draft has been deleted',
+        status: 'success',
+        duration: 3000,
+        position: 'top',
+        containerStyle: {
+          zIndex: '9999',
+        },
+      });
+    }, 500);
   };
 
   return (
@@ -185,26 +251,47 @@ export default function Drafts() {
                   </ErrorMessage>
                 </Box>
               </FormControl>
-              <HStack justify="center" mt={5} gap={5}>
+              <Flex justify="space-between" align="center" mt={5} gap={5}>
                 <Button
-                  isDisabled={isSubmitting}
-                  onClick={() => handleSaveDraft(values)}
+                  colorScheme="red"
+                  variant="ghost"
+                  size="sm"
+                  onClick={onOpen}
                 >
-                  Save Draft
+                  Delete Draft
                 </Button>
-                <Button
-                  colorScheme="blue"
-                  type="submit"
-                  isDisabled={isSubmitting}
-                >
-                  Publish Post
-                </Button>
-              </HStack>
+                <HStack justify="center" align="center" gap={3}>
+                  <Button
+                    isDisabled={isSubmitting}
+                    onClick={() => handleSaveDraft(values)}
+                    size="sm"
+                  >
+                    Save Draft
+                  </Button>
+                  <Button
+                    colorScheme="blue"
+                    type="submit"
+                    isDisabled={isSubmitting}
+                    size="sm"
+                  >
+                    Publish Post
+                  </Button>
+                </HStack>
+              </Flex>
+              <ConfirmationModal
+                isOpen={isOpen}
+                onClose={onClose}
+                title="Delete this draft?"
+                message="Are you sure you want to delete this draft? This action cannot be undone."
+                buttonLabel="Delete"
+                colorScheme="red"
+                onConfirm={confirmDeleteDraft}
+              />
             </Form>
           );
         }}
       </Formik>
-      <Box mt={3}>
+      <Box mt={5}>
         <NavLink
           to={'/create'}
           className={styles['footer-link']}
