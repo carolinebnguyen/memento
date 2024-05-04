@@ -69,24 +69,6 @@ export default function Drafts() {
     setFile(null);
   };
 
-  const onSubmit = (values, { setSubmitting }) => {
-    const type = values.type;
-    setTimeout(() => {
-      setSubmitting(false);
-      navigate('/profile?username=carolibn');
-      toast({
-        title: 'Post Published',
-        description: `Your ${type} has been published`,
-        status: 'success',
-        duration: 3000,
-        position: 'top',
-        containerStyle: {
-          zIndex: '9999',
-        },
-      });
-    }, 1000);
-  };
-
   const savePhotoLocally = (file) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -152,6 +134,25 @@ export default function Drafts() {
         },
       });
     }, 500);
+  };
+
+  const onSubmit = (values, { setSubmitting }) => {
+    const type = values.type;
+    removeLocalDraft();
+    setTimeout(() => {
+      setSubmitting(false);
+      navigate('/profile?username=carolibn');
+      toast({
+        title: 'Post Published',
+        description: `Your ${type} has been published`,
+        status: 'success',
+        duration: 3000,
+        position: 'top',
+        containerStyle: {
+          zIndex: '9999',
+        },
+      });
+    }, 1000);
   };
 
   return (
