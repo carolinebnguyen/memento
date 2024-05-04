@@ -14,6 +14,7 @@ const formatDate = (dateToFormat) => {
 };
 
 /*
+From stackoverflow: https://stackoverflow.com/a/19605207
 - at least 8 characters
 - at least 1 lowercase letter
 - at least 1 uppercase letter
@@ -21,14 +22,10 @@ const formatDate = (dateToFormat) => {
 - at least 1 special character
 */
 const passwordRegex =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
 
-const passwordErrorMessage = `Password requires:
-- at least 8 characters
-- at least 1 lowercase letter
-- at least 1 uppercase letter
-- at least 1 number
-- at least 1 special character`;
+const passwordErrorMessage =
+  'Password requires: \n- at least 8 characters \n- at least 1 lowercase letter\n- at least 1 uppercase letter\n- at least 1 number \n- at least 1 special character';
 
 const NotificationType = {
   LIKE: 'like',
