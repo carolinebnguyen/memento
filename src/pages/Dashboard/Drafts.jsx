@@ -23,21 +23,30 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import styles from '../../components/Sidebar/Sidebar.module.css';
 
 export default function Drafts() {
-  const [file, setFile] = useState(null);
   const toast = useToast();
   const navigate = useNavigate();
   const draftPostString = localStorage.getItem('draftPost');
   const draftPost = draftPostString ? JSON.parse(draftPostString) : {};
-  const { type, imageSrc, text } = draftPost;
+  const { type, text } = draftPost;
+  const [file, setFile] = useState(null);
 
   const initialValues = {
     type: type || '',
-    imageSrc: imageSrc || '',
+    imageSrc: '',
     text: text || '',
   };
 
+  const loadImageLocally = () => {
+    const photoData = localStorage.getItem('draftPhoto');
+    if (photoData) {
+      setFile(photoData);
+    }
+  };
+
   useEffect(() => {
-    console.log(imageSrc);
+    if (type === 'photo') {
+      loadImageLocally();
+    }
   }, []);
 
   const validationSchema = yup.object({
@@ -138,7 +147,7 @@ export default function Drafts() {
                   ) : (
                     <Box position="relative" display="inline-block" mt={5}>
                       <Image
-                        src={file.preview}
+                        src={file.preview || file}
                         alt="Selected pic"
                         objectFit="cover"
                         boxSize={350}

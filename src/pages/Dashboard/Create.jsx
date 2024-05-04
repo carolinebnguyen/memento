@@ -69,6 +69,15 @@ export default function Create() {
     }, 1000);
   };
 
+  const savePhotoLocally = (file) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const photoData = reader.result;
+      localStorage.setItem('draftPhoto', photoData);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSaveDraft = (values) => {
     if (!values.text) {
       toast({
@@ -82,6 +91,10 @@ export default function Create() {
         },
       });
       return;
+    }
+
+    if (values.imageSrc) {
+      savePhotoLocally(file);
     }
 
     localStorage.setItem('draftPost', JSON.stringify(values));
