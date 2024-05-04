@@ -159,7 +159,7 @@ const notifications = [
     postType: PostType.STATUS,
     postId: 1,
     notificationType: NotificationType.LIKE,
-    createdAt: new Date('2024-03-30T00:00:00Z'),
+    createdAt: new Date('2024-03-29T23:59:59Z'),
   },
   {
     id: 3,
@@ -173,6 +173,16 @@ const notifications = [
   },
   {
     id: 4,
+    user: snowieProfile,
+    postId: 1,
+    postType: PostType.STATUS,
+    notificationType: NotificationType.COMMENT,
+    createdAt: new Date('2024-03-30T00:00:05Z'),
+    commentId: 2,
+    commentContent: 'Happy to have you :D',
+  },
+  {
+    id: 5,
     user: snowieProfile,
     postId: 2,
     postType: PostType.PHOTO,

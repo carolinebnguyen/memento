@@ -27,6 +27,7 @@ import caroline from '../../assets/placeholders/carolineAvatarClear.png';
 import { CompactIconButton } from '../CompactNavLink/CompactNavLink';
 import { headerHeight, sidebarWidth } from '../../utils/constants';
 import styles from './BottomNav.module.css';
+import { setUserLoggedOut } from '../../utils/authUtils';
 
 export default function BottomNav() {
   const isWide = useBreakpointValue({ base: false, md: true });
@@ -91,7 +92,14 @@ export default function BottomNav() {
             <Icon as={MdOutlineSettings} boxSize={5} mr={3} />
             Settings
           </MenuItem>
-          <MenuItem as="a" href="/" className={styles['menu-link']}>
+          <MenuItem
+            as="a"
+            href="/"
+            className={styles['menu-link']}
+            onClick={() => {
+              setUserLoggedOut();
+            }}
+          >
             <Icon as={MdLogout} boxSize={5} mr={3} />
             Log Out
           </MenuItem>

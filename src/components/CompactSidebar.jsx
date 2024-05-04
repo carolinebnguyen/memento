@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Image, Stack, Divider } from '@chakra-ui/react';
+import { Flex, Image, Stack, Divider, IconButton } from '@chakra-ui/react';
 import {
   MdOutlineHome,
   MdHome,
@@ -11,7 +11,7 @@ import {
 import { FaRegBell, FaBell, FaRegUser, FaUser, FaSearch } from 'react-icons/fa';
 import { FiPlusCircle } from 'react-icons/fi';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { compactSidebarWidth } from '../utils/constants';
 import FooterMenu from './FooterMenu/FooterMenu';
 import logoLetter from '../assets/mementoLetter.png';
@@ -19,6 +19,7 @@ import {
   CompactNavLink,
   CompactProfileNavLink,
 } from './CompactNavLink/CompactNavLink';
+import { setUserLoggedOut } from '../utils/authUtils';
 
 export default function CompactSidebar() {
   return (
@@ -41,6 +42,13 @@ export default function CompactSidebar() {
 }
 
 function CompactSidebarContent() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    setUserLoggedOut();
+    navigate('/');
+  };
+
   return (
     <Flex direction="column" justify="space-between" h="100%">
       <Stack gap={5} mt={5} p={3}>
@@ -71,7 +79,9 @@ function CompactSidebarContent() {
           icon={MdOutlineSettings}
           filledIcon={MdSettings}
         />
-        <CompactNavLink to="/" icon={MdLogout} />
+        <Flex ml={1} _hover={{ cursor: 'pointer' }} onClick={handleLogout}>
+          <IconButton as={MdLogout} variant="whiteAlpha" size="xs" />
+        </Flex>
       </Stack>
       <FooterMenu />
     </Flex>

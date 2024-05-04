@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Flex,
   Button,
@@ -19,9 +19,16 @@ import { useNavigate, Link } from 'react-router-dom';
 import logo from '../../assets/logoBlack.png';
 import PasswordField from '../../components/PasswordField';
 import { passwordRegex, passwordErrorMessage } from '../../utils/utils';
+import { setUserLoggedIn, isUserLoggedIn } from '../../utils/authUtils';
 
 export default function Signup() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isUserLoggedIn) {
+      navigate('/home');
+    }
+  });
 
   const initialValues = {
     email: '',
@@ -43,6 +50,7 @@ export default function Signup() {
   const onSubmit = (values, { setSubmitting, resetForm }) => {
     setTimeout(() => {
       resetForm(initialValues);
+      setUserLoggedIn();
       setSubmitting(false);
       navigate('/home');
     }, 1000);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   useBreakpointValue,
   Flex,
@@ -20,7 +20,7 @@ import {
 import { FaRegBell, FaBell, FaRegUser, FaUser, FaSearch } from 'react-icons/fa';
 import { FiPlusCircle } from 'react-icons/fi';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logoBlack.png';
 import StyledNavLink from '../StyledNavLink/StyledNavLink';
 import BottomNav from '../BottomNav/BottomNav';
@@ -29,10 +29,18 @@ import linkStyles from '../StyledNavLink/StyledNavLink.module.css';
 import { sidebarWidth } from '../../utils/constants';
 import Header from '../Header/Header';
 import CompactSidebar from '../CompactSidebar';
+import { isUserLoggedIn, setUserLoggedOut } from '../../utils/authUtils';
 
 export default function Sidebar() {
   const isCollapsed = useBreakpointValue({ base: true, sm: false });
   const isCompact = useBreakpointValue({ sm: true, md: false });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isUserLoggedIn()) {
+      navigate('/');
+    }
+  });
 
   return (
     <Flex minH="100vh" h="100%" position="fixed" zIndex="2">
@@ -70,6 +78,12 @@ function FullSidebar() {
 function SidebarContent() {
   const { search } = useLocation();
   const username = new URLSearchParams(search).get('username');
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    setUserLoggedOut();
+    navigate('/');
+  };
 
   return (
     <Flex direction="column" justify="space-between" h="100%">
@@ -129,7 +143,16 @@ function SidebarContent() {
           filledIcon={MdSettings}
           label="Settings"
         />
-        <StyledNavLink to="/" icon={MdLogout} label="Log Out" />
+        <Flex
+          className={linkStyles['nav-link']}
+          _hover={{ cursor: 'pointer' }}
+          onClick={handleLogout}
+        >
+          <HStack p={2}>
+            <Icon as={MdLogout} boxSize={22} />
+            <Text fontWeight="normal">Log Out</Text>
+          </HStack>
+        </Flex>
       </Stack>
       <Stack fontSize={12} p={3}>
         <Text>© 2024 Memento</Text>

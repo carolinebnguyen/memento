@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Flex,
   Button,
@@ -18,6 +18,7 @@ import * as yup from 'yup';
 import { useNavigate, Link } from 'react-router-dom';
 import logo from '../../assets/logoBlack.png';
 import PasswordField from '../../components/PasswordField';
+import { setUserLoggedIn, isUserLoggedIn } from '../../utils/authUtils';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -32,9 +33,16 @@ export default function Login() {
     password: yup.string().required('Password is required'),
   });
 
+  useEffect(() => {
+    if (isUserLoggedIn()) {
+      navigate('/home');
+    }
+  });
+
   const onSubmit = (values, { setSubmitting, resetForm }) => {
     setTimeout(() => {
       resetForm(initialValues);
+      setUserLoggedIn();
       setSubmitting(false);
       navigate('/home');
     }, 1000);
