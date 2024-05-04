@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { IoMdClose } from 'react-icons/io';
 import * as yup from 'yup';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field, ErrorMessage, useFormikContext } from 'formik';
 import DropZone from '../../components/Dropzone';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styles from '../../components/Sidebar/Sidebar.module.css';
@@ -31,6 +31,8 @@ export default function Drafts() {
   const draftPost = draftPostString ? JSON.parse(draftPostString) : {};
   const { type, text } = draftPost;
   const [file, setFile] = useState(null);
+  const [isFileLoaded, setIsFileLoaded] = useState(false);
+  const [isFileChanged, setIsFileChanged] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const initialValues = {
@@ -39,18 +41,31 @@ export default function Drafts() {
     text: text || '',
   };
 
-  const loadImageLocally = () => {
-    const photoData = localStorage.getItem('draftPhoto');
-    if (photoData) {
-      setFile(photoData);
-    }
-  };
-
   useEffect(() => {
-    if (type === 'photo') {
+    if (type === 'photo' && !isFileLoaded) {
       loadImageLocally();
     }
   });
+
+  const loadImageLocally = () => {
+    const photoData = localStorage.getItem('draftPhoto');
+    if (photoData && !isFileLoaded) {
+      setFile(photoData);
+      setIsFileLoaded(true);
+    }
+  };
+
+  const PhotoSetter = () => {
+    const { setFieldValue } = useFormikContext();
+
+    useEffect(() => {
+      if (type === 'photo' && isFileLoaded) {
+        setFieldValue('imageSrc', file);
+      }
+    }, [setFieldValue]);
+
+    return null;
+  };
 
   const validationSchema = yup.object({
     type: yup.string().required('Please select a type'),
@@ -93,7 +108,7 @@ export default function Drafts() {
       return;
     }
 
-    if (values.imageSrc) {
+    if (values.imageSrc && isFileChanged) {
       savePhotoLocally(file);
     }
 
@@ -114,7 +129,7 @@ export default function Drafts() {
 
   const removeLocalDraft = () => {
     localStorage.removeItem('draftPost');
-    localStorage.removeItem('draftImage');
+    localStorage.removeItem('draftPhoto');
   };
 
   const confirmDeleteDraft = () => {
@@ -177,10 +192,12 @@ export default function Drafts() {
         }) => {
           const updateImageSrc = (file) => {
             setFile(file);
+            setIsFileChanged(true);
             setFieldValue('imageSrc', file.preview);
           };
           return (
             <Form>
+              <PhotoSetter />;
               <FormControl isInvalid={errors.type && errors.type}>
                 <Center>
                   <VStack>
