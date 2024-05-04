@@ -25,7 +25,7 @@ export default function Signup() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isUserLoggedIn) {
+    if (isUserLoggedIn()) {
       navigate('/home');
     }
   });

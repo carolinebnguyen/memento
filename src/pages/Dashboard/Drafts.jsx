@@ -197,7 +197,7 @@ export default function Drafts() {
           };
           return (
             <Form>
-              <PhotoSetter />;
+              <PhotoSetter />
               <FormControl isInvalid={errors.type && errors.type}>
                 <Center>
                   <VStack>
