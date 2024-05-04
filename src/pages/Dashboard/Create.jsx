@@ -27,6 +27,7 @@ export default function Create() {
   const toast = useToast();
   const navigate = useNavigate();
   const draftPost = localStorage.getItem('draftPost');
+  const [hasDraft, setHasDraft] = useState(!!draftPost);
 
   const initialValues = {
     type: 'status',
@@ -109,6 +110,7 @@ export default function Create() {
           zIndex: '9999',
         },
       });
+      setHasDraft(true);
     }, 1000);
   };
 
@@ -228,7 +230,7 @@ export default function Create() {
           );
         }}
       </Formik>
-      {draftPost && (
+      {hasDraft && (
         <Box mt={3}>
           <NavLink
             to={'/create/draft'}
