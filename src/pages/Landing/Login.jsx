@@ -13,6 +13,7 @@ import {
   AbsoluteCenter,
   Text,
 } from '@chakra-ui/react';
+import axios from 'axios';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import { useNavigate, Link } from 'react-router-dom';
@@ -34,10 +35,17 @@ export default function Login() {
   });
 
   useEffect(() => {
+    // TODO: REMOVE testApi
+    const testApi = async () => {
+      const test = await axios.get('/api/test');
+      console.log(test);
+    };
+    testApi();
+
     if (isUserLoggedIn()) {
       navigate('/home');
     }
-  });
+  }, []);
 
   const onSubmit = (values, { setSubmitting, resetForm }) => {
     setTimeout(() => {

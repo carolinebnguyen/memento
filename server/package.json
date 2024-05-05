@@ -1,0 +1,22 @@
+{
+  "name": "memento-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend for Memento",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd client && npm install && npm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "morgan": "^1.10.0"
+  },
+  "engines": {
+    "node": "^20"
+  }
+}
