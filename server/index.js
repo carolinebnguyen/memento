@@ -1,11 +1,17 @@
 const express = require('express');
 const morgan = require('morgan');
+const timeout = require('connect-timeout');
+const cookieParser = require('cookie-parser');
 const path = require('path');
 
 const PORT = process.env.PORT || 3001;
 
 const app = express();
 app.use(morgan('dev'));
+app.use(timeout('5s'));
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Server serves files for the built frontend
 // TODO: Move frontend code into client directory
