@@ -14,7 +14,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Server serves files for the built frontend
-// TODO: Move frontend code into client directory
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 // Handle GET requests to /api/test route
