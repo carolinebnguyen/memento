@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Frontend for Memento",
-  "proxy": "http://localhost:3001",
+  "proxy": "http://localhost:5000",
   "dependencies": {
     "@chakra-ui/icons": "^2.1.1",
     "@chakra-ui/react": "^2.8.2",

@@ -6,9 +6,10 @@
   "dependencies": {},
   "devDependencies": {},
   "scripts": {
-    "start": "cd server && npm install && node index.js",
-    "backend-dev": "cd server && npm install && npm start",
+    "start": "node server/index.js",
     "frontend-dev": "cd client && npm install && npm start",
-    "build": "cd client && npm install && npm run build"
+    "backend-dev": "cd server && npm install && npm start",
+    "build": "cd client && npm install && npm run build && rm -rf node_modules",
+    "clean": "rm -rf client/node_modules && rm -rf client/build && rm -rf server/node_modules"
   }
 }
