@@ -18,7 +18,7 @@ app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 // Handle GET requests to /api/test route
 app.get('/api/test', function (req, res) {
-  res.json({ message: 'Hello Caroline!' });
+  res.json({ message: 'Hello Snowie!', from: 'Caroline' });
 });
 
 // All other GET requests not handled before will default to index.html
