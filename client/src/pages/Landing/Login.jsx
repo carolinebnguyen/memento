@@ -37,7 +37,7 @@ export default function Login() {
     if (isUserLoggedIn()) {
       navigate('/home');
     }
-  }, []);
+  }, [navigate]);
 
   const onSubmit = (values, { setSubmitting, resetForm }) => {
     setTimeout(() => {

@@ -8,13 +8,12 @@ Memento is a social media web application that allows users to share photos and 
 
 ## Tech Stack
 
-- MongoDB
+- DynamoDB
 - Express
 - React
 - Node.js
 
-# How to Start Front End
+# How to Start App
 
-1. Run `npm i`
-2. Run `npm start`
-3. If localhost did not automatically start up, navigate to http://localhost:3000.
+1. Run `npm run frontend-dev` to start the front end
+2. Run `npm run backend-dev` to start the back end
