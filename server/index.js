@@ -3,6 +3,9 @@ const morgan = require('morgan');
 const timeout = require('connect-timeout');
 const cookieParser = require('cookie-parser');
 const path = require('path');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const PORT = process.env.PORT || 9000;
 
