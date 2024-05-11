@@ -123,7 +123,7 @@ const carolineProfile = {
   name: 'Caroline Nguyen',
   email: 'test@email.com',
   picture: caroline,
-  bio: 'Developer \n Software Engineering Major',
+  bio: 'Developer \nSoftware Engineering Major',
   followersList: [],
   followingList: [],
   photos: [carolibnPhoto1, carolibnPhoto2],
