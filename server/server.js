@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const timeout = require('connect-timeout');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const path = require('path');
 const dotenv = require('dotenv');
 
@@ -15,16 +16,20 @@ app.use(timeout('5s'));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(
+  cors({
+    origin: [
+      'http://memento.carolinenguyen.me',
+      'http://memento.us-east-2.elasticbeanstalk.com',
+    ],
+  })
+);
 
-// Server serves files for the built frontend
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
-// Handle GET requests to /api/test route
-app.get('/api/test', function (req, res) {
-  res.json({ message: 'Hello Caroline!', from: 'Snowie Pom' });
-});
+const userRoutes = require('./routes/userRoutes');
+app.use('/api/user', userRoutes);
 
-// All other GET requests not handled before will default to index.html
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
 });

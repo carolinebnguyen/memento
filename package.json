@@ -4,9 +4,8 @@
   "private": true,
   "description": "Memento web app",
   "dependencies": {},
-  "devDependencies": {},
   "scripts": {
-    "start": "node server/index.js",
+    "start": "node server/server.js",
     "frontend-dev": "cd client && npm install && npm start",
     "backend-dev": "cd server && npm install && npm start",
     "build": "cd client && npm install && npm run build && rm -rf node_modules",

@@ -9,19 +9,6 @@ import { PostType } from '../../utils/utils';
 export default function Home() {
   const { all, photos, statuses } = categorizedPosts;
 
-  useEffect(() => {
-    // TODO: REMOVE testApi
-    const testApi = async () => {
-      try {
-        const test = await axios.get('/api/test');
-        console.log(test);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    testApi();
-  }, []);
-
   return (
     <Flex justify="center" align="center" w="100%">
       <Tabs align="center" w="100vw">
