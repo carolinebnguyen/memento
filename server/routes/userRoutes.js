@@ -3,10 +3,13 @@ const router = express.Router();
 const crypto = require('crypto');
 const {
   CognitoIdentityProviderClient,
+  InitiateAuthCommand,
   SignUpCommand,
 } = require('@aws-sdk/client-cognito-identity-provider');
 const { DynamoDBClient, PutItemCommand } = require('@aws-sdk/client-dynamodb');
 
+const COGNITO_CLIENT_ID = process.env.COGNITO_CLIENT_ID;
+const COGNITO_CLIENT_SECRET = process.env.COGNITO_CLIENT_SECRET;
 const USER_TABLE = 'User';
 
 const cognitoClient = new CognitoIdentityProviderClient({
@@ -33,7 +36,7 @@ router.post('/signup', async (req, res) => {
     }
 
     const signUpParams = {
-      ClientId: process.env.COGNITO_CLIENT_ID,
+      ClientId: COGNITO_CLIENT_ID,
       SecretHash: getSecretHash(username),
       Username: username,
       Password: password,
@@ -65,7 +68,9 @@ router.post('/signup', async (req, res) => {
     };
     await dynamoDBClient.send(new PutItemCommand(userParams));
 
-    res.status(201).json({ message: 'User account created successfully!' });
+    return res
+      .status(201)
+      .json({ message: 'User account created successfully!' });
   } catch (error) {
     if (
       error.name === 'UsernameExistsException' ||
@@ -75,17 +80,44 @@ router.post('/signup', async (req, res) => {
     }
 
     console.error('Error creating user account:', error);
-    res.status(500).json({ error: 'Failed to create user account.' });
+    return res.status(500).json({ error: 'Failed to create user account.' });
+  }
+});
+
+router.post('/login', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    const params = {
+      ClientId: COGNITO_CLIENT_ID,
+      AuthFlow: 'USER_PASSWORD_AUTH',
+      AuthParameters: {
+        USERNAME: username,
+        PASSWORD: password,
+        SECRET_HASH: getSecretHash(username),
+      },
+    };
+    const data = await cognitoClient.send(new InitiateAuthCommand(params));
+    const { AccessToken, IdToken, RefreshToken, ExpiresIn } =
+      data.AuthenticationResult;
+
+    return res.status(200).json({
+      success: true,
+      accessToken: AccessToken,
+      idToken: IdToken,
+      refreshToken: RefreshToken,
+      expiresIn: ExpiresIn,
+    });
+  } catch (error) {
+    console.error('Failed to login:', error);
+    return res.status(500).json({ error: 'Incorrect username or password.' });
   }
 });
 
 const getSecretHash = (username) => {
-  const clientId = process.env.COGNITO_CLIENT_ID;
-  const clientSecret = process.env.COGNITO_CLIENT_SECRET;
-
-  const concatenated = username + clientId;
+  const concatenated = username + COGNITO_CLIENT_ID;
   const hash = crypto
-    .createHmac('sha256', clientSecret)
+    .createHmac('sha256', COGNITO_CLIENT_SECRET)
     .update(concatenated)
     .digest('base64');
   return hash;
