@@ -85,7 +85,6 @@ export default function Signup() {
         navigate('/home');
       }, 1000);
     } catch (error) {
-      console.error('Error signing up: ', error);
       const errorMessage =
         error.response?.data?.error ?? 'An unexpected error occurred';
       setAlertMessage(errorMessage);
@@ -202,7 +201,7 @@ export default function Signup() {
                     colorScheme="blue"
                     type="submit"
                     w="100%"
-                    mt={10}
+                    mt={5}
                     isLoading={isSubmitting}
                   >
                     Sign up

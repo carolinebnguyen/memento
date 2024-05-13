@@ -6,7 +6,11 @@ const {
   GlobalSignOutCommand,
   SignUpCommand,
 } = require('@aws-sdk/client-cognito-identity-provider');
-const { DynamoDBClient, PutItemCommand } = require('@aws-sdk/client-dynamodb');
+const {
+  DynamoDBClient,
+  PutItemCommand,
+  QueryCommand,
+} = require('@aws-sdk/client-dynamodb');
 const { marshall } = require('@aws-sdk/util-dynamodb');
 const { getSecretHash } = require('../utils/authUtils');
 
@@ -29,6 +33,21 @@ router.post('/signup', async (req, res) => {
       return res.status(400).json({
         error: 'Username, password, email, and name are required',
       });
+    }
+
+    const checkEmail = {
+      TableName: USER_TABLE,
+      IndexName: 'email-index',
+      KeyConditionExpression: 'email = :email',
+      ExpressionAttributeValues: {
+        ':email': { S: email },
+      },
+    };
+
+    const { Items } = await dynamoDBClient.send(new QueryCommand(checkEmail));
+
+    if (Items && Items.length > 0) {
+      return res.status(409).json({ error: 'Email is already in use' });
     }
 
     const signUpParams = {
@@ -60,8 +79,7 @@ router.post('/signup', async (req, res) => {
         followersList: [],
         followingList: [],
       }),
-      ConditionExpression:
-        'attribute_not_exists(username) AND attribute_not_exists(email)',
+      ConditionExpression: 'attribute_not_exists(username)',
     };
     await dynamoDBClient.send(new PutItemCommand(userParams));
 
@@ -73,10 +91,7 @@ router.post('/signup', async (req, res) => {
       error.name === 'UsernameExistsException' ||
       error.__type.includes('ConditionalCheckFailedException')
     ) {
-      const errorMessage = error.message.includes('username')
-        ? 'Username already exists'
-        : 'Email is already in use';
-      return res.status(409).json({ error: errorMessage });
+      return res.status(409).json({ error: 'Username already exists' });
     }
 
     console.error('Error creating user account:', error);
