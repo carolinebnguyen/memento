@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Flex,
   Text,
@@ -28,12 +28,22 @@ import { CompactIconButton } from '../CompactNavLink/CompactNavLink';
 import { headerHeight, sidebarWidth } from '../../utils/constants';
 import styles from './BottomNav.module.css';
 import { logOutUser, setUserLoggedOut } from '../../utils/authUtils';
+import { getCurrentUsername } from '../../utils/userUtils';
 
 export default function BottomNav() {
   const isWide = useBreakpointValue({ base: false, md: true });
   const { search } = useLocation();
   const navigate = useNavigate();
   const username = new URLSearchParams(search).get('username');
+  const [currentUsername, setCurrentUsername] = useState('');
+
+  useEffect(() => {
+    const fetchCurrentUsername = async () => {
+      const username = await getCurrentUsername();
+      setCurrentUsername(username);
+    };
+    fetchCurrentUsername();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -80,14 +90,14 @@ export default function BottomNav() {
       <Menu>
         <MenuButton
           as={IconButton}
-          icon={username === 'carolibn' ? <FaUser /> : <FaRegUser />}
+          icon={username === currentUsername ? <FaUser /> : <FaRegUser />}
           cursor="pointer"
           variant="ghost"
         />
         <MenuList>
           <MenuItem
             as="a"
-            href="/profile?username=carolibn"
+            href={`/profile?username=${currentUsername}`}
             className={styles['menu-link']}
           >
             <Image

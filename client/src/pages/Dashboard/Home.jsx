@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { Flex, Tabs, TabList, TabPanels, TabPanel } from '@chakra-ui/react';
 import { AllTab, PhotoTab, StatusTab } from '../../components/Tabs';
 import HomePostTabContent from '../../components/HomePostTabContent';

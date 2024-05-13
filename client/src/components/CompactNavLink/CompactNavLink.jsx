@@ -13,7 +13,7 @@ function CompactNavLink({ to, icon, filledIcon }) {
   );
 }
 
-function CompactProfileNavLink({ to, icon, filledIcon }) {
+function CompactProfileNavLink({ to, icon, filledIcon, currentUsername }) {
   const { search } = useLocation();
   const username = new URLSearchParams(search).get('username');
 
@@ -21,7 +21,7 @@ function CompactProfileNavLink({ to, icon, filledIcon }) {
     <NavLink to={to} className={styles['compact-nav-link']}>
       {({ isActive }) => (
         <Icon
-          as={isActive && username === 'carolibn' ? filledIcon : icon}
+          as={isActive && username === currentUsername ? filledIcon : icon}
           boxSize={22}
         />
       )}

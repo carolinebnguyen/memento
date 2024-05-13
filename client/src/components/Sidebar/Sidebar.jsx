@@ -36,6 +36,7 @@ import {
   logOutUser,
   setUserLoggedOut,
 } from '../../utils/authUtils';
+import { getCurrentUsername } from '../../utils/userUtils';
 
 export default function Sidebar() {
   const isCollapsed = useBreakpointValue({ base: true, sm: false });
@@ -86,6 +87,15 @@ function SidebarContent() {
   const username = new URLSearchParams(search).get('username');
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [currentUsername, setCurrentUsername] = useState('');
+
+  useEffect(() => {
+    const fetchCurrentUsername = async () => {
+      const username = await getCurrentUsername();
+      setCurrentUsername(username);
+    };
+    fetchCurrentUsername();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -128,9 +138,9 @@ function SidebarContent() {
           label="Notifications"
         />
         <NavLink
-          to="/profile?username=carolibn"
+          to={`/profile?username=${currentUsername}`}
           className={({ isActive }) =>
-            isActive && username === 'carolibn'
+            isActive && username === currentUsername
               ? linkStyles['nav-link-active']
               : linkStyles['nav-link']
           }
@@ -138,12 +148,14 @@ function SidebarContent() {
           {({ isActive }) => (
             <HStack p={2}>
               <Icon
-                as={isActive && username === 'carolibn' ? FaUser : FaRegUser}
+                as={
+                  isActive && username === currentUsername ? FaUser : FaRegUser
+                }
                 boxSize={22}
               />
               <Text
                 fontWeight={
-                  isActive && username === 'carolibn' ? 'bold' : 'normal'
+                  isActive && username === currentUsername ? 'bold' : 'normal'
                 }
               >
                 Profile

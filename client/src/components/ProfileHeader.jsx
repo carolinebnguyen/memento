@@ -20,8 +20,8 @@ export default function ProfileHeader({ profile }) {
     bio,
     followersList,
     followingList,
-    photos,
-    statuses,
+    photoCount,
+    statusCount,
   } = profile;
 
   const {
@@ -66,7 +66,6 @@ export default function ProfileHeader({ profile }) {
             </Button>
           )}
         </Stack>
-
         <Stack direction="row" gap={8} mt={2}>
           <Stack
             direction={{ base: 'column', sm: 'row' }}
@@ -74,10 +73,10 @@ export default function ProfileHeader({ profile }) {
             align="center"
           >
             <Text as="b" fontSize="sm">
-              {photos.length}
+              {photoCount}
             </Text>
             <Text fontSize="sm" fontWeight={500}>
-              {photos.length === 1 ? 'photo' : 'photos'}
+              {photoCount === 1 ? 'photo' : 'photos'}
             </Text>
           </Stack>
           <Stack
@@ -86,10 +85,10 @@ export default function ProfileHeader({ profile }) {
             align="center"
           >
             <Text as="b" fontSize="sm">
-              {statuses.length}
+              {statusCount}
             </Text>
             <Text fontSize="sm" fontWeight={500}>
-              {statuses.length === 1 ? 'status' : 'statuses'}
+              {statusCount === 1 ? 'status' : 'statuses'}
             </Text>
           </Stack>
           <Stack
@@ -100,10 +99,12 @@ export default function ProfileHeader({ profile }) {
             onClick={onOpenFollower}
           >
             <Text as="b" fontSize="sm">
-              {followersList.length}
+              {followersList && followersList.length}
             </Text>
             <Text fontSize="sm" fontWeight={500}>
-              {followersList.length === 1 ? 'follower' : 'followers'}
+              {followersList && followersList.length === 1
+                ? 'follower'
+                : 'followers'}
             </Text>
             <UserModal
               isOpen={isOpenFollower}
@@ -120,7 +121,7 @@ export default function ProfileHeader({ profile }) {
             onClick={onOpenFollowing}
           >
             <Text as="b" fontSize="sm">
-              {followingList.length}
+              {followingList && followingList.length}
             </Text>
             <Text fontSize="sm" fontWeight={500}>
               following
@@ -133,11 +134,9 @@ export default function ProfileHeader({ profile }) {
             usersList={followingList}
           />
         </Stack>
-
         <Heading as="h2" size="xs" noOfLines={1} my={2}>
           {name}
         </Heading>
-
         <Text fontSize="sm" whiteSpace="pre-line">
           {bio}
         </Text>

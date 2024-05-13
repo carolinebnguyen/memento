@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Flex,
   Image,
@@ -22,10 +22,20 @@ import {
 } from '../utils/authUtils';
 import caroline from '../assets/placeholders/carolineAvatarClear.png';
 import styles from '../components/BottomNav/BottomNav.module.css';
+import { getCurrentUsername } from '../utils/userUtils';
 
 export default function Navbar() {
   const isLoggedIn = isUserLoggedIn();
   const navigate = useNavigate();
+  const [currentUsername, setCurrentUsername] = useState('');
+
+  useEffect(() => {
+    const fetchCurrentUsername = async () => {
+      const username = await getCurrentUsername();
+      setCurrentUsername(username);
+    };
+    fetchCurrentUsername();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -63,7 +73,7 @@ export default function Navbar() {
           <MenuList>
             <MenuItem
               as="a"
-              href="/profile?username=carolibn"
+              href={`/profile?username=${currentUsername}`}
               className={styles['menu-link']}
             >
               <Image

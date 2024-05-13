@@ -19,7 +19,7 @@ export default function UserModal({ isOpen, onClose, title, usersList }) {
         <ModalHeader textAlign="center">{title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody mb={3}>
-          {usersList.length > 0 ? (
+          {usersList && usersList.length > 0 ? (
             usersList.map((user, index) => (
               <Box
                 key={user.username}

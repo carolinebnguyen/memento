@@ -2,11 +2,11 @@ import React from 'react';
 import { Flex, Divider, Text, Box } from '@chakra-ui/react';
 import PostCard from './PostCard';
 
-export default function ProfileStatusTabContent({ profile }) {
-  const { statuses } = profile;
-  const sortedStatuses = statuses
-    .slice()
-    .sort((a, b) => b.postedAt - a.postedAt);
+export default function ProfileStatusTabContent({ statuses }) {
+  let sortedStatuses = [];
+  if (statuses.length > 0) {
+    sortedStatuses = statuses.slice().sort((a, b) => b.postedAt - a.postedAt);
+  }
 
   return (
     <Flex direction="column" w="full">
