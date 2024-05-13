@@ -12,15 +12,30 @@ import {
   Avatar,
   Text,
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { MdLogout, MdOutlineSettings } from 'react-icons/md';
 import logo from '../assets/logoBlack.png';
-import { isUserLoggedIn, setUserLoggedOut } from '../utils/authUtils';
+import {
+  isUserLoggedIn,
+  logOutUser,
+  setUserLoggedOut,
+} from '../utils/authUtils';
 import caroline from '../assets/placeholders/carolineAvatarClear.png';
 import styles from '../components/BottomNav/BottomNav.module.css';
 
 export default function Navbar() {
   const isLoggedIn = isUserLoggedIn();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logOutUser();
+      setUserLoggedOut();
+      navigate('/');
+    } catch (error) {
+      console.error('Error logging out ', error);
+    }
+  };
 
   return (
     <Flex
@@ -70,9 +85,7 @@ export default function Navbar() {
               as="a"
               href="/"
               className={styles['menu-link']}
-              onClick={() => {
-                setUserLoggedOut();
-              }}
+              onClick={handleLogout}
             >
               <Icon as={MdLogout} boxSize={5} mr={3} />
               Log Out

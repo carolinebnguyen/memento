@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   useBreakpointValue,
   Flex,
@@ -8,6 +8,8 @@ import {
   Stack,
   Divider,
   Icon,
+  Spinner,
+  Center,
 } from '@chakra-ui/react';
 import {
   MdOutlineHome,
@@ -29,7 +31,11 @@ import linkStyles from '../StyledNavLink/StyledNavLink.module.css';
 import { sidebarWidth } from '../../utils/constants';
 import Header from '../Header/Header';
 import CompactSidebar from '../CompactSidebar';
-import { isUserLoggedIn, setUserLoggedOut } from '../../utils/authUtils';
+import {
+  isUserLoggedIn,
+  logOutUser,
+  setUserLoggedOut,
+} from '../../utils/authUtils';
 
 export default function Sidebar() {
   const isCollapsed = useBreakpointValue({ base: true, sm: false });
@@ -79,10 +85,19 @@ function SidebarContent() {
   const { search } = useLocation();
   const username = new URLSearchParams(search).get('username');
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogout = () => {
-    setUserLoggedOut();
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      setIsLoading(true);
+      await logOutUser();
+      setTimeout(() => {
+        setUserLoggedOut();
+        navigate('/');
+      }, 1500);
+    } catch (error) {
+      console.error('Error logging out ', error);
+    }
   };
 
   return (
@@ -154,6 +169,11 @@ function SidebarContent() {
           </HStack>
         </Flex>
       </Stack>
+      {isLoading && (
+        <Center>
+          <Spinner />
+        </Center>
+      )}
       <Stack fontSize={12} p={3}>
         <Text>© 2024 Memento</Text>
         <HStack justify="space-between">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Image, Stack, Divider, IconButton } from '@chakra-ui/react';
+import { Flex, Image, Stack, Divider } from '@chakra-ui/react';
 import {
   MdOutlineHome,
   MdHome,
@@ -19,7 +19,7 @@ import {
   CompactNavLink,
   CompactProfileNavLink,
 } from './CompactNavLink/CompactNavLink';
-import { setUserLoggedOut } from '../utils/authUtils';
+import { logOutUser, setUserLoggedOut } from '../utils/authUtils';
 
 export default function CompactSidebar() {
   return (
@@ -44,9 +44,14 @@ export default function CompactSidebar() {
 function CompactSidebarContent() {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    setUserLoggedOut();
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      await logOutUser();
+      setUserLoggedOut();
+      navigate('/');
+    } catch (error) {
+      console.error('Error logging out ', error);
+    }
   };
 
   return (
@@ -80,7 +85,7 @@ function CompactSidebarContent() {
           filledIcon={MdSettings}
         />
         <Flex ml={1} _hover={{ cursor: 'pointer' }} onClick={handleLogout}>
-          <IconButton as={MdLogout} variant="whiteAlpha" size="xs" />
+          <MdLogout size={22} />
         </Flex>
       </Stack>
       <FooterMenu />

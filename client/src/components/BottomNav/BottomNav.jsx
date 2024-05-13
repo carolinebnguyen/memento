@@ -22,17 +22,30 @@ import {
 import { FaRegUser, FaUser, FaSearch, FaRegBell, FaBell } from 'react-icons/fa';
 import { FiPlusCircle } from 'react-icons/fi';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import caroline from '../../assets/placeholders/carolineAvatarClear.png';
 import { CompactIconButton } from '../CompactNavLink/CompactNavLink';
 import { headerHeight, sidebarWidth } from '../../utils/constants';
 import styles from './BottomNav.module.css';
-import { setUserLoggedOut } from '../../utils/authUtils';
+import { logOutUser, setUserLoggedOut } from '../../utils/authUtils';
 
 export default function BottomNav() {
   const isWide = useBreakpointValue({ base: false, md: true });
   const { search } = useLocation();
+  const navigate = useNavigate();
   const username = new URLSearchParams(search).get('username');
+
+  const handleLogout = async () => {
+    try {
+      await logOutUser();
+      setTimeout(() => {
+        setUserLoggedOut();
+        navigate('/');
+      }, 1500);
+    } catch (error) {
+      console.error('Error logging out ', error);
+    }
+  };
 
   return (
     <Flex
@@ -92,14 +105,7 @@ export default function BottomNav() {
             <Icon as={MdOutlineSettings} boxSize={5} mr={3} />
             Settings
           </MenuItem>
-          <MenuItem
-            as="a"
-            href="/"
-            className={styles['menu-link']}
-            onClick={() => {
-              setUserLoggedOut();
-            }}
-          >
+          <MenuItem className={styles['menu-link']} onClick={handleLogout}>
             <Icon as={MdLogout} boxSize={5} mr={3} />
             Log Out
           </MenuItem>

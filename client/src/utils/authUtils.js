@@ -20,7 +20,6 @@ const logInUser = async (username, password) => {
       username,
       password,
     });
-    console.log(document.cookie);
   } catch (error) {
     throw error;
   }
