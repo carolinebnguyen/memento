@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Flex,
   Button,
@@ -12,6 +12,11 @@ import {
   Divider,
   AbsoluteCenter,
   Text,
+  useToast,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from '@chakra-ui/react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
@@ -19,10 +24,17 @@ import { useNavigate, Link } from 'react-router-dom';
 import logo from '../../assets/logoBlack.png';
 import PasswordField from '../../components/PasswordField';
 import { passwordRegex, passwordErrorMessage } from '../../utils/utils';
-import { setUserLoggedIn, isUserLoggedIn } from '../../utils/authUtils';
+import {
+  signUpUser,
+  setUserLoggedIn,
+  isUserLoggedIn,
+} from '../../utils/authUtils';
 
 export default function Signup() {
   const navigate = useNavigate();
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const toast = useToast();
 
   useEffect(() => {
     if (isUserLoggedIn()) {
@@ -47,13 +59,39 @@ export default function Signup() {
       .required('Password is required'),
   });
 
-  const onSubmit = (values, { setSubmitting, resetForm }) => {
-    setTimeout(() => {
-      resetForm(initialValues);
-      setUserLoggedIn();
+  const onSubmit = async (values, { setSubmitting, resetForm }) => {
+    setAlertMessage('');
+    setIsAlertVisible(false);
+
+    const { email, name, username, password } = values;
+    const user = { email, name, username, password };
+
+    try {
+      await signUpUser(user);
+      toast({
+        title: 'Account Created',
+        description: 'Your account has been created',
+        status: 'success',
+        variant: 'subtle',
+        position: 'top',
+        containerStyle: {
+          zIndex: '9999',
+        },
+      });
+      setTimeout(() => {
+        resetForm(initialValues);
+        setUserLoggedIn();
+        setSubmitting(false);
+        navigate('/home');
+      }, 1000);
+    } catch (error) {
+      console.error('Error signing up: ', error);
+      const errorMessage =
+        error.response?.data?.error ?? 'An unexpected error occurred';
+      setAlertMessage(errorMessage);
+      setIsAlertVisible(true);
       setSubmitting(false);
-      navigate('/home');
-    }, 1000);
+    }
   };
 
   return (
@@ -151,6 +189,15 @@ export default function Signup() {
                       )}
                     </ErrorMessage>
                   </FormControl>
+                  {isAlertVisible && (
+                    <Alert status="error" mt={5}>
+                      <AlertIcon />
+                      <Box maxW="200px">
+                        <AlertTitle>Error</AlertTitle>
+                        <AlertDescription>{alertMessage}</AlertDescription>
+                      </Box>
+                    </Alert>
+                  )}
                   <Button
                     colorScheme="blue"
                     type="submit"

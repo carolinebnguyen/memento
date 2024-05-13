@@ -1,4 +1,4 @@
-require('dotenv').config(); // Load environment variables before importing other files
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const timeout = require('connect-timeout');
@@ -16,6 +16,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: [
+      'http://localhost:3000',
       'http://memento.carolinenguyen.me',
       'http://memento.us-east-2.elasticbeanstalk.com',
     ],

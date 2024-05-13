@@ -10,7 +10,7 @@ export default function PasswordField({ field, form, ...props }) {
   };
 
   return (
-    <InputGroup>
+    <InputGroup mb={2}>
       <Input
         {...field}
         type={isPasswordVisible ? 'text' : 'password'}

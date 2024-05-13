@@ -40,7 +40,7 @@ export default function ChangePictureModal({ isOpen, onClose, setAvatarSrc }) {
         title: 'Changes Saved',
         description: 'Your profile picture has been updated',
         status: 'success',
-        duration: 3000,
+        variant: 'subtle',
         position: 'top',
         containerStyle: {
           zIndex: '9999',

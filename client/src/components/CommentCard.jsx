@@ -54,7 +54,7 @@ export default function CommentCard({ poster, comment }) {
         title: 'Comment Deleted',
         description: 'The comment has been deleted',
         status: 'success',
-        duration: 3000,
+        variant: 'subtle',
         position: 'top',
         containerStyle: {
           zIndex: '9999',
@@ -83,7 +83,7 @@ export default function CommentCard({ poster, comment }) {
           title: 'Comment Edited',
           description: 'Your comment has been edited',
           status: 'success',
-          duration: 3000,
+          variant: 'subtle',
           position: 'top',
           containerStyle: {
             zIndex: '9999',

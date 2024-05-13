@@ -1,5 +1,11 @@
 import { formatDistanceToNow } from 'date-fns';
 import { format } from 'date-fns-tz';
+import axios from 'axios';
+
+const mementoBackend = axios.create({
+  baseURL: '/api',
+  withCredentials: true,
+});
 
 const formatDateDistanceToNow = (dateToFormat) => {
   return formatDistanceToNow(dateToFormat, {
@@ -57,6 +63,7 @@ const PostType = {
 };
 
 export {
+  mementoBackend,
   formatDateDistanceToNow,
   formatDate,
   passwordRegex,

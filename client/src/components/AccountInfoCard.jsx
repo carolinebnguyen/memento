@@ -56,6 +56,7 @@ export default function AccountInfoCard() {
         description: 'Your password has been changed',
         status: 'success',
         duration: 3000,
+        variant: 'subtle',
         position: 'top',
         containerStyle: {
           zIndex: '9999',

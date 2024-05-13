@@ -60,7 +60,8 @@ router.post('/signup', async (req, res) => {
         followersList: [],
         followingList: [],
       }),
-      ConditionExpression: 'attribute_not_exists(username)',
+      ConditionExpression:
+        'attribute_not_exists(username) AND attribute_not_exists(email)',
     };
     await dynamoDBClient.send(new PutItemCommand(userParams));
 
@@ -72,11 +73,14 @@ router.post('/signup', async (req, res) => {
       error.name === 'UsernameExistsException' ||
       error.__type.includes('ConditionalCheckFailedException')
     ) {
-      return res.status(409).json({ error: 'Username already exists.' });
+      const errorMessage = error.message.includes('username')
+        ? 'Username already exists'
+        : 'Email is already in use';
+      return res.status(409).json({ error: errorMessage });
     }
 
     console.error('Error creating user account:', error);
-    return res.status(500).json({ error: 'Failed to create user account.' });
+    return res.status(500).json({ error: 'Failed to create user account' });
   }
 });
 
@@ -104,7 +108,7 @@ router.post('/login', async (req, res) => {
     return res.status(200).json({ success: true });
   } catch (error) {
     console.error('Failed to login:', error);
-    return res.status(500).json({ error: 'Incorrect username or password.' });
+    return res.status(500).json({ error: 'Incorrect username or password' });
   }
 });
 

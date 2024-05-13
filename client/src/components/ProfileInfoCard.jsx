@@ -63,7 +63,7 @@ export default function ProfileInfoCard() {
         title: 'Changes Saved',
         description: 'Your profile changes have been saved',
         status: 'success',
-        duration: 3000,
+        variant: 'subtle',
         position: 'top',
         containerStyle: {
           zIndex: '9999',
