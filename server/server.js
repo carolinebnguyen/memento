@@ -1,14 +1,11 @@
+require('dotenv').config(); // Load environment variables before importing other files
 const express = require('express');
 const morgan = require('morgan');
 const timeout = require('connect-timeout');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const path = require('path');
-const dotenv = require('dotenv');
-
-dotenv.config();
-
-const PORT = process.env.PORT || 9000;
+const { verifyAccessToken } = require('./utils/authUtils');
 
 const app = express();
 app.use(morgan('dev'));
@@ -27,13 +24,15 @@ app.use(
 
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
-const userRoutes = require('./routes/userRoutes');
-app.use('/api/user', userRoutes);
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/**', verifyAccessToken);
+app.use('/api/user', require('./routes/user'));
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
 });
 
+const PORT = process.env.PORT || 9000;
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });

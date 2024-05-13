@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const crypto = require('crypto');
 const {
   CognitoIdentityProviderClient,
   InitiateAuthCommand,
   SignUpCommand,
 } = require('@aws-sdk/client-cognito-identity-provider');
 const { DynamoDBClient, PutItemCommand } = require('@aws-sdk/client-dynamodb');
+const { marshall } = require('@aws-sdk/util-dynamodb');
+const { getSecretHash } = require('../utils/authUtils');
 
 const COGNITO_CLIENT_ID = process.env.COGNITO_CLIENT_ID;
-const COGNITO_CLIENT_SECRET = process.env.COGNITO_CLIENT_SECRET;
 const USER_TABLE = 'User';
 
 const cognitoClient = new CognitoIdentityProviderClient({
@@ -19,12 +19,7 @@ const dynamoDBClient = new DynamoDBClient({
   region: process.env.AWS_REGION,
 });
 
-// GET /api/user/
-router.get('/', async (req, res) => {
-  return;
-});
-
-// POST /api/user/signup
+// POST /api/auth/signup
 router.post('/signup', async (req, res) => {
   try {
     const { username, password, email, name } = req.body;
@@ -55,15 +50,15 @@ router.post('/signup', async (req, res) => {
 
     const userParams = {
       TableName: USER_TABLE,
-      Item: {
-        username: { S: username },
-        email: { S: email },
-        name: { S: name },
-        picture: { S: '' },
-        bio: { S: '' },
-        followersList: { L: [] },
-        followingList: { L: [] },
-      },
+      Item: marshall({
+        username,
+        email,
+        name,
+        picture: '',
+        bio: '',
+        followersList: [],
+        followingList: [],
+      }),
       ConditionExpression: 'attribute_not_exists(username)',
     };
     await dynamoDBClient.send(new PutItemCommand(userParams));
@@ -84,6 +79,7 @@ router.post('/signup', async (req, res) => {
   }
 });
 
+// POST /api/auth/login
 router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -98,29 +94,17 @@ router.post('/login', async (req, res) => {
       },
     };
     const data = await cognitoClient.send(new InitiateAuthCommand(params));
-    const { AccessToken, IdToken, RefreshToken, ExpiresIn } =
-      data.AuthenticationResult;
+    const { AccessToken, RefreshToken } = data.AuthenticationResult;
 
-    return res.status(200).json({
-      success: true,
-      accessToken: AccessToken,
-      idToken: IdToken,
-      refreshToken: RefreshToken,
-      expiresIn: ExpiresIn,
-    });
+    // Update secure to true if https enabled
+    res.cookie('accessToken', AccessToken, { httpOnly: true, secure: false });
+    res.cookie('refreshToken', RefreshToken, { httpOnly: true, secure: false });
+
+    return res.status(200).json({ success: true });
   } catch (error) {
     console.error('Failed to login:', error);
     return res.status(500).json({ error: 'Incorrect username or password.' });
   }
 });
-
-const getSecretHash = (username) => {
-  const concatenated = username + COGNITO_CLIENT_ID;
-  const hash = crypto
-    .createHmac('sha256', COGNITO_CLIENT_SECRET)
-    .update(concatenated)
-    .digest('base64');
-  return hash;
-};
 
 module.exports = router;

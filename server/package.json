@@ -15,12 +15,14 @@
     "@aws-sdk/client-cognito-identity-provider": "^3.574.0",
     "@aws-sdk/client-dynamodb": "^3.574.0",
     "@aws-sdk/client-s3": "^3.572.0",
+    "@aws-sdk/util-dynamodb": "^3.574.0",
     "connect-timeout": "^1.9.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
