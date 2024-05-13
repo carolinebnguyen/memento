@@ -12,4 +12,10 @@ const getCurrentUserProfile = async () => {
   return profile;
 };
 
-export { getCurrentUsername, getCurrentUserProfile };
+const getUserProfile = async (username) => {
+  const res = await mementoBackend.get(`/user?username=${username}`);
+  const profile = res.data;
+  return profile;
+};
+
+export { getCurrentUsername, getCurrentUserProfile, getUserProfile };

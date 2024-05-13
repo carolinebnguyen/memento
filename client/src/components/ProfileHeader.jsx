@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Avatar,
   Button,
@@ -10,9 +10,20 @@ import {
 } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
 import UserModal from './UserModal';
+import { getCurrentUsername } from '../utils/userUtils';
 
 export default function ProfileHeader({ profile }) {
   const [isFollowing, setIsFollowing] = useState(false);
+  const [currentUsername, setCurrentUsername] = useState('');
+
+  useEffect(() => {
+    const fetchCurrentUsername = async () => {
+      const username = await getCurrentUsername();
+      setCurrentUsername(username);
+    };
+    fetchCurrentUsername();
+  }, []);
+
   const {
     username,
     name,
@@ -50,7 +61,7 @@ export default function ProfileHeader({ profile }) {
           <Heading as="h1" size="md" noOfLines={1}>
             {username}
           </Heading>
-          {searchedUsername === 'carolibn' ? (
+          {searchedUsername === currentUsername ? (
             <Link to="/settings">
               <Button colorScheme="blue" size="xs">
                 Edit Profile

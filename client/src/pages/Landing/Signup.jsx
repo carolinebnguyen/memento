@@ -17,6 +17,7 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
+  FormHelperText,
 } from '@chakra-ui/react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
@@ -161,12 +162,15 @@ export default function Signup() {
                     <FormLabel fontSize="16px" mt={5}>
                       Username
                     </FormLabel>
+                    <FormHelperText>
+                      Username cannot be changed later
+                    </FormHelperText>
                     <Field
                       as={Input}
                       type="text"
                       name="username"
                       id="username"
-                      mb={2}
+                      my={2}
                     />
                     <ErrorMessage name="username">
                       {(msg) => <Text color="red">{msg}</Text>}

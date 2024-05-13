@@ -6,45 +6,52 @@ import {
   TabPanels,
   TabPanel,
   Spinner,
+  Center,
 } from '@chakra-ui/react';
 import { PhotoTab, StatusTab } from '../../components/Tabs';
 import ProfileHeader from '../../components/ProfileHeader';
 import ProfilePhotoTabContent from '../../components/ProfilePhotoTabContent';
 import ProfileStatusTabContent from '../../components/ProfileStatusTabContent';
-import { getCurrentUserProfile } from '../../utils/userUtils';
+import { getUserProfile } from '../../utils/userUtils';
 import { sortPostsByType } from '../../utils/postUtils';
+import { useLocation } from 'react-router-dom';
 
 export default function Profile() {
-  const [currentProfile, setCurrentProfile] = useState({});
+  const [profile, setProfile] = useState({});
   const [photos, setPhotos] = useState({});
   const [statuses, setStatuses] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
+  const { search } = useLocation();
+  const username = new URLSearchParams(search).get('username');
+
   useEffect(() => {
     setIsLoading(true);
-    const fetchCurrentProfile = async () => {
-      const { user, posts } = await getCurrentUserProfile();
+    const fetchUserProfile = async () => {
+      const { user, posts } = await getUserProfile(username);
       const { photos, statuses } = sortPostsByType(posts);
       const fullProfileInfo = {
         ...user,
         photoCount: photos.length,
         statusCount: statuses.length,
       };
-      setCurrentProfile(fullProfileInfo);
+      setProfile(fullProfileInfo);
       setPhotos(photos);
       setStatuses(statuses);
       setIsLoading(false);
     };
-    fetchCurrentProfile();
-  }, []);
+    fetchUserProfile();
+  }, [username]);
 
   return (
     <Flex direction="column" align="center" w="100%">
       {isLoading ? (
-        <Spinner />
+        <Center>
+          <Spinner />
+        </Center>
       ) : (
         <>
-          <ProfileHeader profile={currentProfile} />
+          <ProfileHeader profile={profile} />
           <Flex justify="center" align="center" w="100%">
             <Tabs align="center" w="100vw">
               <TabList role="tablist">
