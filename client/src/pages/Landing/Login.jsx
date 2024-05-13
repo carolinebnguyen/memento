@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Flex,
   Button,
@@ -12,16 +12,30 @@ import {
   Divider,
   AbsoluteCenter,
   Text,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from '@chakra-ui/react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import { useNavigate, Link } from 'react-router-dom';
 import logo from '../../assets/logoBlack.png';
 import PasswordField from '../../components/PasswordField';
-import { setUserLoggedIn, isUserLoggedIn } from '../../utils/authUtils';
+import {
+  setUserLoggedIn,
+  isUserLoggedIn,
+  logInUser,
+} from '../../utils/authUtils';
 
 export default function Login() {
   const navigate = useNavigate();
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [alert, setAlert] = useState({
+    status: '',
+    title: '',
+    message: '',
+  });
 
   const initialValues = {
     username: '',
@@ -39,13 +53,33 @@ export default function Login() {
     }
   }, [navigate]);
 
-  const onSubmit = (values, { setSubmitting, resetForm }) => {
-    setTimeout(() => {
-      resetForm(initialValues);
-      setUserLoggedIn();
+  const onSubmit = async (values, { setSubmitting, resetForm }) => {
+    setIsAlertVisible(false);
+    setAlert({ status: '', title: '', message: '' });
+
+    const { username, password } = values;
+
+    try {
+      await logInUser(username, password);
+      setAlert({
+        status: 'success',
+        title: 'Success!',
+        message: 'Logging you in...',
+      });
+      setIsAlertVisible(true);
+      setTimeout(() => {
+        resetForm(initialValues);
+        setUserLoggedIn();
+        setSubmitting(false);
+        navigate('/home');
+      }, 1500);
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.error ?? 'An unexpected error occurred';
+      setAlert({ status: 'error', title: 'Error', message: errorMessage });
+      setIsAlertVisible(true);
       setSubmitting(false);
-      navigate('/home');
-    }, 1000);
+    }
   };
 
   return (
@@ -96,11 +130,20 @@ export default function Login() {
                       {(msg) => <Text color="red">{msg}</Text>}
                     </ErrorMessage>
                   </FormControl>
+                  {isAlertVisible && (
+                    <Alert status={alert.status} mt={5}>
+                      <AlertIcon />
+                      <Box maxW="200px">
+                        <AlertTitle>{alert.title}</AlertTitle>
+                        <AlertDescription>{alert.message}</AlertDescription>
+                      </Box>
+                    </Alert>
+                  )}
                   <Button
                     colorScheme="blue"
                     type="submit"
                     w="100%"
-                    mt={10}
+                    mt={5}
                     isLoading={isSubmitting}
                   >
                     Log in
