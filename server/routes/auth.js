@@ -3,6 +3,7 @@ const router = express.Router();
 const {
   CognitoIdentityProviderClient,
   InitiateAuthCommand,
+  GlobalSignOutCommand,
   SignUpCommand,
 } = require('@aws-sdk/client-cognito-identity-provider');
 const { DynamoDBClient, PutItemCommand } = require('@aws-sdk/client-dynamodb');
@@ -104,6 +105,33 @@ router.post('/login', async (req, res) => {
   } catch (error) {
     console.error('Failed to login:', error);
     return res.status(500).json({ error: 'Incorrect username or password.' });
+  }
+});
+
+// POST /api/auth/logout
+router.post('/logout', async (req, res) => {
+  const accessToken = req.cookies.accessToken;
+  if (!accessToken) {
+    return res.status(401).json({
+      success: false,
+      redirectToLogin: true,
+      error: 'No access token provided for logout',
+    });
+  }
+
+  try {
+    await cognitoClient.send(
+      new GlobalSignOutCommand({
+        AccessToken: accessToken,
+      })
+    );
+
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
+    res.status(200).json({ success: true, message: 'Logout successful' });
+  } catch (error) {
+    console.error('Error logging out:', error);
+    res.status(500).json({ success: false, message: 'Failed to logout' });
   }
 });
 
