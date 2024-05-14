@@ -45,6 +45,17 @@ const isUserLoggedIn = () => {
   return localStorage.getItem('isLoggedIn') === 'true';
 };
 
+const updatePassword = async (currentPassword, newPassword) => {
+  try {
+    await mementoBackend.put('/auth/password', {
+      currentPassword,
+      newPassword,
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 export {
   signUpUser,
   logInUser,
@@ -52,4 +63,5 @@ export {
   setUserLoggedIn,
   setUserLoggedOut,
   isUserLoggedIn,
+  updatePassword,
 };

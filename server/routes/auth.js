@@ -5,6 +5,7 @@ const {
   InitiateAuthCommand,
   GlobalSignOutCommand,
   SignUpCommand,
+  ChangePasswordCommand,
 } = require('@aws-sdk/client-cognito-identity-provider');
 const {
   DynamoDBClient,
@@ -151,6 +152,43 @@ router.post('/logout', async (req, res) => {
   } catch (error) {
     console.error('Error logging out:', error);
     res.status(500).json({ success: false, message: 'Failed to logout' });
+  }
+});
+
+// PUT api/auth/password
+router.put('/password', async (req, res) => {
+  const accessToken = req.cookies.accessToken;
+  if (!accessToken) {
+    return res.status(401).json({
+      success: false,
+      redirectToLogin: true,
+      error: 'No access token provided for updating password',
+    });
+  }
+
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    const params = {
+      AccessToken: accessToken,
+      PreviousPassword: currentPassword,
+      ProposedPassword: newPassword,
+    };
+
+    const response = await cognitoClient.send(
+      new ChangePasswordCommand(params)
+    );
+
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    console.error('Error updating password: ', error);
+    if (
+      error.name === 'NotAuthorizedException' ||
+      error.name === 'InvalidParameterException'
+    ) {
+      return res.status(500).json({ error: 'Current password is incorrect' });
+    }
+    return res.status(500).json({ error: 'Error updating password' });
   }
 });
 

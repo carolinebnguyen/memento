@@ -9,22 +9,35 @@ import {
   FormControl,
   FormLabel,
   Text,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from '@chakra-ui/react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import PasswordField from './PasswordField';
 import { passwordRegex, passwordErrorMessage } from '../utils/utils';
+import { updatePassword } from '../utils/authUtils';
 
 export default function AccountInfoCard() {
   const [isEditable, setIsEditable] = useState(false);
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   const toast = useToast();
 
   const initialValues = {
+    currentPassword: '',
     newPassword: '',
     confirmPassword: '',
   };
 
   const validationSchema = yup.object().shape({
+    currentPassword: yup.string().when(['newPassword'], {
+      is: (newPassword) => newPassword,
+      then: (schema) => schema.required('Please enter your current password'),
+      otherwise: (schema) => schema.nullable(),
+    }),
     newPassword: yup
       .string()
       .nullable()
@@ -45,24 +58,40 @@ export default function AccountInfoCard() {
 
   const toggleEditMode = () => {
     setIsEditable(!isEditable);
+    setAlertMessage('');
+    setIsAlertVisible(false);
   };
 
-  const onSubmit = (values, { setSubmitting }) => {
-    setTimeout(() => {
+  const onSubmit = async (values, { setSubmitting }) => {
+    setAlertMessage('');
+    setIsAlertVisible(false);
+
+    const { currentPassword, newPassword } = values;
+
+    try {
+      await updatePassword(currentPassword, newPassword);
+      setTimeout(() => {
+        setSubmitting(false);
+        toggleEditMode();
+        toast({
+          title: 'Password Changed',
+          description: 'Your password has been changed',
+          status: 'success',
+          duration: 3000,
+          variant: 'subtle',
+          position: 'top',
+          containerStyle: {
+            zIndex: '9999',
+          },
+        });
+      }, 1000);
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.error ?? 'An unexpected error occurred';
+      setAlertMessage(errorMessage);
+      setIsAlertVisible(true);
       setSubmitting(false);
-      toggleEditMode();
-      toast({
-        title: 'Password Changed',
-        description: 'Your password has been changed',
-        status: 'success',
-        duration: 3000,
-        variant: 'subtle',
-        position: 'top',
-        containerStyle: {
-          zIndex: '9999',
-        },
-      });
-    }, 1000);
+    }
   };
 
   return (
@@ -87,6 +116,21 @@ export default function AccountInfoCard() {
               touched,
             }) => (
               <Form>
+                <FormControl
+                  isInvalid={errors.currentPassword && touched.currentPassword}
+                >
+                  <FormLabel fontSize="16px" mt={5}>
+                    Current Password
+                  </FormLabel>
+                  <Field name="currentPassword" component={PasswordField} />
+                  <ErrorMessage name="currentPassword">
+                    {(msg) => (
+                      <Text color="red" whiteSpace="pre-line">
+                        {msg}
+                      </Text>
+                    )}
+                  </ErrorMessage>
+                </FormControl>
                 <FormControl
                   isInvalid={errors.newPassword && touched.newPassword}
                 >
@@ -113,6 +157,15 @@ export default function AccountInfoCard() {
                     {(msg) => <Text color="red">{msg}</Text>}
                   </ErrorMessage>
                 </FormControl>
+                {isAlertVisible && (
+                  <Alert status="error" mt={5}>
+                    <AlertIcon />
+                    <Box>
+                      <AlertTitle>Error</AlertTitle>
+                      <AlertDescription>{alertMessage}</AlertDescription>
+                    </Box>
+                  </Alert>
+                )}
                 <HStack justify="center" mt={5} gap={5}>
                   <Button isDisabled={isSubmitting} onClick={toggleEditMode}>
                     Cancel
