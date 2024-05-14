@@ -7,6 +7,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 const {
   CognitoIdentityProviderClient,
+  AdminUpdateUserAttributesCommand,
 } = require('@aws-sdk/client-cognito-identity-provider');
 const {
   DynamoDBClient,
@@ -103,9 +104,47 @@ router.put('/account', async (req, res) => {
   }
 
   try {
+    const username = req.user.username;
+
     const { name, email, bio } = req.body;
 
-    return res.status(200).json({});
+    const cognitoParams = {
+      UserPoolId: process.env.COGNITO_USER_POOL_ID,
+      Username: username,
+      UserAttributes: [
+        {
+          Name: 'email',
+          Value: email,
+        },
+        {
+          Name: 'name',
+          Value: name,
+        },
+      ],
+    };
+
+    const cognitoCommand = new AdminUpdateUserAttributesCommand(cognitoParams);
+    await cognitoClient.send(cognitoCommand);
+
+    const dynamoParams = {
+      TableName: USER_TABLE,
+      Key: { username: username },
+      UpdateExpression: 'set email = :email, #name = :name, bio = :bio',
+      ExpressionAttributeValues: {
+        ':email': email,
+        ':name': name,
+        ':bio': bio.trim(),
+      },
+      ExpressionAttributeNames: {
+        '#name': 'name',
+      },
+      ReturnValues: 'UPDATED_NEW',
+    };
+
+    const dynamoCommand = new UpdateCommand(dynamoParams);
+    const data = await docClient.send(dynamoCommand);
+
+    return res.status(200).json({ data: data.Attributes });
   } catch (error) {
     console.error('Error updating user: ', error);
     return res

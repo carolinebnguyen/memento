@@ -23,7 +23,7 @@ import { MdOutlinePhotoCamera } from 'react-icons/md';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import ChangePictureModal from './ChangePictureModal';
-import { getCurrentUserProfile } from '../utils/userUtils';
+import { getCurrentUserProfile, updateUserProfile } from '../utils/userUtils';
 
 export default function ProfileInfoCard() {
   const [isEditable, setIsEditable] = useState(false);
@@ -67,22 +67,31 @@ export default function ProfileInfoCard() {
     setAvatarSrc(src);
   };
 
-  const onSubmit = (values, { setSubmitting }) => {
-    setTimeout(() => {
-      setSubmitting(false);
-      setEditedProfileInfo(values);
-      toggleEditMode();
-      toast({
-        title: 'Changes Saved',
-        description: 'Your profile changes have been saved',
-        status: 'success',
-        variant: 'subtle',
-        position: 'top',
-        containerStyle: {
-          zIndex: '9999',
-        },
-      });
-    }, 1000);
+  const onSubmit = async (values, { setSubmitting }) => {
+    try {
+      const { email, name, bio } = values;
+      const user = { email, name, bio };
+
+      await updateUserProfile(user);
+
+      setTimeout(() => {
+        setSubmitting(false);
+        setEditedProfileInfo(values);
+        toggleEditMode();
+        toast({
+          title: 'Changes Saved',
+          description: 'Your profile changes have been saved',
+          status: 'success',
+          variant: 'subtle',
+          position: 'top',
+          containerStyle: {
+            zIndex: '9999',
+          },
+        });
+      }, 1000);
+    } catch (error) {
+      console.log('Error updating user: ', error);
+    }
   };
 
   return (
@@ -240,7 +249,7 @@ export default function ProfileInfoCard() {
                   </Text>
                   {initialValues.bio ? (
                     <Text fontSize="sm" whiteSpace="pre-line">
-                      {initialValues.bio}
+                      {initialValues.bio.trim()}
                     </Text>
                   ) : (
                     <Text as="i" fontSize="sm">

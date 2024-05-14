@@ -27,6 +27,15 @@ const getUserProfile = async (username) => {
   }
 };
 
+const updateUserProfile = async (user) => {
+  const { email, name, bio } = user;
+  try {
+    await mementoBackend.put('/user/account', { email, name, bio });
+  } catch (error) {
+    throw error;
+  }
+};
+
 const updateProfilePicture = async (file) => {
   try {
     const formData = new FormData();
@@ -41,5 +50,6 @@ export {
   getCurrentUsername,
   getCurrentUserProfile,
   getUserProfile,
+  updateUserProfile,
   updateProfilePicture,
 };
