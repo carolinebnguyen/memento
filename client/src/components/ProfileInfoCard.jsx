@@ -18,6 +18,10 @@ import {
   useDisclosure,
   Spinner,
   Center,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from '@chakra-ui/react';
 import { MdOutlinePhotoCamera } from 'react-icons/md';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -29,6 +33,8 @@ export default function ProfileInfoCard() {
   const [isEditable, setIsEditable] = useState(false);
   const [editedProfileInfo, setEditedProfileInfo] = useState({});
   const [avatarSrc, setAvatarSrc] = useState();
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   const toast = useToast();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -68,6 +74,9 @@ export default function ProfileInfoCard() {
   };
 
   const onSubmit = async (values, { setSubmitting }) => {
+    setAlertMessage('');
+    setIsAlertVisible(false);
+
     try {
       const { email, name, bio } = values;
       const user = { email, name, bio };
@@ -90,7 +99,11 @@ export default function ProfileInfoCard() {
         });
       }, 1000);
     } catch (error) {
-      console.log('Error updating user: ', error);
+      const errorMessage =
+        error.response?.data?.error ?? 'An unexpected error occurred';
+      setAlertMessage(errorMessage);
+      setIsAlertVisible(true);
+      setSubmitting(false);
     }
   };
 
@@ -204,6 +217,15 @@ export default function ProfileInfoCard() {
                           {(msg) => <Text color="red">{msg}</Text>}
                         </ErrorMessage>
                       </FormControl>
+                      {isAlertVisible && (
+                        <Alert status="error" mt={5}>
+                          <AlertIcon />
+                          <Box>
+                            <AlertTitle>Error</AlertTitle>
+                            <AlertDescription>{alertMessage}</AlertDescription>
+                          </Box>
+                        </Alert>
+                      )}
                       <HStack justify="center" mt={5} gap={5}>
                         <Button
                           isDisabled={isSubmitting}
