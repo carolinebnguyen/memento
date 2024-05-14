@@ -150,7 +150,7 @@ export default function ProfileHeader({ profile }) {
                 usersList={followingList}
               />
             </Stack>
-            <Heading as="h2" size="xs" noOfLines={1} my={2}>
+            <Heading as="h2" size="xs" noOfLines={1} mt={2}>
               {name}
             </Heading>
             <Text fontSize="sm" whiteSpace="pre-line">

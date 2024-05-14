@@ -67,6 +67,8 @@ export default function ProfileInfoCard() {
 
   const toggleEditMode = () => {
     setIsEditable(!isEditable);
+    setAlertMessage('');
+    setIsAlertVisible(false);
   };
 
   const handleSetAvatarSrc = (src) => {

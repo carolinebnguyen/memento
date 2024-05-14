@@ -105,8 +105,24 @@ router.put('/account', async (req, res) => {
 
   try {
     const username = req.user.username;
-
     const { name, email, bio } = req.body;
+
+    const checkEmail = {
+      TableName: USER_TABLE,
+      IndexName: 'email-index',
+      KeyConditionExpression: 'email = :email',
+      FilterExpression: 'username <> :username',
+      ExpressionAttributeValues: {
+        ':email': { S: email },
+        ':username': { S: username },
+      },
+    };
+
+    const { Items } = await dynamoDBClient.send(new QueryCommand(checkEmail));
+
+    if (Items && Items.length > 0) {
+      return res.status(409).json({ error: 'Email is already in use' });
+    }
 
     const cognitoParams = {
       UserPoolId: process.env.COGNITO_USER_POOL_ID,
