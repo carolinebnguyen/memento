@@ -21,13 +21,11 @@ const verifyAccessToken = async (req, res, next) => {
   let accessToken = req.cookies.accessToken;
 
   if (!accessToken) {
-    return res
-      .status(401)
-      .json({
-        success: false,
-        redirectToLogin: true,
-        message: 'No access token provided',
-      });
+    return res.status(401).json({
+      success: false,
+      redirectToLogin: true,
+      message: 'No access token provided',
+    });
   }
 
   try {
@@ -83,7 +81,11 @@ const refreshAccessToken = async (accessToken, refreshToken) => {
         },
       })
     );
-    return response.AuthenticationResult.AccessToken;
+
+    const newAccessToken = response.AuthenticationResult.AccessToken;
+    res.cookie('accessToken', newAccessToken, { secure: false });
+
+    return newAccessToken;
   } catch (error) {
     console.error('Error refreshing access token:', error);
     throw error;
