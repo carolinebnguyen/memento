@@ -121,6 +121,8 @@ router.put('/picture', upload.single('file'), async (req, res) => {
   }
 
   try {
+    const username = req.user.username;
+
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
     }
@@ -129,8 +131,7 @@ router.put('/picture', upload.single('file'), async (req, res) => {
     const extension = path.extname(req.file.originalname).toLowerCase();
 
     // upload picture to S3 first
-    const rawBytes = await crypto.randomBytes(16);
-    const photoName = `${rawBytes.toString('hex')}${extension}`;
+    const photoName = `${username.toLowerCase()}ProfilePicture${extension}`;
 
     const s3Params = {
       Bucket: process.env.S3_BUCKET_NAME,
@@ -147,7 +148,7 @@ router.put('/picture', upload.single('file'), async (req, res) => {
     const dynamoParams = {
       TableName: USER_TABLE,
       Key: {
-        username: req.user.username,
+        username: username.toLowerCase(),
       },
       UpdateExpression: 'set picture = :url',
       ExpressionAttributeValues: {
