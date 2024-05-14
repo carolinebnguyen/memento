@@ -28,7 +28,7 @@ import { getCurrentUserProfile } from '../utils/userUtils';
 export default function ProfileInfoCard() {
   const [isEditable, setIsEditable] = useState(false);
   const [editedProfileInfo, setEditedProfileInfo] = useState({});
-  const [avatarSrc, setAvatarSrc] = useState(editedProfileInfo.picture);
+  const [avatarSrc, setAvatarSrc] = useState();
   const toast = useToast();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -40,6 +40,7 @@ export default function ProfileInfoCard() {
     const fetchCurrentProfile = async () => {
       const { user } = await getCurrentUserProfile();
       setEditedProfileInfo(user);
+      setAvatarSrc(user.picture);
       setIsLoading(false);
     };
     fetchCurrentProfile();

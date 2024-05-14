@@ -27,4 +27,19 @@ const getUserProfile = async (username) => {
   }
 };
 
-export { getCurrentUsername, getCurrentUserProfile, getUserProfile };
+const updateProfilePicture = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    await mementoBackend.put('/user/picture', formData);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export {
+  getCurrentUsername,
+  getCurrentUserProfile,
+  getUserProfile,
+  updateProfilePicture,
+};

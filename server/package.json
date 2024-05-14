@@ -15,6 +15,7 @@
     "@aws-sdk/client-cognito-identity-provider": "^3.574.0",
     "@aws-sdk/client-dynamodb": "^3.574.0",
     "@aws-sdk/client-s3": "^3.572.0",
+    "@aws-sdk/lib-dynamodb": "^3.575.0",
     "@aws-sdk/util-dynamodb": "^3.574.0",
     "connect-timeout": "^1.9.0",
     "cookie-parser": "^1.4.6",
@@ -23,7 +24,8 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"

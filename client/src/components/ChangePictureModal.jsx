@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { IoMdClose } from 'react-icons/io';
 import DropZone from './Dropzone';
+import { updateProfilePicture } from '../utils/userUtils';
 
 export default function ChangePictureModal({ isOpen, onClose, setAvatarSrc }) {
   const [file, setFile] = useState(null);
@@ -31,22 +32,38 @@ export default function ChangePictureModal({ isOpen, onClose, setAvatarSrc }) {
     removeFile();
   };
 
-  const onSubmit = () => {
-    setTimeout(() => {
-      setAvatarSrc(file.preview);
-      removeFile();
-      onClose();
+  const onSubmit = async () => {
+    try {
+      await updateProfilePicture(file);
+
+      setTimeout(() => {
+        setAvatarSrc(file.preview);
+        removeFile();
+        onClose();
+        toast({
+          title: 'Changes Saved',
+          description: 'Your profile picture has been updated',
+          status: 'success',
+          variant: 'subtle',
+          position: 'top',
+          containerStyle: {
+            zIndex: '9999',
+          },
+        });
+      }, 1000);
+    } catch (error) {
+      console.error('Error uploading profile picture', error);
       toast({
-        title: 'Changes Saved',
-        description: 'Your profile picture has been updated',
-        status: 'success',
+        title: 'Error',
+        description: 'Your profile picture could not be updated',
+        status: 'error',
         variant: 'subtle',
         position: 'top',
         containerStyle: {
           zIndex: '9999',
         },
       });
-    }, 1000);
+    }
   };
 
   return (
