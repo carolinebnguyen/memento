@@ -117,7 +117,7 @@ router.post('/login', async (req, res) => {
     const { AccessToken, RefreshToken } = data.AuthenticationResult;
 
     // Update secure to true if https enabled
-    res.cookie('accessToken', AccessToken, { httpOnly: true, secure: false });
+    res.cookie('accessToken', AccessToken, { secure: false });
     res.cookie('refreshToken', RefreshToken, { httpOnly: true, secure: false });
 
     return res.status(200).json({ success: true });

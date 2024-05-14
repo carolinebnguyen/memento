@@ -1,9 +1,11 @@
 import { mementoBackend } from './utils';
+import { jwtDecode } from 'jwt-decode';
+import cookies from 'js-cookie';
 
 const getCurrentUsername = async () => {
-  const res = await mementoBackend.get('/user/current');
-  const { username } = res.data;
-  return username;
+  const accessToken = cookies.get('accessToken');
+  const decodedAccessToken = jwtDecode(accessToken);
+  return decodedAccessToken.username;
 };
 
 const getCurrentUserProfile = async () => {
