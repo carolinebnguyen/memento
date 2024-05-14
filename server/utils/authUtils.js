@@ -39,7 +39,7 @@ const verifyAccessToken = async (req, res, next) => {
         });
       }
       accessToken = await refreshAccessToken(accessToken, refreshToken);
-      res.cookie('accessToken', accessToken, { httpOnly: true, secure: false });
+      res.cookie('accessToken', accessToken, { secure: false });
     }
 
     const response = await cognitoClient.send(
@@ -82,10 +82,7 @@ const refreshAccessToken = async (accessToken, refreshToken) => {
       })
     );
 
-    const newAccessToken = response.AuthenticationResult.AccessToken;
-    res.cookie('accessToken', newAccessToken, { secure: false });
-
-    return newAccessToken;
+    return response.AuthenticationResult.AccessToken;
   } catch (error) {
     console.error('Error refreshing access token:', error);
     throw error;
