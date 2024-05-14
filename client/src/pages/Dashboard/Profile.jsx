@@ -15,6 +15,7 @@ import ProfileStatusTabContent from '../../components/ProfileStatusTabContent';
 import { getUserProfile } from '../../utils/userUtils';
 import { sortPostsByType } from '../../utils/postUtils';
 import { useLocation } from 'react-router-dom';
+import UserNotFound from '../../components/UserNotFound';
 
 export default function Profile() {
   const [profile, setProfile] = useState({});
@@ -28,7 +29,14 @@ export default function Profile() {
   useEffect(() => {
     setIsLoading(true);
     const fetchUserProfile = async () => {
-      const { user, posts } = await getUserProfile(username);
+      const res = await getUserProfile(username);
+
+      if (!res && res === null) {
+        setIsLoading(false);
+        return;
+      }
+
+      const { user, posts } = res;
       const { photos, statuses } = sortPostsByType(posts);
       const fullProfileInfo = {
         ...user,
@@ -51,23 +59,29 @@ export default function Profile() {
         </Center>
       ) : (
         <>
-          <ProfileHeader profile={profile} />
-          <Flex justify="center" align="center" w="100%">
-            <Tabs align="center" w="100vw">
-              <TabList role="tablist">
-                <PhotoTab>Photos</PhotoTab>
-                <StatusTab>Statuses</StatusTab>
-              </TabList>
-              <TabPanels>
-                <TabPanel role="tabpanel">
-                  <ProfilePhotoTabContent photos={photos} />
-                </TabPanel>
-                <TabPanel role="tabpanel">
-                  <ProfileStatusTabContent statuses={statuses} />
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-          </Flex>
+          {Object.keys(profile).length === 0 ? (
+            <UserNotFound />
+          ) : (
+            <>
+              <ProfileHeader profile={profile} />
+              <Flex justify="center" align="center" w="100%">
+                <Tabs align="center" w="100vw">
+                  <TabList role="tablist">
+                    <PhotoTab>Photos</PhotoTab>
+                    <StatusTab>Statuses</StatusTab>
+                  </TabList>
+                  <TabPanels>
+                    <TabPanel role="tabpanel">
+                      <ProfilePhotoTabContent photos={photos} />
+                    </TabPanel>
+                    <TabPanel role="tabpanel">
+                      <ProfileStatusTabContent statuses={statuses} />
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+              </Flex>
+            </>
+          )}
         </>
       )}
     </Flex>
