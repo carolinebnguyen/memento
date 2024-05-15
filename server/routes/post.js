@@ -87,11 +87,14 @@ router.post('/', upload.single('file'), async (req, res) => {
 
       const photoName = `${postUUID}${extension}`;
 
+      const contentType = `image/${extension.slice(1)}`;
+
       const s3Params = {
         Bucket: process.env.S3_BUCKET_NAME,
         Key: photoName,
         Body: fileData,
         ACL: 'public-read',
+        ContentType: contentType,
       };
 
       await s3Client.send(new PutObjectCommand(s3Params));
@@ -124,7 +127,7 @@ router.post('/', upload.single('file'), async (req, res) => {
   }
 });
 
-// UPDATE api/post/:postId
+// PUT api/post/:postId
 router.put('/:postId', async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: 'User is not authenticated' });
