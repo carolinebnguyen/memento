@@ -15,6 +15,10 @@ import {
   Textarea,
   Select,
   useDisclosure,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from '@chakra-ui/react';
 import { IoMdClose } from 'react-icons/io';
 import * as yup from 'yup';
@@ -23,6 +27,8 @@ import DropZone from '../../components/Dropzone';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styles from '../../components/Sidebar/Sidebar.module.css';
 import ConfirmationModal from '../../components/ConfirmationModal';
+import { getCurrentUsername } from '../../utils/userUtils';
+import { createPost } from '../../utils/postUtils';
 
 export default function Drafts() {
   const toast = useToast();
@@ -34,6 +40,18 @@ export default function Drafts() {
   const [isFileLoaded, setIsFileLoaded] = useState(false);
   const [isFileChanged, setIsFileChanged] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [currentUsername, setCurrentUsername] = useState('');
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+
+  useEffect(() => {
+    const fetchCurrentUsername = async () => {
+      const username = await getCurrentUsername();
+      setCurrentUsername(username);
+    };
+    fetchCurrentUsername();
+  }, []);
 
   const initialValues = {
     type: type || '',
@@ -143,6 +161,7 @@ export default function Drafts() {
         description: 'Your draft has been deleted',
         status: 'success',
         duration: 3000,
+        variant: 'subtle',
         position: 'top',
         containerStyle: {
           zIndex: '9999',
@@ -151,23 +170,45 @@ export default function Drafts() {
     }, 500);
   };
 
-  const onSubmit = (values, { setSubmitting }) => {
-    const type = values.type;
-    removeLocalDraft();
-    setTimeout(() => {
+  const onSubmit = async (values, { setSubmitting }) => {
+    setAlertMessage('');
+    setIsAlertVisible(false);
+
+    try {
+      const { type, text } = values;
+      let post = {};
+
+      if (file) {
+        post = { file, type, text };
+      } else {
+        post = { type, text };
+      }
+
+      await createPost(post);
+
+      setTimeout(() => {
+        setSubmitting(false);
+        removeLocalDraft();
+        navigate(`/profile?username=${currentUsername}`);
+        toast({
+          title: 'Post Published',
+          description: `Your ${type} has been published`,
+          status: 'success',
+          duration: 3000,
+          variant: 'subtle',
+          position: 'top',
+          containerStyle: {
+            zIndex: '9999',
+          },
+        });
+      }, 1000);
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.error ?? 'An unexpected error occurred';
+      setAlertMessage(errorMessage);
+      setIsAlertVisible(true);
       setSubmitting(false);
-      navigate('/profile?username=carolibn');
-      toast({
-        title: 'Post Published',
-        description: `Your ${type} has been published`,
-        status: 'success',
-        duration: 3000,
-        position: 'top',
-        containerStyle: {
-          zIndex: '9999',
-        },
-      });
-    }, 1000);
+    }
   };
 
   return (
@@ -269,6 +310,15 @@ export default function Drafts() {
                   </ErrorMessage>
                 </Box>
               </FormControl>
+              {isAlertVisible && (
+                <Alert status="error" mt={5}>
+                  <AlertIcon />
+                  <Box>
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>{alertMessage}</AlertDescription>
+                  </Box>
+                </Alert>
+              )}
               <Flex justify="space-between" align="center" mt={5} gap={5}>
                 <Button
                   colorScheme="red"

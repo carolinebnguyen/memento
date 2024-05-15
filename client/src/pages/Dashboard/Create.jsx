@@ -93,6 +93,7 @@ export default function Create() {
           description: `Your ${type} has been published`,
           status: 'success',
           duration: 3000,
+          variant: 'subtle',
           position: 'top',
           containerStyle: {
             zIndex: '9999',
@@ -124,6 +125,7 @@ export default function Create() {
         description: 'Please enter some text before saving your draft',
         status: 'error',
         duration: 3000,
+        variant: 'subtle',
         position: 'top',
         containerStyle: {
           zIndex: '9999',
@@ -143,6 +145,7 @@ export default function Create() {
         description: `Your draft ${values.type} has been saved`,
         status: 'success',
         duration: 3000,
+        variant: 'subtle',
         position: 'top',
         containerStyle: {
           zIndex: '9999',

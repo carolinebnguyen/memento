@@ -5,7 +5,7 @@ const multer = require('multer');
 const path = require('path');
 const upload = multer({ storage: multer.memoryStorage() });
 
-const { DynamoDBClient, GetItemCommand } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const { unmarshall } = require('@aws-sdk/util-dynamodb');
 const {
   DynamoDBDocumentClient,
@@ -13,6 +13,7 @@ const {
   DeleteCommand,
   PutCommand,
   QueryCommand,
+  GetCommand,
 } = require('@aws-sdk/lib-dynamodb');
 
 const {
@@ -135,22 +136,21 @@ router.delete('/:postId', async (req, res) => {
 
     const checkPost = {
       TableName: POST_TABLE,
-      IndexName: 'postId-index',
-      KeyConditionExpression: 'postId = :postId',
-      ExpressionAttributeValues: {
-        ':postId': postId,
+      Key: {
+        username: username,
+        postId: postId,
       },
     };
 
-    const { Items } = await docClient.send(new QueryCommand(checkPost));
+    const { Item } = await docClient.send(new GetCommand(checkPost));
 
-    if (!Items || Items.length === 0) {
+    if (!Item) {
       return res.status(404).json({ error: 'Post not found' });
     }
 
-    const post = Items[0];
+    const { imageSrc } = Item;
 
-    if (post.username !== username) {
+    if (Item.username !== username) {
       return res
         .status(403)
         .json({ error: 'User is not authorized to delete this post' });
@@ -159,20 +159,23 @@ router.delete('/:postId', async (req, res) => {
     const dynamoParams = {
       TableName: POST_TABLE,
       Key: {
+        username: username,
         postId: postId,
       },
     };
 
     await docClient.send(new DeleteCommand(dynamoParams));
 
-    const s3Key = imageSrc.substring(imageSrc.lastIndexOf('/') + 1);
+    if (imageSrc) {
+      const s3Key = imageSrc.substring(imageSrc.lastIndexOf('/') + 1);
 
-    const s3Params = {
-      Bucket: process.env.S3_BUCKET_NAME,
-      Key: s3Key,
-    };
+      const s3Params = {
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: s3Key,
+      };
 
-    await s3Client.send(new DeleteObjectCommand(s3Params));
+      await s3Client.send(new DeleteObjectCommand(s3Params));
+    }
 
     return res.status(200).json({ success: true });
   } catch (error) {
