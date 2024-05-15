@@ -21,6 +21,11 @@ import {
   MenuButton,
   IconButton,
   Spinner,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Box,
 } from '@chakra-ui/react';
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
@@ -32,7 +37,7 @@ import styles from '../components/BottomNav/BottomNav.module.css';
 import ConfirmationModal from './ConfirmationModal';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { getCurrentUsername, getUserProfile } from '../utils/userUtils';
-import { deletePost } from '../utils/postUtils';
+import { deletePost, updatePost } from '../utils/postUtils';
 
 export default function PostCard({ post }) {
   const { postId, username, type, text, imageSrc, likes, comments, postedAt } =
@@ -42,6 +47,8 @@ export default function PostCard({ post }) {
   const [modifiedLikes, setModifiedLikes] = useState(likes || []);
   const [currentUsername, setCurrentUsername] = useState('');
   const [profile, setProfile] = useState({});
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   const isPhoto = type === PostType.PHOTO;
 
@@ -89,6 +96,7 @@ export default function PostCard({ post }) {
           description: 'The post has been deleted',
           status: 'success',
           duration: 3000,
+          variant: 'subtle',
           position: 'top',
           containerStyle: {
             zIndex: '9999',
@@ -98,6 +106,17 @@ export default function PostCard({ post }) {
     } catch (error) {
       console.log('Error deleting post: ', error);
       setIsLoading(false);
+      toast({
+        title: 'Error',
+        description: 'The post could not be deleted',
+        status: 'error',
+        duration: 3000,
+        variant: 'subtle',
+        position: 'top',
+        containerStyle: {
+          zIndex: '9999',
+        },
+      });
     }
   };
 
@@ -109,23 +128,38 @@ export default function PostCard({ post }) {
     text: editedText,
   };
 
-  const onSubmit = (values, { setSubmitting }) => {
-    setEditedText(values.text);
+  const onSubmit = async (values, { setSubmitting }) => {
+    setAlertMessage('');
+    setIsAlertVisible(false);
 
-    setTimeout(() => {
+    try {
+      const { text } = values;
+
+      await updatePost(postId, text);
+
+      setTimeout(() => {
+        setSubmitting(false);
+        setEditedText(text);
+        toggleEditMode();
+        toast({
+          title: 'Post Edited',
+          description: 'Your post has been edited',
+          status: 'success',
+          duration: 3000,
+          variant: 'subtle',
+          position: 'top',
+          containerStyle: {
+            zIndex: '9999',
+          },
+        });
+      }, 1000);
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.error ?? 'An unexpected error occurred';
+      setAlertMessage(errorMessage);
+      setIsAlertVisible(true);
       setSubmitting(false);
-      toggleEditMode();
-      toast({
-        title: 'Post Edited',
-        description: 'Your post has been edited',
-        status: 'success',
-        duration: 3000,
-        position: 'top',
-        containerStyle: {
-          zIndex: '9999',
-        },
-      });
-    }, 1000);
+    }
   };
 
   const toggleIsLiked = () => {
@@ -255,12 +289,30 @@ export default function PostCard({ post }) {
                         {(msg) => <Text color="red">{msg}</Text>}
                       </ErrorMessage>
                     </FormControl>
+                    {isAlertVisible && (
+                      <Alert status="error" mt={5}>
+                        <AlertIcon />
+                        <Box>
+                          <AlertTitle>Error</AlertTitle>
+                          <AlertDescription>{alertMessage}</AlertDescription>
+                        </Box>
+                      </Alert>
+                    )}
                     <HStack justify="center" mt={2} gap={3}>
-                      <Button onClick={toggleEditMode} size="xs">
+                      <Button
+                        onClick={toggleEditMode}
+                        size="xs"
+                        isDisabled={isSubmitting}
+                      >
                         Cancel
                       </Button>
-                      <Button colorScheme="blue" type="submit" size="xs">
-                        Save Changes
+                      <Button
+                        colorScheme="blue"
+                        type="submit"
+                        size="xs"
+                        isDisabled={isSubmitting}
+                      >
+                        {isSubmitting ? 'Saving...' : 'Save Changes'}
                       </Button>
                     </HStack>
                   </Form>

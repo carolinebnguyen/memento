@@ -106,7 +106,7 @@ router.post('/', upload.single('file'), async (req, res) => {
         username: username,
         type: type,
         imageSrc: imageSrc,
-        text: text,
+        text: text.trim(),
         likes: [],
         comments: [],
         postedAt: new Date().toISOString(),
@@ -124,7 +124,64 @@ router.post('/', upload.single('file'), async (req, res) => {
   }
 });
 
-// DELETE api/post/
+// UPDATE api/post/:postId
+router.put('/:postId', async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ error: 'User is not authenticated' });
+  }
+
+  try {
+    const username = req.user.username;
+    const { postId } = req.params;
+    const { text } = req.body;
+
+    const checkPost = {
+      TableName: POST_TABLE,
+      Key: {
+        username: username,
+        postId: postId,
+      },
+    };
+
+    const { Item } = await docClient.send(new GetCommand(checkPost));
+
+    if (!Item) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    if (Item.username !== username) {
+      return res
+        .status(403)
+        .json({ error: 'User is not authorized to delete this post' });
+    }
+
+    const dynamoParams = {
+      TableName: POST_TABLE,
+      Key: {
+        username: username,
+        postId: postId,
+      },
+      UpdateExpression: 'set #text = :text',
+      ExpressionAttributeNames: {
+        '#text': 'text',
+      },
+      ExpressionAttributeValues: {
+        ':text': text.trim(),
+      },
+    };
+
+    await docClient.send(new UpdateCommand(dynamoParams));
+
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    console.error('Error updating post: ', error);
+    return res
+      .status(500)
+      .json({ error: 'Internal server error updating post' });
+  }
+});
+
+// DELETE api/post/:postId
 router.delete('/:postId', async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: 'User is not authenticated' });

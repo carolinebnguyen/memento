@@ -57,6 +57,14 @@ const createPost = async (post) => {
   }
 };
 
+const updatePost = async (postId, text) => {
+  try {
+    await mementoBackend.put(`/post/${postId}`, { text });
+  } catch (error) {
+    throw error;
+  }
+};
+
 const deletePost = async (postId) => {
   try {
     await mementoBackend.delete(`/post/${postId}`);
@@ -65,4 +73,4 @@ const deletePost = async (postId) => {
   }
 };
 
-export { sortPostsByType, getPost, createPost, deletePost };
+export { sortPostsByType, getPost, createPost, updatePost, deletePost };
