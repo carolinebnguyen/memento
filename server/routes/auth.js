@@ -7,12 +7,12 @@ const {
   SignUpCommand,
   ChangePasswordCommand,
 } = require('@aws-sdk/client-cognito-identity-provider');
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const {
-  DynamoDBClient,
-  PutItemCommand,
+  DynamoDBDocumentClient,
   QueryCommand,
-} = require('@aws-sdk/client-dynamodb');
-const { marshall } = require('@aws-sdk/util-dynamodb');
+  PutCommand,
+} = require('@aws-sdk/lib-dynamodb');
 const { getSecretHash } = require('../utils/authUtils');
 
 const COGNITO_CLIENT_ID = process.env.COGNITO_CLIENT_ID;
@@ -21,9 +21,11 @@ const USER_TABLE = 'User';
 const cognitoClient = new CognitoIdentityProviderClient({
   region: process.env.AWS_REGION,
 });
+
 const dynamoDBClient = new DynamoDBClient({
   region: process.env.AWS_REGION,
 });
+const docClient = DynamoDBDocumentClient.from(dynamoDBClient);
 
 // POST /api/auth/signup
 router.post('/signup', async (req, res) => {
@@ -36,16 +38,16 @@ router.post('/signup', async (req, res) => {
       });
     }
 
-    const checkEmail = {
+    const checkEmailParams = {
       TableName: USER_TABLE,
       IndexName: 'email-index',
       KeyConditionExpression: 'email = :email',
       ExpressionAttributeValues: {
-        ':email': { S: email },
+        ':email': email,
       },
     };
 
-    const { Items } = await dynamoDBClient.send(new QueryCommand(checkEmail));
+    const { Items } = await docClient.send(new QueryCommand(checkEmailParams));
 
     if (Items && Items.length > 0) {
       return res.status(409).json({ error: 'Email is already in use' });
@@ -71,7 +73,7 @@ router.post('/signup', async (req, res) => {
 
     const userParams = {
       TableName: USER_TABLE,
-      Item: marshall({
+      Item: {
         username,
         email,
         name,
@@ -79,10 +81,11 @@ router.post('/signup', async (req, res) => {
         bio: '',
         followersList: [],
         followingList: [],
-      }),
+      },
       ConditionExpression: 'attribute_not_exists(username)',
     };
-    await dynamoDBClient.send(new PutItemCommand(userParams));
+
+    await docClient.send(new PutCommand(userParams));
 
     return res
       .status(201)

@@ -8,7 +8,7 @@ const {
   CognitoIdentityProviderClient,
   AdminUpdateUserAttributesCommand,
 } = require('@aws-sdk/client-cognito-identity-provider');
-const { DynamoDBClient, GetItemCommand } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const {
   DynamoDBDocumentClient,
   UpdateCommand,
@@ -90,18 +90,18 @@ router.put('/account', async (req, res) => {
     const username = req.user.username;
     const { name, email, bio } = req.body;
 
-    const checkEmail = {
+    const checkEmailParams = {
       TableName: USER_TABLE,
       IndexName: 'email-index',
       KeyConditionExpression: 'email = :email',
       FilterExpression: 'username <> :username',
       ExpressionAttributeValues: {
-        ':email': { S: email },
-        ':username': { S: username },
+        ':email': email,
+        ':username': username,
       },
     };
 
-    const { Items } = await dynamoDBClient.send(new QueryCommand(checkEmail));
+    const { Items } = await docClient.send(new QueryCommand(checkEmailParams));
 
     if (Items && Items.length > 0) {
       return res.status(409).json({ error: 'Email is already in use' });

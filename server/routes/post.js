@@ -6,7 +6,6 @@ const path = require('path');
 const upload = multer({ storage: multer.memoryStorage() });
 
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { unmarshall } = require('@aws-sdk/util-dynamodb');
 const {
   DynamoDBDocumentClient,
   UpdateCommand,

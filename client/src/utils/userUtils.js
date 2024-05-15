@@ -9,7 +9,8 @@ const getCurrentUsername = async () => {
 };
 
 const getCurrentUserProfile = async () => {
-  const res = await mementoBackend.get('/user');
+  const currentUsername = await getCurrentUsername();
+  const res = await mementoBackend.get(`/user/${currentUsername}`);
   const profile = res.data;
   return profile;
 };
