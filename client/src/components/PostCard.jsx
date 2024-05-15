@@ -260,6 +260,16 @@ export default function PostCard({ post }) {
           </Flex>
           {isEditable ? (
             <>
+              {isPhoto ? (
+                <Center>
+                  <Image
+                    src={imageSrc}
+                    my={3}
+                    boxSize={500}
+                    objectFit="cover"
+                  />
+                </Center>
+              ) : null}
               <Formik
                 initialValues={initialValues}
                 onSubmit={onSubmit}
@@ -280,7 +290,7 @@ export default function PostCard({ post }) {
                         type="text"
                         name="text"
                         id="text"
-                        mt={2}
+                        my={2}
                         size="sm"
                         borderRadius={5}
                         rows="2"
@@ -290,7 +300,7 @@ export default function PostCard({ post }) {
                       </ErrorMessage>
                     </FormControl>
                     {isAlertVisible && (
-                      <Alert status="error" mt={5}>
+                      <Alert status="error" my={1}>
                         <AlertIcon />
                         <Box>
                           <AlertTitle>Error</AlertTitle>

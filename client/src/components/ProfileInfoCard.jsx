@@ -225,7 +225,7 @@ export default function ProfileInfoCard() {
                         </ErrorMessage>
                       </FormControl>
                       {isAlertVisible && (
-                        <Alert status="error" mt={5}>
+                        <Alert status="error" mt={3}>
                           <AlertIcon />
                           <Box>
                             <AlertTitle>Error</AlertTitle>

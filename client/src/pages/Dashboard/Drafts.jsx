@@ -69,7 +69,10 @@ export default function Drafts() {
     const photoData = localStorage.getItem('draftPhoto');
     if (photoData && !isFileLoaded) {
       const blob = await (await fetch(photoData)).blob();
-      const file = new File([blob], 'draftFile', { type: blob.type });
+      const extension = blob.type.slice(blob.type.indexOf('/') + 1);
+      const file = new File([blob], `draftFile.${extension}`, {
+        type: blob.type,
+      });
       const fileWithPreview = Object.assign(file, {
         preview: URL.createObjectURL(file),
       });
