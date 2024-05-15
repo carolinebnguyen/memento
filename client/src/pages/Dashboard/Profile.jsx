@@ -29,24 +29,28 @@ export default function Profile() {
   useEffect(() => {
     setProfileState('LOADING');
     const fetchUserProfile = async () => {
-      const res = await getUserProfile(username);
+      try {
+        const res = await getUserProfile(username);
 
-      if (!res && res === null) {
+        if (!res && res === null) {
+          setProfileState('NOT_FOUND');
+          return;
+        }
+
+        const { user, posts } = res;
+        const { photos, statuses } = sortPostsByType(posts);
+        const fullProfileInfo = {
+          ...user,
+          photoCount: photos.length,
+          statusCount: statuses.length,
+        };
+        setProfile(fullProfileInfo);
+        setPhotos(photos);
+        setStatuses(statuses);
+        setProfileState('DONE');
+      } catch (error) {
         setProfileState('NOT_FOUND');
-        return;
       }
-
-      const { user, posts } = res;
-      const { photos, statuses } = sortPostsByType(posts);
-      const fullProfileInfo = {
-        ...user,
-        photoCount: photos.length,
-        statusCount: statuses.length,
-      };
-      setProfile(fullProfileInfo);
-      setPhotos(photos);
-      setStatuses(statuses);
-      setProfileState('DONE');
     };
     fetchUserProfile();
   }, [username]);

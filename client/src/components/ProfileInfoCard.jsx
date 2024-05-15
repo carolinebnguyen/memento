@@ -44,10 +44,15 @@ export default function ProfileInfoCard() {
   useEffect(() => {
     setIsLoading(true);
     const fetchCurrentProfile = async () => {
-      const { user } = await getCurrentUserProfile();
-      setEditedProfileInfo(user);
-      setAvatarSrc(user.picture);
-      setIsLoading(false);
+      try {
+        const { user } = await getCurrentUserProfile();
+        setEditedProfileInfo(user);
+        setAvatarSrc(user.picture);
+      } catch (error) {
+        return;
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchCurrentProfile();
   }, []);
