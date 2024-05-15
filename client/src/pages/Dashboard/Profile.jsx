@@ -21,18 +21,18 @@ export default function Profile() {
   const [profile, setProfile] = useState({});
   const [photos, setPhotos] = useState({});
   const [statuses, setStatuses] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+  const [profileState, setProfileState] = useState('LOADING');
 
   const { search } = useLocation();
   const username = new URLSearchParams(search).get('username');
 
   useEffect(() => {
-    setIsLoading(true);
+    setProfileState('LOADING');
     const fetchUserProfile = async () => {
       const res = await getUserProfile(username);
 
       if (!res && res === null) {
-        setIsLoading(false);
+        setProfileState('NOT_FOUND');
         return;
       }
 
@@ -46,20 +46,20 @@ export default function Profile() {
       setProfile(fullProfileInfo);
       setPhotos(photos);
       setStatuses(statuses);
-      setIsLoading(false);
+      setProfileState('DONE');
     };
     fetchUserProfile();
   }, [username]);
 
   return (
     <Flex direction="column" align="center" w="100%">
-      {isLoading ? (
+      {profileState === 'LOADING' ? (
         <Center>
           <Spinner />
         </Center>
       ) : (
         <>
-          {Object.keys(profile).length === 0 ? (
+          {profileState === 'NOT_FOUND' ? (
             <UserNotFound />
           ) : (
             <>
