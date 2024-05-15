@@ -25,11 +25,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import logo from '../../assets/logoBlack.png';
 import PasswordField from '../../components/PasswordField';
 import { passwordRegex, passwordErrorMessage } from '../../utils/utils';
-import {
-  signUpUser,
-  setUserLoggedIn,
-  isUserLoggedIn,
-} from '../../utils/authUtils';
+import { signUpUser, isUserLoggedIn } from '../../utils/authUtils';
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -81,9 +77,8 @@ export default function Signup() {
       });
       setTimeout(() => {
         resetForm(initialValues);
-        setUserLoggedIn();
         setSubmitting(false);
-        navigate('/home');
+        navigate('/');
       }, 1000);
     } catch (error) {
       const errorMessage =
