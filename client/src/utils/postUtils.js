@@ -1,6 +1,9 @@
 import { mementoBackend } from './utils';
 import { PostType } from './utils';
 
+const sortReverseChronologicalOrder = (a, b) =>
+  new Date(b.postedAt) - new Date(a.postedAt);
+
 const sortPostsByType = (posts) => {
   const photos = [];
   const statuses = [];
@@ -13,7 +16,10 @@ const sortPostsByType = (posts) => {
     }
   });
 
-  return { photos, statuses };
+  return {
+    photos: photos.sort(sortReverseChronologicalOrder),
+    statuses: statuses.sort(sortReverseChronologicalOrder),
+  };
 };
 
 const getPost = async (postId) => {
