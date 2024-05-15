@@ -65,10 +65,15 @@ export default function Drafts() {
     }
   });
 
-  const loadImageLocally = () => {
+  const loadImageLocally = async () => {
     const photoData = localStorage.getItem('draftPhoto');
     if (photoData && !isFileLoaded) {
-      setFile(photoData);
+      const blob = await (await fetch(photoData)).blob();
+      const file = new File([blob], 'draftFile', { type: blob.type });
+      const fileWithPreview = Object.assign(file, {
+        preview: URL.createObjectURL(file),
+      });
+      setFile(fileWithPreview);
       setIsFileLoaded(true);
     }
   };
@@ -118,6 +123,7 @@ export default function Drafts() {
         description: 'Please enter some text before saving your draft',
         status: 'error',
         duration: 3000,
+        variant: 'subtle',
         position: 'top',
         containerStyle: {
           zIndex: '9999',

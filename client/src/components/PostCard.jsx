@@ -340,7 +340,7 @@ export default function PostCard({ post }) {
                   />
                 </Center>
               ) : null}
-              <Text fontSize="sm" my={2} textAlign="left">
+              <Text fontSize="sm" my={2} textAlign="left" whiteSpace="pre-line">
                 {initialValues.text}
               </Text>
             </>
