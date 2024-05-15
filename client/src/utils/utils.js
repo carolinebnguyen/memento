@@ -7,13 +7,23 @@ const mementoBackend = axios.create({
   withCredentials: true,
 });
 
-const formatDateDistanceToNow = (dateToFormat) => {
+const formatDateDistanceToNow = (dateString) => {
+  if (!dateString) {
+    return '';
+  }
+
+  const dateToFormat = new Date(dateString);
   return formatDistanceToNow(dateToFormat, {
     addSuffix: true,
   });
 };
 
-const formatDate = (dateToFormat) => {
+const formatDate = (dateString) => {
+  if (!dateString) {
+    return '';
+  }
+
+  const dateToFormat = new Date(dateString);
   return format(dateToFormat, 'PPPPPp (z)', {
     timeZone: 'America/Los_Angeles',
   });
