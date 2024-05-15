@@ -1,6 +1,6 @@
 import React from 'react';
 import { Icon, IconButton } from '@chakra-ui/react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import styles from './CompactNavLink.module.css';
 
 function CompactNavLink({ to, icon, filledIcon }) {
@@ -14,8 +14,7 @@ function CompactNavLink({ to, icon, filledIcon }) {
 }
 
 function CompactProfileNavLink({ to, icon, filledIcon, currentUsername }) {
-  const { search } = useLocation();
-  const username = new URLSearchParams(search).get('username');
+  const { username } = useParams();
 
   return (
     <NavLink to={to} className={styles['compact-nav-link']}>

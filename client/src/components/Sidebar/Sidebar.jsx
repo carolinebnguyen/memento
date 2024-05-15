@@ -22,7 +22,7 @@ import {
 import { FaRegBell, FaBell, FaRegUser, FaUser, FaSearch } from 'react-icons/fa';
 import { FiPlusCircle } from 'react-icons/fi';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import logo from '../../assets/logoBlack.png';
 import StyledNavLink from '../StyledNavLink/StyledNavLink';
 import BottomNav from '../BottomNav/BottomNav';
@@ -83,8 +83,7 @@ function FullSidebar() {
 }
 
 function SidebarContent() {
-  const { search } = useLocation();
-  const username = new URLSearchParams(search).get('username');
+  const { username } = useParams();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [currentUsername, setCurrentUsername] = useState('');

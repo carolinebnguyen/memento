@@ -22,7 +22,7 @@ import {
 import { FaRegUser, FaUser, FaSearch, FaRegBell, FaBell } from 'react-icons/fa';
 import { FiPlusCircle } from 'react-icons/fi';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import caroline from '../../assets/placeholders/carolineAvatarClear.png';
 import { CompactIconButton } from '../CompactNavLink/CompactNavLink';
 import { headerHeight, sidebarWidth } from '../../utils/constants';
@@ -32,9 +32,8 @@ import { getCurrentUsername } from '../../utils/userUtils';
 
 export default function BottomNav() {
   const isWide = useBreakpointValue({ base: false, md: true });
-  const { search } = useLocation();
   const navigate = useNavigate();
-  const username = new URLSearchParams(search).get('username');
+  const { username } = useParams();
   const [currentUsername, setCurrentUsername] = useState('');
 
   useEffect(() => {
