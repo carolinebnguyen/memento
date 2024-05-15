@@ -104,7 +104,6 @@ export default function PostCard({ post }) {
         });
       }, 500);
     } catch (error) {
-      console.log('Error deleting post: ', error);
       setIsLoading(false);
       toast({
         title: 'Error',
