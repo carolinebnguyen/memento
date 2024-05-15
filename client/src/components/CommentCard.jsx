@@ -43,7 +43,7 @@ export default function CommentCard({ poster, comment }) {
   const isOwnPost = poster === 'carolibn';
 
   const handleUserNavigation = () => {
-    navigate(`/profile?username=${username}`);
+    navigate(`/profile/${username}`);
   };
 
   const confirmDeleteComment = () => {

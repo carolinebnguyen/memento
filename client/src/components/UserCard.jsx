@@ -19,7 +19,7 @@ export default function UserCard({ user, handleClose }) {
     if (handleClose) {
       handleClose();
     }
-    navigate(`/profile?username=${username}`);
+    navigate(`/profile/${username}`);
   };
 
   const toggleIsFollowing = () => {

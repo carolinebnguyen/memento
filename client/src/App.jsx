@@ -51,7 +51,7 @@ const router = createBrowserRouter([
       { path: 'create', element: <Create /> },
       { path: 'create/draft', element: <Drafts /> },
       { path: 'notifications', element: <Notifications /> },
-      { path: 'profile', element: <Profile /> },
+      { path: 'profile/:username', element: <Profile /> },
       { path: 'settings', element: <Settings /> },
       { path: 'post/:postId', element: <Post /> },
     ],

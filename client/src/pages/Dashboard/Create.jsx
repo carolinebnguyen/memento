@@ -87,7 +87,7 @@ export default function Create() {
 
       setTimeout(() => {
         setSubmitting(false);
-        navigate(`/profile?username=${currentUsername}`);
+        navigate(`/profile/${currentUsername}`);
         toast({
           title: 'Post Published',
           description: `Your ${type} has been published`,

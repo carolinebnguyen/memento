@@ -14,7 +14,7 @@ import ProfilePhotoTabContent from '../../components/ProfilePhotoTabContent';
 import ProfileStatusTabContent from '../../components/ProfileStatusTabContent';
 import { getUserProfile } from '../../utils/userUtils';
 import { sortPostsByType } from '../../utils/postUtils';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import UserNotFound from '../../components/UserNotFound';
 
 export default function Profile() {
@@ -23,8 +23,7 @@ export default function Profile() {
   const [statuses, setStatuses] = useState({});
   const [profileState, setProfileState] = useState('LOADING');
 
-  const { search } = useLocation();
-  const username = new URLSearchParams(search).get('username');
+  const { username } = useParams();
 
   useEffect(() => {
     setProfileState('LOADING');

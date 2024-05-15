@@ -33,7 +33,7 @@ export default function NotificationCard({ notification }) {
   const navigate = useNavigate();
 
   const handleUserNavigation = () => {
-    navigate(`/profile?username=${username}`);
+    navigate(`/profile/${username}`);
   };
 
   const handlePostNavigation = () => {

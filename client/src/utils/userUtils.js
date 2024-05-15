@@ -16,7 +16,7 @@ const getCurrentUserProfile = async () => {
 
 const getUserProfile = async (username) => {
   try {
-    const res = await mementoBackend.get(`/user?username=${username}`);
+    const res = await mementoBackend.get(`/user/${username}`);
     const profile = res.data;
     return profile;
   } catch (error) {

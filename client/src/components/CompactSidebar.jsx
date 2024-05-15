@@ -84,7 +84,7 @@ function CompactSidebarContent() {
           filledIcon={FaBell}
         />
         <CompactProfileNavLink
-          to={`/profile?username=${currentUsername}`}
+          to={`/profile/${currentUsername}`}
           icon={FaRegUser}
           filledIcon={FaUser}
           currentUsername={currentUsername}

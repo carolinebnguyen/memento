@@ -198,7 +198,7 @@ export default function Drafts() {
       setTimeout(() => {
         setSubmitting(false);
         removeLocalDraft();
-        navigate(`/profile?username=${currentUsername}`);
+        navigate(`/profile/${currentUsername}`);
         toast({
           title: 'Post Published',
           description: `Your ${type} has been published`,

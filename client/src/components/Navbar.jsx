@@ -73,7 +73,7 @@ export default function Navbar() {
           <MenuList>
             <MenuItem
               as="a"
-              href={`/profile?username=${currentUsername}`}
+              href={`/profile/${currentUsername}`}
               className={styles['menu-link']}
             >
               <Image

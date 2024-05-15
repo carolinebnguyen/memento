@@ -173,7 +173,7 @@ export default function PostCard({ post }) {
   };
 
   const handleUserNavigate = () => {
-    navigate(`/profile?username=${username}`);
+    navigate(`/profile/${username}`);
   };
 
   const handlePostNavigate = () => {

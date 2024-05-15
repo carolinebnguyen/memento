@@ -97,7 +97,7 @@ export default function BottomNav() {
         <MenuList>
           <MenuItem
             as="a"
-            href={`/profile?username=${currentUsername}`}
+            href={`/profile/${currentUsername}`}
             className={styles['menu-link']}
           >
             <Image

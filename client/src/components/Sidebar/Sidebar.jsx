@@ -138,7 +138,7 @@ function SidebarContent() {
           label="Notifications"
         />
         <NavLink
-          to={`/profile?username=${currentUsername}`}
+          to={`/profile/${currentUsername}`}
           className={({ isActive }) =>
             isActive && username === currentUsername
               ? linkStyles['nav-link-active']
