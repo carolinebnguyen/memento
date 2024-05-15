@@ -1,18 +1,42 @@
-import React from 'react';
-import { Flex } from '@chakra-ui/react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Center, Flex, Spinner } from '@chakra-ui/react';
+import { useParams } from 'react-router-dom';
 import PostContent from '../../components/PostContent';
 import PostNotFound from '../../components/PostNotFound';
-import { getPost } from '../../utils/testData';
+import { getPost } from '../../utils/postUtils';
 
 export default function Post() {
-  const { search } = useLocation();
-  const searchedId = new URLSearchParams(search).get('id');
-  const post = getPost(searchedId);
+  const { postId } = useParams();
+
+  const [post, setPost] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    const fetchPost = async () => {
+      const res = await getPost(postId);
+
+      if (!res && res === null) {
+        setPost(null);
+        setIsLoading(false);
+        return;
+      }
+
+      setPost(res);
+      setIsLoading(false);
+    };
+    fetchPost();
+  }, [postId]);
 
   return (
     <Flex direction="column" justify="center" align="center">
-      {!post ? <PostNotFound /> : <PostContent post={post} />}
+      {isLoading ? (
+        <Center>
+          <Spinner />
+        </Center>
+      ) : (
+        <>{!post ? <PostNotFound /> : <PostContent post={post} />}</>
+      )}
     </Flex>
   );
 }

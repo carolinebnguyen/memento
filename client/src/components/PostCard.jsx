@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Flex,
   Text,
@@ -23,26 +23,34 @@ import {
 } from '@chakra-ui/react';
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { getProfile, carolineProfile } from '../utils/testData';
+import { carolineProfile } from '../utils/testData';
 import { FaRegHeart, FaHeart, FaRegComment, FaEllipsis } from 'react-icons/fa6';
 import UserModal from './UserModal';
-import { formatDateDistanceToNow, formatDate, PostType } from '../utils/utils';
+import { PostType } from '../utils/utils';
 import styles from '../components/BottomNav/BottomNav.module.css';
 import ConfirmationModal from './ConfirmationModal';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { getCurrentUsername } from '../utils/userUtils';
 
 export default function PostCard({ post }) {
-  const { id, postedBy, type, text, imageSrc, likes, comments, postedAt } =
+  const { postId, username, type, text, imageSrc, likes, comments, postedAt } =
     post;
   const [isLiked, setIsLiked] = useState(false);
-  const [modifiedLikes, setModifiedLikes] = useState(likes);
+  const [modifiedLikes, setModifiedLikes] = useState(likes || []);
+  const [currentUsername, setCurrentUsername] = useState('');
 
   const isPhoto = type === PostType.PHOTO;
 
-  const user = getProfile(postedBy);
-  const { username, picture } = user;
-  const isOwnPost = postedBy === 'carolibn';
+  const isOwnPost = username === currentUsername;
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCurrentUsername = async () => {
+      const username = await getCurrentUsername();
+      setCurrentUsername(username);
+    };
+    fetchCurrentUsername();
+  }, []);
 
   // get path to navigate user to proper page after deleting post
   const { pathname } = useLocation();
@@ -122,11 +130,11 @@ export default function PostCard({ post }) {
   };
 
   const handleUserNavigate = () => {
-    navigate(`/profile?username=${postedBy}`);
+    navigate(`/profile?username=${username}`);
   };
 
   const handlePostNavigate = () => {
-    navigate(`/post?id=${id}`);
+    navigate(`/post/${postId}`);
   };
 
   return (
@@ -135,7 +143,7 @@ export default function PostCard({ post }) {
         <Flex direction="column" w="100%">
           <Flex justify="space-between" gap={20} align="center">
             <Stack direction="row" align="center" gap={2}>
-              <Avatar size="sm" src={picture} />
+              <Avatar size="sm" />
               <Heading
                 as="h2"
                 size="xs"
@@ -144,11 +152,8 @@ export default function PostCard({ post }) {
               >
                 {username}
               </Heading>
-              <Tooltip
-                label={formatDate(postedAt)}
-                placement="bottom"
-                openDelay={500}
-              >
+              {/* TODO: fix formatDate */}
+              <Tooltip label={postedAt} placement="bottom" openDelay={500}>
                 <Text
                   fontSize="xs"
                   color="gray"
@@ -158,7 +163,8 @@ export default function PostCard({ post }) {
                   }}
                   onClick={handlePostNavigate}
                 >
-                  {formatDateDistanceToNow(postedAt)}
+                  {/* TODO: fix formatDateDistanceToNow */}
+                  {postedAt}
                 </Text>
               </Tooltip>
             </Stack>
@@ -318,8 +324,8 @@ export default function PostCard({ post }) {
                 _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
                 onClick={handlePostNavigate}
               >
-                {comments.length}{' '}
-                {comments.length === 1 ? 'comment' : 'comments'}
+                {comments && comments.length}{' '}
+                {comments && comments.length === 1 ? 'comment' : 'comments'}
               </Text>
             </Stack>
           </Flex>

@@ -3,11 +3,11 @@ import { GridItem, Image } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 
 export default function ProfilePhotoCard({ photo }) {
-  const { id, imageSrc } = photo;
+  const { postId, imageSrc } = photo;
   const navigate = useNavigate();
 
   const handlePostNavigate = () => {
-    navigate(`/post?id=${id}`);
+    navigate(`/post/${postId}`);
   };
 
   return (

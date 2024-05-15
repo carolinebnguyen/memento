@@ -6,9 +6,9 @@ const sortPostsByType = (posts) => {
   const statuses = [];
 
   posts.forEach((post) => {
-    if (post.postType === PostType.PHOTO) {
+    if (post.type === PostType.PHOTO) {
       photos.push(post);
-    } else if (post.postType === PostType.STATUS) {
+    } else if (post.type === PostType.STATUS) {
       statuses.push(post);
     }
   });

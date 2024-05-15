@@ -13,7 +13,7 @@ export default function ProfilePhotoTabContent({ photos }) {
       {sortedPhotos.length > 0 ? (
         <Grid templateColumns="repeat(3, 1fr)" gap={2}>
           {sortedPhotos.map((photo) => (
-            <Box key={photo.id}>
+            <Box key={photo.postId}>
               <ProfilePhotoCard photo={photo} />
             </Box>
           ))}

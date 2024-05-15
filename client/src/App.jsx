@@ -53,7 +53,7 @@ const router = createBrowserRouter([
       { path: 'notifications', element: <Notifications /> },
       { path: 'profile', element: <Profile /> },
       { path: 'settings', element: <Settings /> },
-      { path: 'post', element: <Post /> },
+      { path: 'post/:postId', element: <Post /> },
     ],
   },
 ]);

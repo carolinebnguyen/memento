@@ -5,17 +5,14 @@ const multer = require('multer');
 const path = require('path');
 const upload = multer({ storage: multer.memoryStorage() });
 
-const {
-  DynamoDBClient,
-  GetItemCommand,
-  QueryCommand,
-} = require('@aws-sdk/client-dynamodb');
+const { DynamoDBClient, GetItemCommand } = require('@aws-sdk/client-dynamodb');
 const { unmarshall } = require('@aws-sdk/util-dynamodb');
 const {
   DynamoDBDocumentClient,
   UpdateCommand,
   DeleteCommand,
   PutCommand,
+  QueryCommand,
 } = require('@aws-sdk/lib-dynamodb');
 
 const {
@@ -45,19 +42,21 @@ router.get('/:postId', async (req, res) => {
 
   try {
     const dynamoParams = {
-      TableName: USER_TABLE,
-      Key: {
-        postId: postId,
+      TableName: POST_TABLE,
+      IndexName: 'postId-index',
+      KeyConditionExpression: 'postId = :postId',
+      ExpressionAttributeValues: {
+        ':postId': postId,
       },
     };
 
-    const { Item } = await docClient.send(new GetItemCommand(dynamoParams));
+    const { Items } = await docClient.send(new QueryCommand(dynamoParams));
 
-    if (!Item) {
+    if (!Items || Items.length === 0) {
       return res.status(404).json({ error: 'Post not found' });
     }
 
-    return res.status(200).json(Item);
+    return res.status(200).json(Items[0]);
   } catch (error) {
     console.error('Error getting post:', error);
     return res
@@ -144,11 +143,12 @@ router.delete('/:postId', async (req, res) => {
     };
 
     const { Items } = await docClient.send(new QueryCommand(checkPost));
-    const post = Items[0];
 
-    if (!post) {
+    if (!Items || Items.length === 0) {
       return res.status(404).json({ error: 'Post not found' });
     }
+
+    const post = Items[0];
 
     if (post.username !== username) {
       return res

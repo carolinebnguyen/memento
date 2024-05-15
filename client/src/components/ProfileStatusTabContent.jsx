@@ -12,7 +12,7 @@ export default function ProfileStatusTabContent({ statuses }) {
     <Flex direction="column" w="full">
       {sortedStatuses.length > 0 ? (
         sortedStatuses.map((status, index, array) => (
-          <Box key={status.id}>
+          <Box key={status.postId}>
             <PostCard post={status} />
             {index !== array.length - 1 && <Divider my={3} />}
           </Box>
