@@ -17,6 +17,7 @@ const {
   QueryCommand,
   ScanCommand,
   TransactWriteCommand,
+  BatchGetCommand,
 } = require('@aws-sdk/lib-dynamodb');
 const { marshall, unmarshall } = require('@aws-sdk/util-dynamodb');
 
@@ -68,59 +69,68 @@ router.get('/:username', async (req, res) => {
       },
     };
 
-    const { Item } = await docClient.send(new GetCommand(userParams));
+    const { Item: user } = await docClient.send(new GetCommand(userParams));
 
-    if (!Item) {
+    if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    const { Items } = await docClient.send(new QueryCommand(postParams));
+    const { Items: posts } = await docClient.send(new QueryCommand(postParams));
 
-    const result = {
-      user: Item,
-      posts: Items,
-    };
-
-    // convert to arrays so that data from string sets can be parsed by client
-    result.user.following = Array.from(result.user?.following || []);
-    result.user.followers = Array.from(result.user?.followers || []);
-    result.posts.forEach((post) => {
+    user.following = Array.from(user?.following || new Set());
+    user.followers = Array.from(user?.followers || new Set());
+    posts.forEach((post) => {
       post.comments = Array.from(post?.comments || []);
       post.likes = Array.from(post?.likes || []);
-      post.profilePicture = Item.picture;
+      post.profilePicture = user.picture;
     });
+
+    const uniqueUsernames = new Set([...user.following, ...user.followers]);
+    const batchGetUserParams = {
+      RequestItems: {
+        [USER_TABLE]: {
+          Keys: Array.from(uniqueUsernames).map((username) => ({
+            username: username,
+          })),
+          ProjectionExpression: 'username, picture, #name',
+          ExpressionAttributeNames: {
+            '#name': 'name',
+          },
+        },
+      },
+    };
+
+    const { Responses } = await docClient.send(
+      new BatchGetCommand(batchGetUserParams)
+    );
+    const userProfiles = Responses[USER_TABLE].reduce((acc, user) => {
+      acc[user.username] = {
+        picture: user.picture,
+        name: user.name,
+      };
+      return acc;
+    }, {});
+
+    user.following = user.following.map((username) => ({
+      username,
+      picture: userProfiles[username].picture,
+      name: userProfiles[username].name,
+    }));
+
+    user.followers = user.followers.map((username) => ({
+      username,
+      picture: userProfiles[username].picture,
+      name: userProfiles[username].name,
+    }));
+
+    const result = {
+      user,
+      posts,
+    };
 
     return res.status(200).json(result);
   } catch (error) {
     console.error('Error getting user:', error);
-    return res
-      .status(500)
-      .json({ error: 'Internal server error getting user' });
-  }
-});
-
-// GET api/users/:username/info
-router.get('/:username/info', async (req, res) => {
-  try {
-    const { username } = req.params;
-
-    const params = {
-      TableName: USER_TABLE,
-      Key: {
-        username: username,
-      },
-    };
-
-    const { Item } = await docClient.send(new GetCommand(params));
-
-    const user = Item;
-
-    user.following = Array.from(user?.following || []);
-    user.followers = Array.from(user?.followers || []);
-
-    return res.status(200).json(user);
-  } catch (error) {
-    console.error('Error getting user: ', error);
     return res
       .status(500)
       .json({ error: 'Internal server error getting user' });

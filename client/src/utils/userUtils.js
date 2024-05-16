@@ -28,31 +28,6 @@ const getUserProfile = async (username) => {
   }
 };
 
-const getUserInformation = async (username) => {
-  try {
-    const res = await mementoBackend.get(`/users/${username}/info`);
-    const profile = res.data;
-    return profile;
-  } catch (error) {
-    if (error.response && error.response.status === 404) {
-      return null;
-    }
-    throw error;
-  }
-};
-
-const getAllUserProfiles = async (usersList) => {
-  try {
-    const profilesPromises = usersList.map((username) =>
-      getUserInformation(username)
-    );
-    const profiles = await Promise.all(profilesPromises);
-    return profiles;
-  } catch (error) {
-    throw error;
-  }
-};
-
 const getAllUsers = async () => {
   try {
     const res = await mementoBackend.get('/user');
@@ -108,8 +83,6 @@ export {
   getCurrentUsername,
   getCurrentUserProfile,
   getUserProfile,
-  getUserInformation,
-  getAllUserProfiles,
   getAllUsers,
   updateUserProfile,
   updateProfilePicture,
