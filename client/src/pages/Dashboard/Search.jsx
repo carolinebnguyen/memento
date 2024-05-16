@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Fuse from 'fuse.js';
 import {
   Flex,
   Input,
@@ -34,6 +35,8 @@ export default function Search() {
     setIsAlertVisible(false);
   };
 
+  const fuse = new Fuse(users, { keys: ['name', 'username'] });
+
   useEffect(() => {
     resetAlert();
     const fetchAllUsers = async () => {
@@ -59,10 +62,8 @@ export default function Search() {
     if (query.trim() === '' && !isAlertVisible) {
       setSearchResults(users);
     } else {
-      const results = users.filter((user) =>
-        user.username.toLowerCase().includes(query.toLowerCase())
-      );
-      setSearchResults(results);
+      const results = fuse.search(query);
+      setSearchResults(results.map((result) => result.item));
     }
 
     resetAlert();
@@ -107,7 +108,7 @@ export default function Search() {
       {searched && (
         <Flex direction="column" mt={4} w="full">
           {searchResults.length > 0 ? (
-            searchResults.map((user) => (
+            searchResults.map((user, index) => (
               <Box key={user.username} mb={4}>
                 <UserCard user={user} />
               </Box>
