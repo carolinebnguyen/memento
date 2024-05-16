@@ -42,7 +42,6 @@ import ConfirmationModal from './ConfirmationModal';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { getCurrentUsername } from '../utils/userUtils';
 import {
-  checkIsLiked,
   deletePost,
   likePost,
   unlikePost,
@@ -78,7 +77,7 @@ export default function PostCard({ post }) {
     const fetchInfo = async () => {
       try {
         const currentUsername = await getCurrentUsername();
-        const isLiked = await checkIsLiked(postId);
+        const isLiked = likes.includes(currentUsername);
         setCurrentUsername(currentUsername);
         setIsLiked(isLiked);
         setIsLoading(false);
@@ -87,7 +86,7 @@ export default function PostCard({ post }) {
       }
     };
     fetchInfo();
-  }, [username, postId]);
+  }, [username, postId, likes]);
 
   const {
     isOpen: isOpenLikes,

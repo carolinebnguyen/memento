@@ -1,4 +1,3 @@
-import { getCurrentUsername } from './userUtils';
 import { mementoBackend } from './utils';
 import { PostType } from './utils';
 
@@ -90,17 +89,6 @@ const unlikePost = async (postId) => {
   }
 };
 
-const checkIsLiked = async (postId) => {
-  try {
-    const post = await getPost(postId);
-    const currentUsername = await getCurrentUsername();
-    const { likes } = post || {};
-    return Array.isArray(likes) && likes.includes(currentUsername);
-  } catch (error) {
-    throw error;
-  }
-};
-
 const getAllHomeFeedPosts = async () => {
   try {
     const res = await mementoBackend.get('/posts/');
@@ -119,6 +107,5 @@ export {
   deletePost,
   likePost,
   unlikePost,
-  checkIsLiked,
   getAllHomeFeedPosts,
 };
