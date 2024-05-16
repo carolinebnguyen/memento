@@ -40,7 +40,7 @@ import {
 import styles from '../components/BottomNav/BottomNav.module.css';
 import ConfirmationModal from './ConfirmationModal';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { getCurrentUsername, getUserProfile } from '../utils/userUtils';
+import { getCurrentUsername } from '../utils/userUtils';
 import {
   checkIsLiked,
   deletePost,
@@ -50,13 +50,21 @@ import {
 } from '../utils/postUtils';
 
 export default function PostCard({ post }) {
-  const { postId, username, type, text, imageSrc, likes, comments, postedAt } =
-    post;
+  const {
+    postId,
+    username,
+    type,
+    text,
+    imageSrc,
+    likes,
+    comments,
+    postedAt,
+    profilePicture,
+  } = post;
   const [isLoading, setIsLoading] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [modifiedLikes, setModifiedLikes] = useState(likes || []);
   const [currentUsername, setCurrentUsername] = useState('');
-  const [profile, setProfile] = useState({});
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
 
@@ -68,15 +76,15 @@ export default function PostCard({ post }) {
   useEffect(() => {
     setIsLoading(true);
     const fetchInfo = async () => {
-      const currentUsername = await getCurrentUsername();
-      const isLiked = await checkIsLiked(postId);
-      setCurrentUsername(currentUsername);
-      setIsLiked(isLiked);
-      if (username) {
-        const { user } = await getUserProfile(username);
-        setProfile(user);
+      try {
+        const currentUsername = await getCurrentUsername();
+        const isLiked = await checkIsLiked(postId);
+        setCurrentUsername(currentUsername);
+        setIsLiked(isLiked);
+        setIsLoading(false);
+      } catch (error) {
+        return;
       }
-      setIsLoading(false);
     };
     fetchInfo();
   }, [username, postId]);
@@ -221,7 +229,7 @@ export default function PostCard({ post }) {
         <>
           <Flex justify="space-between" gap={20} align="center">
             <Stack direction="row" align="center" gap={2}>
-              <Avatar size="sm" src={profile.picture} />
+              <Avatar size="sm" src={profilePicture} />
               <Heading
                 as="h2"
                 size="xs"

@@ -47,7 +47,7 @@ router.get('/:postId', async (req, res) => {
   }
 
   try {
-    const dynamoParams = {
+    const postParams = {
       TableName: POST_TABLE,
       IndexName: 'postId-index',
       KeyConditionExpression: 'postId = :postId',
@@ -56,7 +56,7 @@ router.get('/:postId', async (req, res) => {
       },
     };
 
-    const { Items } = await docClient.send(new QueryCommand(dynamoParams));
+    const { Items } = await docClient.send(new QueryCommand(postParams));
 
     if (!Items || Items.length === 0) {
       return res.status(404).json({ error: 'Post not found' });
@@ -66,6 +66,17 @@ router.get('/:postId', async (req, res) => {
 
     post.comments = Array.from(post?.comments || []);
     post.likes = Array.from(post?.likes || []);
+
+    const userParams = {
+      TableName: USER_TABLE,
+      Key: {
+        username: post.username,
+      },
+    };
+
+    const { Item: user } = await docClient.send(new GetCommand(userParams));
+
+    post.profilePicture = user.picture;
 
     return res.status(200).json(post);
   } catch (error) {
@@ -83,7 +94,16 @@ router.get('/', async (req, res) => {
   }
 
   async function getAllPosts(usernames) {
-    const promises = usernames.map((username) =>
+    const userPromises = usernames.map((username) =>
+      docClient.send(
+        new GetCommand({
+          TableName: USER_TABLE,
+          Key: { username: username },
+        })
+      )
+    );
+
+    const postPromises = usernames.map((username) =>
       docClient.send(
         new QueryCommand({
           TableName: POST_TABLE,
@@ -95,12 +115,23 @@ router.get('/', async (req, res) => {
       )
     );
 
-    const results = await Promise.all(promises);
+    const users = await Promise.all(userPromises);
+    const postsByUser = await Promise.all(postPromises);
 
-    const posts = results.flatMap((result) => result.Items);
-    posts.forEach((post) => {
-      post.comments = Array.from(post?.comments || []);
-      post.likes = Array.from(post?.likes || []);
+    const profilePictures = users.reduce((acc, userData) => {
+      if (userData.Item) {
+        acc[userData.Item.username] = userData.Item.picture;
+      }
+      return acc;
+    }, {});
+
+    const posts = postsByUser.flatMap((postData) => {
+      return postData.Items.map((post) => ({
+        ...post,
+        comments: Array.from(post?.comments || []),
+        likes: Array.from(post?.likes || []),
+        profilePicture: profilePictures[post.username],
+      }));
     });
 
     return posts;

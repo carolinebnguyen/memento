@@ -87,6 +87,7 @@ router.get('/:username', async (req, res) => {
     result.posts.forEach((post) => {
       post.comments = Array.from(post?.comments || []);
       post.likes = Array.from(post?.likes || []);
+      post.profilePicture = Item.picture;
     });
 
     return res.status(200).json(result);
