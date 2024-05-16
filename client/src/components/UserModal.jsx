@@ -22,7 +22,7 @@ export default function UserModal({ isOpen, onClose, title, usersList }) {
           {usersList && usersList.length > 0 ? (
             usersList.map((user, index) => (
               <Box
-                key={user.username}
+                key={user.username || user}
                 mb={index !== usersList.length - 1 ? 3 : 0}
               >
                 <UserCard user={user} handleClose={onClose} />

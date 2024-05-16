@@ -76,7 +76,10 @@ const unfollowUser = async (username) => {
 const checkIsFollowing = async (username) => {
   const { user } = await getCurrentUserProfile();
   const { following } = user || {};
-  return Array.isArray(following) && following.includes(username);
+  return (
+    Array.isArray(following) &&
+    following.some((follower) => follower.username === username)
+  );
 };
 
 export {
