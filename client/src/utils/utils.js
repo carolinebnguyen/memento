@@ -72,6 +72,14 @@ const PostType = {
   POST: 'post',
 };
 
+const getFollowAction = (isFollowing) => {
+  let action = 'follow';
+  if (isFollowing) {
+    action = 'unfollow';
+  }
+  return action;
+};
+
 export {
   mementoBackend,
   formatDateDistanceToNow,
@@ -82,4 +90,5 @@ export {
   notificationGroupToHeadingMap,
   getNotificationMessage,
   PostType,
+  getFollowAction,
 };

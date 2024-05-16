@@ -16,6 +16,7 @@ import {
   getCurrentUsername,
   unfollowUser,
 } from '../utils/userUtils';
+import { getFollowAction } from '../utils/utils';
 
 export default function ProfileHeader({ profile, isFollowingUser }) {
   const [isFollowing, setIsFollowing] = useState(isFollowingUser);
@@ -56,14 +57,6 @@ export default function ProfileHeader({ profile, isFollowingUser }) {
 
   const { username: userParam } = useParams();
 
-  const getFollowAction = () => {
-    let action = 'follow';
-    if (isFollowing) {
-      action = 'unfollow';
-    }
-    return action;
-  };
-
   const toggleIsFollowing = async () => {
     try {
       if (!isFollowing) {
@@ -82,7 +75,9 @@ export default function ProfileHeader({ profile, isFollowingUser }) {
     } catch (error) {
       toast({
         title: 'Error',
-        description: `An error occurred while attempting to ${getFollowAction()} user`,
+        description: `An error occurred while attempting to ${getFollowAction(
+          isFollowing
+        )} user`,
         status: 'error',
         duration: 3000,
         variant: 'subtle',
