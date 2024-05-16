@@ -81,11 +81,17 @@ router.get('/:username', async (req, res) => {
     user.followers = Array.from(user?.followers || new Set());
     posts.forEach((post) => {
       post.comments = Array.from(post?.comments || []);
-      post.likes = Array.from(post?.likes || []);
+      post.likes = Array.from(post?.likes || new Set());
       post.profilePicture = user.picture;
     });
 
     const uniqueUsernames = new Set([...user.following, ...user.followers]);
+    posts.forEach((post) => {
+      post.likes.forEach((username) => {
+        uniqueUsernames.add(username);
+      });
+    });
+
     const batchGetUserParams = {
       RequestItems: {
         [USER_TABLE]: {
@@ -122,6 +128,14 @@ router.get('/:username', async (req, res) => {
       picture: userProfiles[username].picture,
       name: userProfiles[username].name,
     }));
+
+    posts.forEach((post) => {
+      post.likes = post.likes.map((username) => ({
+        username,
+        picture: userProfiles[username].picture,
+        name: userProfiles[username].name,
+      }));
+    });
 
     const result = {
       user,

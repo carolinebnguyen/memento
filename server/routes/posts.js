@@ -13,6 +13,7 @@ const {
   PutCommand,
   QueryCommand,
   GetCommand,
+  BatchGetCommand,
 } = require('@aws-sdk/lib-dynamodb');
 
 const {
@@ -65,7 +66,38 @@ router.get('/:postId', async (req, res) => {
     const post = Items[0];
 
     post.comments = Array.from(post?.comments || []);
-    post.likes = Array.from(post?.likes || []);
+    post.likes = Array.from(post?.likes || new Set());
+
+    const batchGetUserParams = {
+      RequestItems: {
+        [USER_TABLE]: {
+          Keys: Array.from(post.likes).map((username) => ({
+            username: username,
+          })),
+          ProjectionExpression: 'username, picture, #name',
+          ExpressionAttributeNames: {
+            '#name': 'name',
+          },
+        },
+      },
+    };
+
+    const { Responses } = await docClient.send(
+      new BatchGetCommand(batchGetUserParams)
+    );
+    const userProfiles = Responses[USER_TABLE].reduce((acc, user) => {
+      acc[user.username] = {
+        picture: user.picture,
+        name: user.name,
+      };
+      return acc;
+    }, {});
+
+    post.likes = post.likes.map((username) => ({
+      username,
+      picture: userProfiles[username].picture,
+      name: userProfiles[username].name,
+    }));
 
     const userParams = {
       TableName: USER_TABLE,
@@ -148,7 +180,7 @@ router.get('/', async (req, res) => {
       },
     };
     const { Item: user } = await docClient.send(new GetCommand(getUserParams));
-    user.following = Array.from(user?.following || []);
+    user.following = Array.from(user?.following || new Set());
     user.following = [...user.following, username];
 
     const posts = await getAllPosts(user.following);
