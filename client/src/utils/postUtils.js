@@ -11,9 +11,9 @@ const sortPostsByType = (posts) => {
 
   posts.forEach((post) => {
     if (post.type === PostType.PHOTO) {
-      photos.push(post);
+      photos.push(JSON.parse(JSON.stringify(post)));
     } else if (post.type === PostType.STATUS) {
-      statuses.push(post);
+      statuses.push(JSON.parse(JSON.stringify(post)));
     }
   });
 

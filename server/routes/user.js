@@ -81,8 +81,13 @@ router.get('/:username', async (req, res) => {
       posts: Items,
     };
 
+    // convert to arrays so that data from string sets can be parsed by client
     result.user.following = Array.from(result.user?.following || []);
     result.user.followers = Array.from(result.user?.followers || []);
+    result.posts.forEach((post) => {
+      post.comments = Array.from(post?.comments || []);
+      post.likes = Array.from(post?.likes || []);
+    });
 
     return res.status(200).json(result);
   } catch (error) {
