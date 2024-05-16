@@ -16,7 +16,7 @@ export default function HomePostTabContent({ postList, postType }) {
     <Flex direction="column" w="full">
       {postList.length > 0 ? (
         postList.map((post, index, array) => (
-          <Box key={post.id}>
+          <Box key={post.postId}>
             <PostCard post={post} />
             {index !== array.length - 1 && <Divider my={3} />}
           </Box>

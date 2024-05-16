@@ -108,6 +108,7 @@ export {
   getCurrentUsername,
   getCurrentUserProfile,
   getUserProfile,
+  getUserInformation,
   getAllUserProfiles,
   getAllUsers,
   updateUserProfile,

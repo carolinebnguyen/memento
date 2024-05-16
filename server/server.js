@@ -27,9 +27,9 @@ app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/**', verifyAccessToken);
-app.use('/api/users', require('./routes/user'));
-app.use('/api/posts', require('./routes/post'));
-app.use('/api/notifications', require('./routes/notification'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/posts', require('./routes/posts'));
+app.use('/api/notifications', require('./routes/notifications'));
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
