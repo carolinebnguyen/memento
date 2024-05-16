@@ -25,7 +25,7 @@ const sortPostsByType = (posts) => {
 
 const getPost = async (postId) => {
   try {
-    const res = await mementoBackend.get(`/post/${postId}`);
+    const res = await mementoBackend.get(`/posts/${postId}`);
     const post = res.data;
     return post;
   } catch (error) {
@@ -60,7 +60,7 @@ const createPost = async (post) => {
 
 const updatePost = async (postId, text) => {
   try {
-    await mementoBackend.put(`/post/${postId}`, { text });
+    await mementoBackend.put(`/posts/${postId}`, { text });
   } catch (error) {
     throw error;
   }
@@ -68,7 +68,7 @@ const updatePost = async (postId, text) => {
 
 const deletePost = async (postId) => {
   try {
-    await mementoBackend.delete(`/post/${postId}`);
+    await mementoBackend.delete(`/posts/${postId}`);
   } catch (error) {
     throw error;
   }
@@ -76,7 +76,7 @@ const deletePost = async (postId) => {
 
 const likePost = async (postId) => {
   try {
-    await mementoBackend.put(`/post/${postId}/like`);
+    await mementoBackend.put(`/posts/${postId}/like`);
   } catch (error) {
     throw error;
   }
@@ -84,7 +84,7 @@ const likePost = async (postId) => {
 
 const unlikePost = async (postId) => {
   try {
-    await mementoBackend.put(`/post/${postId}/unlike`);
+    await mementoBackend.put(`/posts/${postId}/unlike`);
   } catch (error) {
     throw error;
   }

@@ -37,7 +37,7 @@ const s3Client = new S3Client({
   region: process.env.AWS_REGION,
 });
 
-// GET api/post/
+// GET api/posts/
 router.get('/:postId', async (req, res) => {
   const { postId } = req.params;
 
@@ -75,7 +75,7 @@ router.get('/:postId', async (req, res) => {
   }
 });
 
-// POST api/post/
+// POST api/posts/
 router.post('/', upload.single('file'), async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: 'User is not authenticated' });
@@ -134,7 +134,7 @@ router.post('/', upload.single('file'), async (req, res) => {
   }
 });
 
-// PUT api/post/:postId
+// PUT api/posts/:postId
 router.put('/:postId', async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: 'User is not authenticated' });
@@ -191,7 +191,7 @@ router.put('/:postId', async (req, res) => {
   }
 });
 
-// PUT api/post/:postId/like
+// PUT api/posts/:postId/like
 router.put('/:postId/like', async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: 'User is not authenticated' });
@@ -241,7 +241,7 @@ router.put('/:postId/like', async (req, res) => {
   }
 });
 
-// PUT api/post/:postId/unlike
+// PUT api/posts/:postId/unlike
 router.put('/:postId/unlike', async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: 'User is not authenticated' });
@@ -292,7 +292,7 @@ router.put('/:postId/unlike', async (req, res) => {
   }
 });
 
-// DELETE api/post/:postId
+// DELETE api/posts/:postId
 router.delete('/:postId', async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: 'User is not authenticated' });

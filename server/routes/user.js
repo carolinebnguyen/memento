@@ -44,7 +44,7 @@ const s3Client = new S3Client({
   region: process.env.AWS_REGION,
 });
 
-// GET api/user/:username
+// GET api/users/:username
 router.get('/:username', async (req, res) => {
   const { username } = req.params;
 
@@ -98,7 +98,7 @@ router.get('/:username', async (req, res) => {
   }
 });
 
-// GET api/user/:username/info
+// GET api/users/:username/info
 router.get('/:username/info', async (req, res) => {
   try {
     const { username } = req.params;
@@ -121,7 +121,7 @@ router.get('/:username/info', async (req, res) => {
   }
 });
 
-// GET api/user/
+// GET api/users/
 router.get('/', async (req, res) => {
   try {
     const params = {
@@ -139,7 +139,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// PUT api/user/account
+// PUT api/users/account
 router.put('/account', async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: 'User is not authenticated' });
@@ -211,7 +211,7 @@ router.put('/account', async (req, res) => {
   }
 });
 
-// PUT api/user/picture
+// PUT api/users/picture
 router.put('/picture', upload.single('file'), async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: 'User is not authenticated' });
@@ -266,7 +266,7 @@ router.put('/picture', upload.single('file'), async (req, res) => {
   }
 });
 
-// PUT api/user/:username/follow
+// PUT api/users/:username/follow
 router.put('/:username/follow', async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: 'User is not authenticated' });
@@ -324,7 +324,7 @@ router.put('/:username/follow', async (req, res) => {
   }
 });
 
-// PUT api/user/:username/unfollow
+// PUT api/users/:username/unfollow
 router.put('/:username/unfollow', async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: 'User is not authenticated' });

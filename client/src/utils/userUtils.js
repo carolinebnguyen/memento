@@ -10,14 +10,14 @@ const getCurrentUsername = async () => {
 
 const getCurrentUserProfile = async () => {
   const currentUsername = await getCurrentUsername();
-  const res = await mementoBackend.get(`/user/${currentUsername}`);
+  const res = await mementoBackend.get(`/users/${currentUsername}`);
   const profile = res.data;
   return profile;
 };
 
 const getUserProfile = async (username) => {
   try {
-    const res = await mementoBackend.get(`/user/${username}`);
+    const res = await mementoBackend.get(`/users/${username}`);
     const profile = res.data;
     return profile;
   } catch (error) {
@@ -30,7 +30,7 @@ const getUserProfile = async (username) => {
 
 const getUserInformation = async (username) => {
   try {
-    const res = await mementoBackend.get(`/user/${username}/info`);
+    const res = await mementoBackend.get(`/users/${username}/info`);
     const profile = res.data;
     return profile;
   } catch (error) {
@@ -66,7 +66,7 @@ const getAllUsers = async () => {
 const updateUserProfile = async (user) => {
   const { email, name, bio } = user;
   try {
-    await mementoBackend.put('/user/account', { email, name, bio });
+    await mementoBackend.put('/users/account', { email, name, bio });
   } catch (error) {
     throw error;
   }
@@ -76,7 +76,7 @@ const updateProfilePicture = async (file) => {
   try {
     const formData = new FormData();
     formData.append('file', file);
-    await mementoBackend.put('/user/picture', formData);
+    await mementoBackend.put('/users/picture', formData);
   } catch (error) {
     throw error;
   }
@@ -84,7 +84,7 @@ const updateProfilePicture = async (file) => {
 
 const followUser = async (username) => {
   try {
-    await mementoBackend.put(`/user/${username}/follow`);
+    await mementoBackend.put(`/users/${username}/follow`);
   } catch (error) {
     throw error;
   }
@@ -92,7 +92,7 @@ const followUser = async (username) => {
 
 const unfollowUser = async (username) => {
   try {
-    await mementoBackend.put(`/user/${username}/unfollow`);
+    await mementoBackend.put(`/users/${username}/unfollow`);
   } catch (error) {
     throw error;
   }
