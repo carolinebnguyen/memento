@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Flex,
   Input,
@@ -9,25 +9,64 @@ import {
   Text,
   InputRightElement,
   IconButton,
+  Center,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from '@chakra-ui/react';
 import { MdOutlineSearch } from 'react-icons/md';
 import { IoMdClose } from 'react-icons/io';
-import { usernameToProfileMap, getProfile } from '../../utils/testData';
 import UserCard from '../../components/UserCard';
+import { getAllUsers } from '../../utils/userUtils';
 
 export default function Search() {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searched, setSearched] = useState(false);
+  const [users, setUsers] = useState([]);
+
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+
+  const resetAlert = () => {
+    setAlertMessage('');
+    setIsAlertVisible(false);
+  };
+
+  useEffect(() => {
+    resetAlert();
+    const fetchAllUsers = async () => {
+      try {
+        const users = await getAllUsers();
+        setUsers(users);
+      } catch (error) {
+        const errorMessage =
+          error.response?.data?.error ?? 'An unexpected error occurred';
+        setAlertMessage(errorMessage);
+        setIsAlertVisible(true);
+        return;
+      }
+    };
+    fetchAllUsers();
+  }, []);
 
   const handleSearch = () => {
-    if (query.trim() !== '') {
-      setSearched(true);
-      const results = Object.keys(usernameToProfileMap).filter((username) =>
-        username.toLowerCase().includes(query.toLowerCase())
+    if (isAlertVisible) {
+      return;
+    }
+
+    if (query.trim() === '' && !isAlertVisible) {
+      setSearchResults(users);
+    } else {
+      const results = users.filter((user) =>
+        user.username.toLowerCase().includes(query.toLowerCase())
       );
       setSearchResults(results);
     }
+
+    resetAlert();
+    setSearched(true);
   };
 
   const handleClearSearch = () => {
@@ -68,13 +107,25 @@ export default function Search() {
       {searched && (
         <Flex direction="column" mt={4} w="full">
           {searchResults.length > 0 ? (
-            searchResults.map((username) => (
-              <Box key={username} mb={4}>
-                <UserCard user={getProfile(username)} />
+            searchResults.map((user) => (
+              <Box key={user.username} mb={4}>
+                <UserCard user={user} />
               </Box>
             ))
           ) : (
-            <Text>No results found</Text>
+            <Center>
+              {isAlertVisible ? (
+                <Alert status="error">
+                  <AlertIcon />
+                  <Box>
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>{alertMessage}</AlertDescription>
+                  </Box>
+                </Alert>
+              ) : (
+                <Text>No results found</Text>
+              )}
+            </Center>
           )}
         </Flex>
       )}

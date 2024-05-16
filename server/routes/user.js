@@ -14,6 +14,7 @@ const {
   UpdateCommand,
   GetCommand,
   QueryCommand,
+  ScanCommand,
 } = require('@aws-sdk/lib-dynamodb');
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 
@@ -77,6 +78,24 @@ router.get('/:username', async (req, res) => {
     return res
       .status(500)
       .json({ error: 'Internal server error getting user' });
+  }
+});
+
+// GET api/user/
+router.get('/', async (req, res) => {
+  try {
+    const params = {
+      TableName: USER_TABLE,
+    };
+
+    const { Items } = await docClient.send(new ScanCommand(params));
+
+    return res.status(200).json(Items);
+  } catch (error) {
+    console.error('Error getting all users: ', error);
+    return res
+      .status(500)
+      .json({ error: 'Internal server error getting all users' });
   }
 });
 
