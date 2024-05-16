@@ -1,4 +1,4 @@
-import { getCurrentUsername, getUserInformation } from './userUtils';
+import { getCurrentUsername } from './userUtils';
 import { mementoBackend } from './utils';
 import { PostType } from './utils';
 
@@ -101,40 +101,10 @@ const checkIsLiked = async (postId) => {
   }
 };
 
-const getAllPosts = async (username) => {
-  try {
-    const res = await mementoBackend.get(`/users/${username}/posts`);
-    const posts = res.data;
-    return posts.flat();
-  } catch (error) {
-    throw error;
-  }
-};
-
-const getAllFollowingPosts = async (usersList) => {
-  try {
-    const postPromises = usersList.map((username) => getAllPosts(username));
-    const posts = await Promise.all(postPromises);
-    return posts.flat();
-  } catch (error) {
-    throw error;
-  }
-};
-
 const getAllHomeFeedPosts = async () => {
   try {
-    const currentUsername = await getCurrentUsername();
-    const currentProfile = await getUserInformation(currentUsername);
-    const { username, following = [] } = currentProfile || {};
-
-    // add current username to list to fetch own posts
-    const usersList = [...following, username];
-
-    if (usersList.length < 1) {
-      return [];
-    }
-
-    const allFollowingPosts = await getAllFollowingPosts(usersList);
+    const res = await mementoBackend.get('/posts/');
+    const allFollowingPosts = res.data;
     return allFollowingPosts.sort(sortReverseChronologicalOrder);
   } catch (error) {
     throw error;

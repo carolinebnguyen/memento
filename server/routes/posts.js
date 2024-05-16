@@ -21,6 +21,7 @@ const {
   DeleteObjectCommand,
 } = require('@aws-sdk/client-s3');
 
+const USER_TABLE = 'User';
 const POST_TABLE = 'Post';
 
 const dynamoDBClient = new DynamoDBClient({
@@ -37,7 +38,7 @@ const s3Client = new S3Client({
   region: process.env.AWS_REGION,
 });
 
-// GET api/posts/
+// GET api/posts/:postId
 router.get('/:postId', async (req, res) => {
   const { postId } = req.params;
 
@@ -72,6 +73,61 @@ router.get('/:postId', async (req, res) => {
     return res
       .status(500)
       .json({ error: 'Internal server error getting post' });
+  }
+});
+
+// GET api/posts/
+router.get('/', async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ error: 'User is not authenticated' });
+  }
+
+  async function getAllPosts(usernames) {
+    const promises = usernames.map((username) =>
+      docClient.send(
+        new QueryCommand({
+          TableName: POST_TABLE,
+          KeyConditionExpression: 'username = :username',
+          ExpressionAttributeValues: {
+            ':username': username.toLowerCase(),
+          },
+        })
+      )
+    );
+
+    const results = await Promise.all(promises);
+
+    const posts = results.flatMap((result) => result.Items);
+    posts.forEach((post) => {
+      post.comments = Array.from(post?.comments || []);
+      post.likes = Array.from(post?.likes || []);
+    });
+
+    return posts;
+  }
+
+  try {
+    const username = req.user.username;
+
+    // get user to get their following list
+    const getUserParams = {
+      TableName: USER_TABLE,
+      Key: {
+        username: username.toLowerCase(),
+      },
+    };
+    const { Item: user } = await docClient.send(new GetCommand(getUserParams));
+    user.following = Array.from(user?.following || []);
+    user.following = [...user.following, username];
+
+    const posts = await getAllPosts(user.following);
+
+    return res.status(200).json(posts);
+  } catch (error) {
+    console.error('Error getting posts:', error);
+    return res
+      .status(500)
+      .json({ error: 'Internal server error getting posts' });
   }
 });
 

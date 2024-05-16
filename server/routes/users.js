@@ -98,41 +98,6 @@ router.get('/:username', async (req, res) => {
   }
 });
 
-// GET api/users/:username/posts
-router.get('/:username/posts', async (req, res) => {
-  const { username } = req.params;
-
-  if (!username) {
-    return res.status(400).json({ error: 'Username is required' });
-  }
-
-  try {
-    const postParams = {
-      TableName: POST_TABLE,
-      KeyConditionExpression: 'username = :username',
-      ExpressionAttributeValues: {
-        ':username': username.toLowerCase(),
-      },
-    };
-
-    const { Items } = await docClient.send(new QueryCommand(postParams));
-
-    const posts = Items;
-
-    posts.forEach((post) => {
-      post.comments = Array.from(post?.comments || []);
-      post.likes = Array.from(post?.likes || []);
-    });
-
-    return res.status(200).json(posts);
-  } catch (error) {
-    console.error('Error getting user posts:', error);
-    return res
-      .status(500)
-      .json({ error: 'Internal server error getting user posts' });
-  }
-});
-
 // GET api/users/:username/info
 router.get('/:username/info', async (req, res) => {
   try {
