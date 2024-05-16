@@ -72,7 +72,7 @@ export default function Profile() {
             <>
               <ProfileHeader profile={profile} isFollowingUser={isFollowing} />
               <Flex justify="center" align="center" w="100%">
-                <Tabs align="center" w="100vw">
+                <Tabs align="center" w="90vw">
                   <TabList role="tablist">
                     <PhotoTab>Photos</PhotoTab>
                     <StatusTab>Statuses</StatusTab>

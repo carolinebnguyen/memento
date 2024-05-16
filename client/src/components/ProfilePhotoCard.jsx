@@ -13,7 +13,7 @@ export default function ProfilePhotoCard({ photo }) {
   return (
     <GridItem border="2px" borderColor="gray.200">
       <Image
-        boxSize={{ base: '150px', sm: '250px', md: '500px' }}
+        boxSize={{ base: '450px', sm: '250px', md: '500px' }}
         objectFit="cover"
         src={imageSrc}
         _hover={{ cursor: 'pointer' }}

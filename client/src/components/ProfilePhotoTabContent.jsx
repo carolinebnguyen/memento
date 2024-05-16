@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Grid, Box, Flex } from '@chakra-ui/react';
+import { Text, Grid, Box } from '@chakra-ui/react';
 import ProfilePhotoCard from './ProfilePhotoCard';
 
 export default function ProfilePhotoTabContent({ photos }) {
@@ -9,9 +9,16 @@ export default function ProfilePhotoTabContent({ photos }) {
   }
 
   return (
-    <Flex justify="center">
+    <Box justify="center">
       {sortedPhotos.length > 0 ? (
-        <Grid templateColumns="repeat(3, 1fr)" gap={2}>
+        <Grid
+          templateColumns={{
+            sm: 'repeat(2, 1fr)',
+            md: 'repeat(1, 1fr)',
+            lg: 'repeat(2, 1fr)',
+          }}
+          gap={2}
+        >
           {sortedPhotos.map((photo) => (
             <Box key={photo.postId}>
               <ProfilePhotoCard photo={photo} />
@@ -21,6 +28,6 @@ export default function ProfilePhotoTabContent({ photos }) {
       ) : (
         <Text>No photos to display</Text>
       )}
-    </Flex>
+    </Box>
   );
 }

@@ -90,7 +90,7 @@ export default function ProfileHeader({ profile, isFollowingUser }) {
   };
 
   return (
-    <Flex mb={2}>
+    <Flex mb={2} maxW="100%">
       <Avatar size="xl" mr={5} src={picture} />
       <Stack direction="column">
         <Stack direction="row" gap={5}>
@@ -113,7 +113,7 @@ export default function ProfileHeader({ profile, isFollowingUser }) {
             </Button>
           )}
         </Stack>
-        <Stack direction="row" gap={8} mt={2}>
+        <Stack direction="row" gap={6} mt={2}>
           <Stack
             direction={{ base: 'column', sm: 'row' }}
             gap={{ base: 0, sm: 1 }}
