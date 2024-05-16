@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Flex,
   Text,
@@ -9,11 +9,21 @@ import {
   Link,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import { getCurrentUsername } from '../utils/userUtils';
 
 export default function UserCard({ user, handleClose }) {
   const [isFollowing, setIsFollowing] = useState(false);
   const { username, name, picture } = user;
   const navigate = useNavigate();
+  const [currentUsername, setCurrentUsername] = useState('');
+
+  useEffect(() => {
+    const fetchCurrentUsername = async () => {
+      const username = await getCurrentUsername();
+      setCurrentUsername(username);
+    };
+    fetchCurrentUsername();
+  }, []);
 
   const handleNavigation = () => {
     if (handleClose) {
@@ -39,7 +49,7 @@ export default function UserCard({ user, handleClose }) {
           </Text>
         </Stack>
       </HStack>
-      {username === 'carolibn' ? null : (
+      {username === currentUsername ? null : (
         <Button
           onClick={toggleIsFollowing}
           colorScheme={isFollowing ? 'gray' : 'blue'}
