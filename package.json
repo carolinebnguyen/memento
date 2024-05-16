@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "description": "Memento web app",
-  "dependencies": {
-    "fuse.js": "^7.0.0"
-  },
   "scripts": {
     "start": "node server/server.js",
     "frontend-dev": "cd client && npm install && npm start",
