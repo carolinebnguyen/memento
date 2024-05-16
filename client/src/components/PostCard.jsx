@@ -29,15 +29,25 @@ import {
 } from '@chakra-ui/react';
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
-import { carolineProfile } from '../utils/testData';
 import { FaRegHeart, FaHeart, FaRegComment, FaEllipsis } from 'react-icons/fa6';
 import UserModal from './UserModal';
-import { PostType, formatDate, formatDateDistanceToNow } from '../utils/utils';
+import {
+  PostType,
+  formatDate,
+  formatDateDistanceToNow,
+  getLikeAction,
+} from '../utils/utils';
 import styles from '../components/BottomNav/BottomNav.module.css';
 import ConfirmationModal from './ConfirmationModal';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { getCurrentUsername, getUserProfile } from '../utils/userUtils';
-import { deletePost, updatePost } from '../utils/postUtils';
+import {
+  checkIsLiked,
+  deletePost,
+  likePost,
+  unlikePost,
+  updatePost,
+} from '../utils/postUtils';
 
 export default function PostCard({ post }) {
   const { postId, username, type, text, imageSrc, likes, comments, postedAt } =
@@ -57,17 +67,19 @@ export default function PostCard({ post }) {
 
   useEffect(() => {
     setIsLoading(true);
-    const fetchProfile = async () => {
+    const fetchInfo = async () => {
       const currentUsername = await getCurrentUsername();
+      const isLiked = await checkIsLiked(postId);
       setCurrentUsername(currentUsername);
+      setIsLiked(isLiked);
       if (username) {
         const { user } = await getUserProfile(username);
         setProfile(user);
       }
       setIsLoading(false);
     };
-    fetchProfile();
-  }, [username]);
+    fetchInfo();
+  }, [username, postId]);
 
   const {
     isOpen: isOpenLikes,
@@ -161,15 +173,34 @@ export default function PostCard({ post }) {
     }
   };
 
-  const toggleIsLiked = () => {
-    if (isLiked) {
-      setModifiedLikes(
-        modifiedLikes.filter((user) => user !== carolineProfile)
-      );
-    } else {
-      setModifiedLikes([...modifiedLikes, carolineProfile]);
+  const toggleIsLiked = async () => {
+    try {
+      if (!isLiked) {
+        await likePost(postId);
+        setModifiedLikes([...modifiedLikes, currentUsername]);
+      } else {
+        await unlikePost(postId);
+        setModifiedLikes(
+          modifiedLikes.filter((user) => user !== currentUsername)
+        );
+      }
+      setIsLiked(!isLiked);
+    } catch (error) {
+      console.log('error: ', error);
+      toast({
+        title: 'Error',
+        description: `An error occurred while attempting to ${getLikeAction(
+          isLiked
+        )} post`,
+        status: 'error',
+        duration: 3000,
+        variant: 'subtle',
+        position: 'top',
+        containerStyle: {
+          zIndex: '9999',
+        },
+      });
     }
-    setIsLiked(!isLiked);
   };
 
   const handleUserNavigate = () => {
@@ -383,7 +414,7 @@ export default function PostCard({ post }) {
                 _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
                 onClick={onOpenLikes}
               >
-                {modifiedLikes.length}{' '}
+                {modifiedLikes.length || 0}{' '}
                 {modifiedLikes.length === 1 ? 'like' : 'likes'}
               </Text>
               <UserModal

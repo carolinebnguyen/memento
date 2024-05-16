@@ -80,6 +80,14 @@ const getFollowAction = (isFollowing) => {
   return action;
 };
 
+const getLikeAction = (isLiked) => {
+  let action = 'like';
+  if (isLiked) {
+    action = 'unlike';
+  }
+  return action;
+};
+
 export {
   mementoBackend,
   formatDateDistanceToNow,
@@ -91,4 +99,5 @@ export {
   getNotificationMessage,
   PostType,
   getFollowAction,
+  getLikeAction,
 };

@@ -26,7 +26,12 @@ const POST_TABLE = 'Post';
 const dynamoDBClient = new DynamoDBClient({
   region: process.env.AWS_REGION,
 });
-const docClient = DynamoDBDocumentClient.from(dynamoDBClient);
+const docClient = DynamoDBDocumentClient.from(dynamoDBClient, {
+  marshallOptions: {
+    removeUndefinedValues: true,
+    convertEmptyValues: true,
+  },
+});
 
 const s3Client = new S3Client({
   region: process.env.AWS_REGION,
@@ -56,7 +61,12 @@ router.get('/:postId', async (req, res) => {
       return res.status(404).json({ error: 'Post not found' });
     }
 
-    return res.status(200).json(Items[0]);
+    const post = Items[0];
+
+    post.comments = Array.from(post?.comments || []);
+    post.likes = Array.from(post?.likes || []);
+
+    return res.status(200).json(post);
   } catch (error) {
     console.error('Error getting post:', error);
     return res
@@ -178,6 +188,107 @@ router.put('/:postId', async (req, res) => {
     return res
       .status(500)
       .json({ error: 'Internal server error updating post' });
+  }
+});
+
+// PUT api/post/:postId/like
+router.put('/:postId/like', async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ error: 'User is not authenticated' });
+  }
+
+  try {
+    const username = req.user.username;
+    const { postId } = req.params;
+
+    const getPostParams = {
+      TableName: POST_TABLE,
+      IndexName: 'postId-index',
+      KeyConditionExpression: 'postId = :postId',
+      ExpressionAttributeValues: {
+        ':postId': postId,
+      },
+    };
+
+    const { Items } = await docClient.send(new QueryCommand(getPostParams));
+
+    if (!Items || Items.length === 0) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    const post = Items[0];
+    const { username: poster } = post;
+
+    const likeParams = {
+      TableName: POST_TABLE,
+      Key: {
+        username: poster,
+        postId: postId,
+      },
+      UpdateExpression: 'ADD likes :username',
+      ExpressionAttributeValues: {
+        ':username': new Set([username]),
+      },
+      ConditionExpression: 'attribute_exists(username)',
+    };
+
+    await docClient.send(new UpdateCommand(likeParams));
+
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    console.error('Error liking post: ', error);
+    return res.status(500).json({ error: 'Internal server error liking post' });
+  }
+});
+
+// PUT api/post/:postId/unlike
+router.put('/:postId/unlike', async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ error: 'User is not authenticated' });
+  }
+
+  try {
+    const username = req.user.username;
+    const { postId } = req.params;
+
+    const getPostParams = {
+      TableName: POST_TABLE,
+      IndexName: 'postId-index',
+      KeyConditionExpression: 'postId = :postId',
+      ExpressionAttributeValues: {
+        ':postId': postId,
+      },
+    };
+
+    const { Items } = await docClient.send(new QueryCommand(getPostParams));
+
+    if (!Items || Items.length === 0) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    const post = Items[0];
+    const { username: poster } = post;
+
+    const unlikeParams = {
+      TableName: POST_TABLE,
+      Key: {
+        username: poster,
+        postId: postId,
+      },
+      UpdateExpression: 'DELETE likes :username',
+      ExpressionAttributeValues: {
+        ':username': new Set([username]),
+      },
+    };
+
+    await docClient.send(new UpdateCommand(unlikeParams));
+
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    console.error('Error unliking post: ', error);
+    return res
+      .status(500)
+      .json({ error: 'Internal server error unliking post' });
   }
 });
 

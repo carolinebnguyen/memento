@@ -1,3 +1,4 @@
+import { getCurrentUsername } from './userUtils';
 import { mementoBackend } from './utils';
 import { PostType } from './utils';
 
@@ -73,4 +74,36 @@ const deletePost = async (postId) => {
   }
 };
 
-export { sortPostsByType, getPost, createPost, updatePost, deletePost };
+const likePost = async (postId) => {
+  try {
+    await mementoBackend.put(`/post/${postId}/like`);
+  } catch (error) {
+    throw error;
+  }
+};
+
+const unlikePost = async (postId) => {
+  try {
+    await mementoBackend.put(`/post/${postId}/unlike`);
+  } catch (error) {
+    throw error;
+  }
+};
+
+const checkIsLiked = async (postId) => {
+  const post = await getPost(postId);
+  const currentUsername = await getCurrentUsername();
+  const { likes } = post || {};
+  return Array.isArray(likes) && likes.includes(currentUsername);
+};
+
+export {
+  sortPostsByType,
+  getPost,
+  createPost,
+  updatePost,
+  deletePost,
+  likePost,
+  unlikePost,
+  checkIsLiked,
+};
