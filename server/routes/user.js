@@ -33,7 +33,12 @@ const cognitoClient = new CognitoIdentityProviderClient({
 const dynamoDBClient = new DynamoDBClient({
   region: process.env.AWS_REGION,
 });
-const docClient = DynamoDBDocumentClient.from(dynamoDBClient);
+const docClient = DynamoDBDocumentClient.from(dynamoDBClient, {
+  marshallOptions: {
+    removeUndefinedValues: true,
+    convertEmptyValues: true,
+  },
+});
 
 const s3Client = new S3Client({
   region: process.env.AWS_REGION,
@@ -322,10 +327,12 @@ router.put('/:username/unfollow', async (req, res) => {
 
   try {
     const { username } = req.params;
-    const { follower } = req.user.username;
+    const follower = req.user.username;
 
     if (username === follower) {
-      return res.status(409).json({ error: 'Users cannot follow themselves' });
+      return res
+        .status(409)
+        .json({ error: 'Users cannot unfollow themselves' });
     }
 
     const followParams = {
@@ -337,7 +344,6 @@ router.put('/:username/unfollow', async (req, res) => {
       ExpressionAttributeValues: {
         ':follower': new Set([follower]),
       },
-      ConditionExpression: 'contains(followers, :follower)',
     };
 
     const followingParams = {
@@ -349,7 +355,6 @@ router.put('/:username/unfollow', async (req, res) => {
       ExpressionAttributeValues: {
         ':username': new Set([username]),
       },
-      ConditionExpression: 'contains(following, :username)',
     };
 
     const updateFollowers = new UpdateCommand(followParams);
@@ -366,11 +371,6 @@ router.put('/:username/unfollow', async (req, res) => {
     return res.status(200).json({ success: true });
   } catch (error) {
     console.error('Error unfollowing user: ', error);
-    if (error.__type.includes('ConditionalCheckFailedException')) {
-      return res
-        .status(409)
-        .json({ error: 'User is not currently following target user' });
-    }
     return res
       .status(500)
       .json({ error: 'Internal server error unfollowing user' });

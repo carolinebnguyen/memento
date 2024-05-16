@@ -11,7 +11,11 @@ import {
 } from '@chakra-ui/react';
 import { Link, useParams } from 'react-router-dom';
 import UserModal from './UserModal';
-import { followUser, getCurrentUsername } from '../utils/userUtils';
+import {
+  followUser,
+  getCurrentUsername,
+  unfollowUser,
+} from '../utils/userUtils';
 
 export default function ProfileHeader({ profile, isFollowingUser }) {
   const [isFollowing, setIsFollowing] = useState(isFollowingUser);
@@ -50,14 +54,26 @@ export default function ProfileHeader({ profile, isFollowingUser }) {
 
   const { username: userParam } = useParams();
 
+  const getFollowAction = () => {
+    let action = 'follow';
+    if (isFollowing) {
+      action = 'unfollow';
+    }
+    return action;
+  };
+
   const toggleIsFollowing = async () => {
     try {
-      await followUser(userParam);
+      if (!isFollowing) {
+        await followUser(userParam);
+      } else {
+        await unfollowUser(userParam);
+      }
       setIsFollowing(!isFollowing);
     } catch (error) {
       toast({
         title: 'Error',
-        description: 'An error occurred while attempting to follow user',
+        description: `An error occurred while attempting to ${getFollowAction()} user`,
         status: 'error',
         duration: 3000,
         variant: 'subtle',
