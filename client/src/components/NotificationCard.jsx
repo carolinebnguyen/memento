@@ -37,7 +37,7 @@ export default function NotificationCard({ notification }) {
   };
 
   const handlePostNavigation = () => {
-    navigate(`/post?id=${postId}`);
+    navigate(`/post/${postId}`);
   };
 
   return (
