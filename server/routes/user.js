@@ -8,6 +8,7 @@ const {
   CognitoIdentityProviderClient,
   AdminUpdateUserAttributesCommand,
 } = require('@aws-sdk/client-cognito-identity-provider');
+
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const {
   DynamoDBDocumentClient,
@@ -15,7 +16,10 @@ const {
   GetCommand,
   QueryCommand,
   ScanCommand,
+  TransactWriteCommand,
 } = require('@aws-sdk/lib-dynamodb');
+const { marshall, unmarshall } = require('@aws-sdk/util-dynamodb');
+
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 
 const COGNITO_CLIENT_ID = process.env.COGNITO_CLIENT_ID;
@@ -72,9 +76,35 @@ router.get('/:username', async (req, res) => {
       posts: Items,
     };
 
+    result.user.following = Array.from(result.user?.following || []);
+    result.user.followers = Array.from(result.user?.followers || []);
+
     return res.status(200).json(result);
   } catch (error) {
     console.error('Error getting user:', error);
+    return res
+      .status(500)
+      .json({ error: 'Internal server error getting user' });
+  }
+});
+
+// GET api/user/:username/info
+router.get('/:username/info', async (req, res) => {
+  try {
+    const { username } = req.params;
+
+    const params = {
+      TableName: USER_TABLE,
+      Key: {
+        username: username,
+      },
+    };
+
+    const { Item } = await docClient.send(new GetCommand(params));
+
+    return res.status(200).json(Item);
+  } catch (error) {
+    console.error('Error getting user: ', error);
     return res
       .status(500)
       .json({ error: 'Internal server error getting user' });
@@ -223,6 +253,127 @@ router.put('/picture', upload.single('file'), async (req, res) => {
     return res
       .status(500)
       .json({ error: 'Internal server error updating user' });
+  }
+});
+
+// PUT api/user/:username/follow
+router.put('/:username/follow', async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ error: 'User is not authenticated' });
+  }
+
+  try {
+    const { username } = req.params;
+    const follower = req.user.username;
+
+    if (username === follower) {
+      return res.status(409).json({ error: 'Users cannot follow themselves' });
+    }
+
+    const followParams = {
+      TableName: USER_TABLE,
+      Key: {
+        username: username,
+      },
+      UpdateExpression: 'ADD followers :follower',
+      ExpressionAttributeValues: {
+        ':follower': new Set([follower]),
+      },
+      ConditionExpression: 'attribute_exists(username)',
+    };
+
+    const followingParams = {
+      TableName: USER_TABLE,
+      Key: {
+        username: follower,
+      },
+      UpdateExpression: 'ADD following :username',
+      ExpressionAttributeValues: {
+        ':username': new Set([username]),
+      },
+      ConditionExpression: 'attribute_exists(username)',
+    };
+
+    const updateFollowers = new UpdateCommand(followParams);
+    const updateFollowing = new UpdateCommand(followingParams);
+
+    const transactionParams = {
+      TransactItems: [
+        { Update: updateFollowers.input },
+        { Update: updateFollowing.input },
+      ],
+    };
+
+    await docClient.send(new TransactWriteCommand(transactionParams));
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    console.error('Error following user: ', error);
+    return res
+      .status(500)
+      .json({ error: 'Internal server error following user' });
+  }
+});
+
+// PUT api/user/:username/unfollow
+router.put('/:username/unfollow', async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ error: 'User is not authenticated' });
+  }
+
+  try {
+    const { username } = req.params;
+    const { follower } = req.user.username;
+
+    if (username === follower) {
+      return res.status(409).json({ error: 'Users cannot follow themselves' });
+    }
+
+    const followParams = {
+      TableName: USER_TABLE,
+      Key: {
+        username: username,
+      },
+      UpdateExpression: 'DELETE followers :follower',
+      ExpressionAttributeValues: {
+        ':follower': new Set([follower]),
+      },
+      ConditionExpression: 'contains(followers, :follower)',
+    };
+
+    const followingParams = {
+      TableName: USER_TABLE,
+      Key: {
+        username: follower,
+      },
+      UpdateExpression: 'DELETE following :username',
+      ExpressionAttributeValues: {
+        ':username': new Set([username]),
+      },
+      ConditionExpression: 'contains(following, :username)',
+    };
+
+    const updateFollowers = new UpdateCommand(followParams);
+    const updateFollowing = new UpdateCommand(followingParams);
+
+    const transactionParams = {
+      TransactItems: [
+        { Update: updateFollowers.input },
+        { Update: updateFollowing.input },
+      ],
+    };
+
+    await docClient.send(new TransactWriteCommand(transactionParams));
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    console.error('Error unfollowing user: ', error);
+    if (error.__type.includes('ConditionalCheckFailedException')) {
+      return res
+        .status(409)
+        .json({ error: 'User is not currently following target user' });
+    }
+    return res
+      .status(500)
+      .json({ error: 'Internal server error unfollowing user' });
   }
 });
 

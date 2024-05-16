@@ -28,6 +28,31 @@ const getUserProfile = async (username) => {
   }
 };
 
+const getUserInformation = async (username) => {
+  try {
+    const res = await mementoBackend.get(`/user/${username}/info`);
+    const profile = res.data;
+    return profile;
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      return null;
+    }
+    throw error;
+  }
+};
+
+const getAllUserProfiles = async (usersList) => {
+  try {
+    const profilesPromises = usersList.map((username) =>
+      getUserInformation(username)
+    );
+    const profiles = await Promise.all(profilesPromises);
+    return profiles;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const getAllUsers = async () => {
   try {
     const res = await mementoBackend.get('/user');
@@ -57,11 +82,37 @@ const updateProfilePicture = async (file) => {
   }
 };
 
+const followUser = async (username) => {
+  try {
+    await mementoBackend.put(`/user/${username}/follow`);
+  } catch (error) {
+    throw error;
+  }
+};
+
+const unfollowUser = async (username) => {
+  try {
+    await mementoBackend.put(`/user/${username}/unfollow`);
+  } catch (error) {
+    throw error;
+  }
+};
+
+const checkIsFollowing = async (username) => {
+  const { user } = await getCurrentUserProfile();
+  const { following } = user || {};
+  return Array.isArray(following) && following.includes(username);
+};
+
 export {
   getCurrentUsername,
   getCurrentUserProfile,
   getUserProfile,
+  getAllUserProfiles,
   getAllUsers,
   updateUserProfile,
   updateProfilePicture,
+  followUser,
+  unfollowUser,
+  checkIsFollowing,
 };

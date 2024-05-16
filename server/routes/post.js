@@ -109,8 +109,6 @@ router.post('/', upload.single('file'), async (req, res) => {
         type: type,
         imageSrc: imageSrc,
         text: text.trim(),
-        likes: [],
-        comments: [],
         postedAt: new Date().toISOString(),
       },
     };

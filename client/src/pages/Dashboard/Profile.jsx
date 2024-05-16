@@ -12,7 +12,7 @@ import { PhotoTab, StatusTab } from '../../components/Tabs';
 import ProfileHeader from '../../components/ProfileHeader';
 import ProfilePhotoTabContent from '../../components/ProfilePhotoTabContent';
 import ProfileStatusTabContent from '../../components/ProfileStatusTabContent';
-import { getUserProfile } from '../../utils/userUtils';
+import { checkIsFollowing, getUserProfile } from '../../utils/userUtils';
 import { sortPostsByType } from '../../utils/postUtils';
 import { useParams } from 'react-router-dom';
 import UserNotFound from '../../components/UserNotFound';
@@ -22,6 +22,7 @@ export default function Profile() {
   const [photos, setPhotos] = useState({});
   const [statuses, setStatuses] = useState({});
   const [profileState, setProfileState] = useState('LOADING');
+  const [isFollowing, setIsFollowing] = useState(false);
 
   const { username } = useParams();
 
@@ -35,6 +36,9 @@ export default function Profile() {
           setProfileState('NOT_FOUND');
           return;
         }
+
+        const isFollowingUser = await checkIsFollowing(username);
+        setIsFollowing(isFollowingUser);
 
         const { user, posts } = res;
         const { photos, statuses } = sortPostsByType(posts);
@@ -66,7 +70,7 @@ export default function Profile() {
             <UserNotFound />
           ) : (
             <>
-              <ProfileHeader profile={profile} />
+              <ProfileHeader profile={profile} isFollowingUser={isFollowing} />
               <Flex justify="center" align="center" w="100%">
                 <Tabs align="center" w="100vw">
                   <TabList role="tablist">

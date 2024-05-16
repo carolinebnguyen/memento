@@ -29,6 +29,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/**', verifyAccessToken);
 app.use('/api/user', require('./routes/user'));
 app.use('/api/post', require('./routes/post'));
+app.use('/api/notification', require('./routes/notification'));
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));

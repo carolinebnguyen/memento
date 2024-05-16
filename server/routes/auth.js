@@ -79,8 +79,6 @@ router.post('/signup', async (req, res) => {
         name,
         picture: '',
         bio: '',
-        followersList: [],
-        followingList: [],
       },
       ConditionExpression: 'attribute_not_exists(username)',
     };

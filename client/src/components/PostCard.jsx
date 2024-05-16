@@ -401,7 +401,7 @@ export default function PostCard({ post }) {
                 _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
                 onClick={handlePostNavigate}
               >
-                {comments && comments.length}{' '}
+                {(comments && comments.length) || 0}{' '}
                 {comments && comments.length === 1 ? 'comment' : 'comments'}
               </Text>
             </Stack>
