@@ -343,7 +343,7 @@ export default function PostCard({ post }) {
                 <Center>
                   <Image
                     src={imageSrc}
-                    my={3}
+                    mt={3}
                     boxSize={500}
                     objectFit="cover"
                   />
@@ -354,7 +354,7 @@ export default function PostCard({ post }) {
               </Text>
             </>
           )}
-          <Flex justify="space-between">
+          <Flex justify="space-between" mt={2}>
             <Stack direction="row" gap={0}>
               <Button
                 size="xs"

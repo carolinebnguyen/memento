@@ -33,6 +33,8 @@ export default function ProfileHeader({ profile, isFollowingUser }) {
     statusCount,
   } = profile;
 
+  const [followersList, setFollowersList] = useState(followers);
+
   useEffect(() => {
     const fetchCurrentUsername = async () => {
       const currentUsername = await getCurrentUsername();
@@ -66,8 +68,15 @@ export default function ProfileHeader({ profile, isFollowingUser }) {
     try {
       if (!isFollowing) {
         await followUser(userParam);
+        setFollowersList((followersList) => [
+          ...followersList,
+          currentUsername,
+        ]);
       } else {
         await unfollowUser(userParam);
+        setFollowersList((followersList) =>
+          followersList.filter((follower) => follower !== currentUsername)
+        );
       }
       setIsFollowing(!isFollowing);
     } catch (error) {
@@ -142,16 +151,18 @@ export default function ProfileHeader({ profile, isFollowingUser }) {
             onClick={onOpenFollower}
           >
             <Text as="b" fontSize="sm">
-              {(followers && followers.length) || 0}
+              {(followersList && followersList.length) || 0}
             </Text>
             <Text fontSize="sm" fontWeight={500}>
-              {followers && followers.length === 1 ? 'follower' : 'followers'}
+              {followersList && followersList.length === 1
+                ? 'follower'
+                : 'followers'}
             </Text>
             <UserModal
               isOpen={isOpenFollower}
               onClose={onCloseFollower}
               title="Followers"
-              usersList={followers}
+              usersList={followersList}
             />
           </Stack>
           <Stack
