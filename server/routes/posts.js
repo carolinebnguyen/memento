@@ -163,29 +163,31 @@ router.get('/', async (req, res) => {
       },
     };
 
-    const { Responses } = await docClient.send(
-      new BatchGetCommand(batchGetUserParams)
-    );
-    const userProfiles = Responses[USER_TABLE].reduce((acc, user) => {
-      acc[user.username] = {
-        picture: user.picture,
-        name: user.name,
-      };
-      return acc;
-    }, {});
+    if (uniqueUsernames.size > 0) {
+      const { Responses } = await docClient.send(
+        new BatchGetCommand(batchGetUserParams)
+      );
+      const userProfiles = Responses[USER_TABLE].reduce((acc, user) => {
+        acc[user.username] = {
+          picture: user.picture,
+          name: user.name,
+        };
+        return acc;
+      }, {});
 
-    posts.forEach((post) => {
-      post.comments = Array.from(post?.comments || new Set());
-      post.likes = Array.from(post?.likes || new Set());
-      if (post.likes.length > 0) {
-        post.likes = post.likes.map((username) => ({
-          username,
-          picture: userProfiles[username].picture,
-          name: userProfiles[username].name,
-        }));
-      }
-      post.profilePicture = userProfiles[post.username]?.picture;
-    });
+      posts.forEach((post) => {
+        post.comments = Array.from(post?.comments || new Set());
+        post.likes = Array.from(post?.likes || new Set());
+        if (post.likes.length > 0) {
+          post.likes = post.likes.map((username) => ({
+            username,
+            picture: userProfiles[username].picture,
+            name: userProfiles[username].name,
+          }));
+        }
+        post.profilePicture = userProfiles[post.username]?.picture;
+      });
+    }
 
     return posts;
   }

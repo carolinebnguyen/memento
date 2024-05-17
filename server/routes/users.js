@@ -106,36 +106,39 @@ router.get('/:username', async (req, res) => {
       },
     };
 
-    const { Responses } = await docClient.send(
-      new BatchGetCommand(batchGetUserParams)
-    );
-    const userProfiles = Responses[USER_TABLE].reduce((acc, user) => {
-      acc[user.username] = {
-        picture: user.picture,
-        name: user.name,
-      };
-      return acc;
-    }, {});
+    if (uniqueUsernames.size > 0) {
+      const { Responses } = await docClient.send(
+        new BatchGetCommand(batchGetUserParams)
+      );
 
-    user.following = user.following.map((username) => ({
-      username,
-      picture: userProfiles[username].picture,
-      name: userProfiles[username].name,
-    }));
+      const userProfiles = Responses[USER_TABLE].reduce((acc, user) => {
+        acc[user.username] = {
+          picture: user.picture,
+          name: user.name,
+        };
+        return acc;
+      }, {});
 
-    user.followers = user.followers.map((username) => ({
-      username,
-      picture: userProfiles[username].picture,
-      name: userProfiles[username].name,
-    }));
-
-    posts.forEach((post) => {
-      post.likes = post.likes.map((username) => ({
+      user.following = user.following.map((username) => ({
         username,
         picture: userProfiles[username].picture,
         name: userProfiles[username].name,
       }));
-    });
+
+      user.followers = user.followers.map((username) => ({
+        username,
+        picture: userProfiles[username].picture,
+        name: userProfiles[username].name,
+      }));
+
+      posts.forEach((post) => {
+        post.likes = post.likes.map((username) => ({
+          username,
+          picture: userProfiles[username].picture,
+          name: userProfiles[username].name,
+        }));
+      });
+    }
 
     const result = {
       user,
