@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -9,10 +9,20 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import userNotFoundDog from '../assets/userNotFoundDog.jpg';
+import { getErrorContent } from '../utils/utils';
 
-export default function UserNotFound() {
+export default function ErrorComponent({ errorType }) {
   const navigate = useNavigate();
+  const [errorContent, setErrorContent] = useState(() =>
+    getErrorContent(errorType)
+  );
+
+  useEffect(() => {
+    setErrorContent(getErrorContent(errorType));
+  }, [errorType]);
+
+  const { code, statusReason, errorMessage, imageSrc, altText, credits } =
+    errorContent;
 
   const handleBackClick = () => {
     if (window.history.length > 1) {
@@ -27,23 +37,23 @@ export default function UserNotFound() {
       <Flex direction="column">
         <Box align="center" justify="center" p={5}>
           <Heading as="h1" size="4xl">
-            404
+            {code}
           </Heading>
-          <Text fontSize="5xl">User Not Found</Text>
-          <Text fontSize="xl">Oops! We couldn't find that user.</Text>
+          <Text fontSize="5xl">{statusReason}</Text>
+          <Text fontSize="xl">{errorMessage}</Text>
           <Button m={5} colorScheme="blue" onClick={handleBackClick}>
             Go Back
           </Button>
         </Box>
         <VStack>
           <Image
-            src={userNotFoundDog}
+            src={imageSrc}
             boxSize="500px"
             objectFit="cover"
             objectPosition="center"
-            alt="Pomeranian with scarf"
+            alt={altText}
           />
-          <Text as="i">Source: RudyPongki</Text>
+          {credits && <Text as="i">Source: {credits}</Text>}
         </VStack>
       </Flex>
     </Flex>

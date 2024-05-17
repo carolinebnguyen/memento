@@ -2,6 +2,10 @@ import { formatDistanceToNow } from 'date-fns';
 import { format } from 'date-fns-tz';
 import axios from 'axios';
 
+import postNotFoundDog from '../assets/postNotFoundDog.jpg';
+import userNotFoundDog from '../assets/userNotFoundDog.jpg';
+import serverErrorCat from '../assets/serverErrorCat.jpg';
+
 const mementoBackend = axios.create({
   baseURL: '/api',
   withCredentials: true,
@@ -88,6 +92,37 @@ const getLikeAction = (isLiked) => {
   return action;
 };
 
+const errorContentMap = {
+  POST: {
+    code: '404',
+    statusReason: 'Post Not Found',
+    errorMessage: `Oops! We couldn't find that post.`,
+    imageSrc: postNotFoundDog,
+    altText: 'Pomeranian with Santa hat',
+    credits: 'RudyPongki',
+  },
+  USER: {
+    code: '404',
+    statusReason: 'User Not Found',
+    errorMessage: `Oops! We couldn't find that user.`,
+    imageSrc: userNotFoundDog,
+    altText: 'Pomeranian with scarf',
+    credits: 'RudyPongki',
+  },
+  SERVER: {
+    code: '500',
+    statusReason: 'Internal Server Error',
+    errorMessage: `Oops! We're experiencing technical difficulties. Please try again later.`,
+    imageSrc: serverErrorCat,
+    altText: 'Cat with glasses sitting at laptop',
+    credits: '',
+  },
+};
+
+const getErrorContent = (errorType) => {
+  return errorContentMap[errorType];
+};
+
 export {
   mementoBackend,
   formatDateDistanceToNow,
@@ -100,4 +135,5 @@ export {
   PostType,
   getFollowAction,
   getLikeAction,
+  getErrorContent,
 };

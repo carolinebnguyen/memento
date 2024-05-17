@@ -15,7 +15,7 @@ import ProfileStatusTabContent from '../../components/ProfileStatusTabContent';
 import { checkIsFollowing, getUserProfile } from '../../utils/userUtils';
 import { sortPostsByType } from '../../utils/postUtils';
 import { useParams } from 'react-router-dom';
-import UserNotFound from '../../components/UserNotFound';
+import ErrorComponent from '../../components/ErrorComponent';
 
 export default function Profile() {
   const [profile, setProfile] = useState({});
@@ -67,7 +67,7 @@ export default function Profile() {
       ) : (
         <>
           {profileState === 'NOT_FOUND' ? (
-            <UserNotFound />
+            <ErrorComponent errorType="USER" />
           ) : (
             <>
               <ProfileHeader profile={profile} isFollowingUser={isFollowing} />
