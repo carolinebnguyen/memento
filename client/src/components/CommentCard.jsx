@@ -19,15 +19,16 @@ import { useNavigate } from 'react-router-dom';
 import ConfirmationModal from './ConfirmationModal';
 import CommentMenu from './CommentMenu';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { deleteComment } from '../utils/commentUtils';
 
 export default function CommentCard({ poster, comment, currentUser }) {
-  const { username, text, postedAt } = comment;
+  const { username, text, postedAt, picture, commentId } = comment;
   const navigate = useNavigate();
   const [isCommentVisible, setIsCommentVisible] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
-  const { username: currentUsername, picture } = currentUser;
+  const { username: currentUsername } = currentUser;
 
   const [isEditable, setIsEditable] = useState(false);
   const [editedComment, setEditedComment] = useState(text);
@@ -39,21 +40,35 @@ export default function CommentCard({ poster, comment, currentUser }) {
     navigate(`/profile/${username}`);
   };
 
-  const confirmDeleteComment = () => {
-    setTimeout(() => {
-      setIsCommentVisible(false);
-      onClose();
+  const confirmDeleteComment = async () => {
+    try {
+      await deleteComment(commentId);
+      setTimeout(() => {
+        setIsCommentVisible(false);
+        onClose();
+        toast({
+          title: 'Comment Deleted',
+          description: 'The comment has been deleted',
+          status: 'success',
+          variant: 'subtle',
+          position: 'top',
+          containerStyle: {
+            zIndex: '9999',
+          },
+        });
+      }, 500);
+    } catch (error) {
       toast({
-        title: 'Comment Deleted',
-        description: 'The comment has been deleted',
-        status: 'success',
+        title: 'Error',
+        description: 'The comment could not be deleted',
+        status: 'error',
         variant: 'subtle',
         position: 'top',
         containerStyle: {
           zIndex: '9999',
         },
       });
-    }, 500);
+    }
   };
 
   const toggleEditMode = () => {

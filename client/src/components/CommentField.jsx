@@ -7,21 +7,37 @@ import {
   Button,
   HStack,
 } from '@chakra-ui/react';
+import { postComment } from '../utils/commentUtils';
 
-export default function CommentField({ addComment, currentUser }) {
+export default function CommentField({
+  postId,
+  poster,
+  addComment,
+  currentUser,
+}) {
   const [commentText, setCommentText] = useState('');
   const { username, picture } = currentUser;
 
-  const handleSubmit = () => {
-    if (commentText.trim() !== '') {
-      const newComment = {
-        username: username,
-        text: commentText.trim(),
-        postedAt: new Date().toISOString(),
-      };
-      addComment(newComment);
-      setCommentText('');
+  const handleSubmit = async () => {
+    try {
+      await postComment(commentText, postId, poster);
+      if (commentText.trim() !== '') {
+        const newComment = {
+          picture: picture,
+          username: username,
+          text: commentText.trim(),
+          postedAt: new Date().toISOString(),
+        };
+        addComment(newComment);
+        setCommentText('');
+      }
+    } catch (error) {
+      console.log('error creating post: ', error);
     }
+  };
+
+  const handleCancel = () => {
+    setCommentText('');
   };
 
   return (
@@ -40,7 +56,9 @@ export default function CommentField({ addComment, currentUser }) {
         </Stack>
         {commentText && (
           <HStack display="flex" justify="flex-end" mb={2}>
-            <Button size="xs">Cancel</Button>
+            <Button size="xs" onClick={handleCancel}>
+              Cancel
+            </Button>
             <Button size="xs" colorScheme="blue" onClick={handleSubmit}>
               Comment
             </Button>

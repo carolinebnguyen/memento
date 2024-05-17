@@ -80,7 +80,6 @@ router.get('/:username', async (req, res) => {
     user.following = Array.from(user?.following || new Set());
     user.followers = Array.from(user?.followers || new Set());
     posts.forEach((post) => {
-      post.comments = Array.from(post?.comments || []);
       post.likes = Array.from(post?.likes || new Set());
       post.profilePicture = user.picture;
     });

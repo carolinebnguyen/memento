@@ -24,6 +24,7 @@ const {
 
 const USER_TABLE = 'User';
 const POST_TABLE = 'Post';
+const COMMENT_TABLE = 'Comment';
 
 const dynamoDBClient = new DynamoDBClient({
   region: process.env.AWS_REGION,
@@ -64,17 +65,40 @@ router.get('/:postId', async (req, res) => {
     }
 
     const post = Items[0];
-
-    post.comments = Array.from(post?.comments || []);
     post.likes = Array.from(post?.likes || new Set());
 
-    const uniqueUsernames = new Set([...post.likes]);
+    const commentParams = {
+      TableName: COMMENT_TABLE,
+      IndexName: 'postId-index',
+      KeyConditionExpression: 'postId = :postId',
+      ExpressionAttributeValues: {
+        ':postId': postId,
+      },
+    };
+
+    const { Items: commentItems } = await docClient.send(
+      new QueryCommand(commentParams)
+    );
+
+    let comments = commentItems;
+
+    const uniqueUsernames = new Set();
+
+    if (post.likes && post.likes.length > 0) {
+      post.likes.forEach((username) => {
+        uniqueUsernames.add(username);
+      });
+    }
+
+    comments.forEach((comment) => {
+      uniqueUsernames.add(comment.username);
+    });
 
     if (uniqueUsernames.size > 0) {
       const batchGetUserParams = {
         RequestItems: {
           [USER_TABLE]: {
-            Keys: Array.from(post.likes).map((username) => ({
+            Keys: Array.from(uniqueUsernames).map((username) => ({
               username: username,
             })),
             ProjectionExpression: 'username, picture, #name',
@@ -88,6 +112,7 @@ router.get('/:postId', async (req, res) => {
       const { Responses } = await docClient.send(
         new BatchGetCommand(batchGetUserParams)
       );
+
       const userProfiles = Responses[USER_TABLE].reduce((acc, user) => {
         acc[user.username] = {
           picture: user.picture,
@@ -101,6 +126,13 @@ router.get('/:postId', async (req, res) => {
         picture: userProfiles[username].picture,
         name: userProfiles[username].name,
       }));
+
+      comments = Object.values(comments).map((comment) => ({
+        ...comment,
+        username: comment.username,
+        picture: userProfiles[comment.username].picture,
+        name: userProfiles[comment.username].name,
+      }));
     }
 
     const userParams = {
@@ -113,6 +145,7 @@ router.get('/:postId', async (req, res) => {
     const { Item: user } = await docClient.send(new GetCommand(userParams));
 
     post.profilePicture = user.picture;
+    post.comments = comments;
 
     return res.status(200).json(post);
   } catch (error) {
@@ -180,7 +213,6 @@ router.get('/', async (req, res) => {
       }, {});
 
       posts.forEach((post) => {
-        post.comments = Array.from(post?.comments || new Set());
         post.likes = Array.from(post?.likes || new Set());
         if (post.likes.length > 0) {
           post.likes = post.likes.map((username) => ({
@@ -266,6 +298,7 @@ router.post('/', upload.single('file'), async (req, res) => {
         imageSrc: imageSrc,
         text: text.trim(),
         postedAt: new Date().toISOString(),
+        commentCount: 0,
       },
     };
 

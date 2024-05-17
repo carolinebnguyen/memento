@@ -4,10 +4,11 @@ import PostCard from './PostCard';
 import CommentCard from './CommentCard';
 import CommentField from './CommentField';
 import { getCurrentUserProfile } from '../utils/userUtils';
+import { sortComments } from '../utils/commentUtils';
 
 export default function PostContent({ post, onRemovePost }) {
   const { postId, username, comments } = post;
-  const [newComments, setNewComments] = useState(comments);
+  const [newComments, setNewComments] = useState(sortComments(comments) || []);
   const [currentUser, setCurrentUser] = useState({});
 
   useEffect(() => {
@@ -33,7 +34,12 @@ export default function PostContent({ post, onRemovePost }) {
     <Flex direction="column" justify="center" align="center" w="100%">
       <PostCard post={post} removePost={handleDeletePost} />
       <Divider my={3} />
-      <CommentField addComment={handleAddComment} currentUser={currentUser} />
+      <CommentField
+        postId={postId}
+        poster={username}
+        addComment={handleAddComment}
+        currentUser={currentUser}
+      />
       {newComments.length > 0
         ? newComments.map((comment, index) => (
             <Box key={`${postId}-${index}`} w="full">

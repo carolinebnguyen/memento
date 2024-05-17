@@ -77,7 +77,7 @@ router.post('/', async (req, res) => {
 
   try {
     const username = req.user.username;
-    const { text, postId } = req.body;
+    const { text, postId, poster } = req.body;
 
     const commentId = crypto.randomUUID();
 
@@ -93,6 +93,25 @@ router.post('/', async (req, res) => {
     };
 
     await docClient.send(new PutCommand(commentParams));
+
+    const postParams = {
+      TableName: POST_TABLE,
+      Key: {
+        username: poster,
+        postId: postId,
+      },
+      UpdateExpression:
+        'SET #commentCount = if_not_exists(#commentCount, :zero) + :inc',
+      ExpressionAttributeNames: {
+        '#commentCount': 'commentCount',
+      },
+      ExpressionAttributeValues: {
+        ':inc': 1,
+        ':zero': 0,
+      },
+    };
+
+    await docClient.send(new UpdateCommand(postParams));
 
     return res.status(200).json({ success: true });
   } catch (error) {
@@ -128,27 +147,9 @@ router.put('/:commentId', async (req, res) => {
         ':text': text.trim(),
         ':username': username,
       },
-      ReturnValues: 'ALL_NEW',
     };
 
-    const result = await docClient.send(new UpdateCommand(commentParams));
-    const postId = result.Attributes.postId;
-
-    const postParams = {
-      TableName: POST_TABLE,
-      Key: {
-        postId: postId,
-      },
-      UpdateExpression: 'SET #commentCount = #commentCount + :inc',
-      ExpressionAttributeNames: {
-        '#commentCount': 'commentCount',
-      },
-      ExpressionAttributeValues: {
-        ':inc': 1,
-      },
-    };
-
-    await docClient.send(new UpdateCommand(postParams));
+    await docClient.send(new UpdateCommand(commentParams));
 
     return res.status(200).json({ success: true });
   } catch (error) {
@@ -168,6 +169,21 @@ router.delete('/:commentId', async (req, res) => {
     const username = req.user.username;
     const { commentId } = req.params;
 
+    const checkComment = {
+      TableName: COMMENT_TABLE,
+      Key: {
+        commentId: commentId,
+      },
+    };
+
+    const { Item } = await docClient.send(new GetCommand(checkComment));
+
+    if (!Item) {
+      return res.status(404).json({ error: 'Comment not found' });
+    }
+
+    const { postId } = Item;
+
     const commentParams = {
       TableName: COMMENT_TABLE,
       Key: {
@@ -177,9 +193,27 @@ router.delete('/:commentId', async (req, res) => {
 
     await docClient.send(new DeleteCommand(commentParams));
 
-    const postParams = {
+    const getPostParams = {
+      TableName: POST_TABLE,
+      IndexName: 'postId-index',
+      KeyConditionExpression: 'postId = :postId',
+      ExpressionAttributeValues: {
+        ':postId': postId,
+      },
+    };
+
+    const { Items } = await docClient.send(new QueryCommand(getPostParams));
+
+    if (!Items || Items.length === 0) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    const post = Items[0];
+
+    const updatePostParams = {
       TableName: POST_TABLE,
       Key: {
+        username: post.username,
         postId: postId,
       },
       UpdateExpression: 'SET #commentCount = #commentCount - :dec',
@@ -191,7 +225,7 @@ router.delete('/:commentId', async (req, res) => {
       },
     };
 
-    await docClient.send(new UpdateCommand(postParams));
+    await docClient.send(new UpdateCommand(updatePostParams));
 
     return res.status(200).json({ success: true });
   } catch (error) {
