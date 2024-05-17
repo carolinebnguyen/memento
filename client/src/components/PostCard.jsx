@@ -190,7 +190,11 @@ export default function PostCard({ post }) {
       } else {
         await unlikePost(postId);
         setModifiedLikes(
-          modifiedLikes.filter((user) => user.username !== currentUsername)
+          modifiedLikes.filter(
+            (user) =>
+              (typeof user === 'string' ? user : user.username) !==
+              currentUsername
+          )
         );
       }
       setIsLiked(!isLiked);
