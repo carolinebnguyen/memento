@@ -68,36 +68,40 @@ router.get('/:postId', async (req, res) => {
     post.comments = Array.from(post?.comments || []);
     post.likes = Array.from(post?.likes || new Set());
 
-    const batchGetUserParams = {
-      RequestItems: {
-        [USER_TABLE]: {
-          Keys: Array.from(post.likes).map((username) => ({
-            username: username,
-          })),
-          ProjectionExpression: 'username, picture, #name',
-          ExpressionAttributeNames: {
-            '#name': 'name',
+    const uniqueUsernames = new Set([...post.likes]);
+
+    if (uniqueUsernames.size > 0) {
+      const batchGetUserParams = {
+        RequestItems: {
+          [USER_TABLE]: {
+            Keys: Array.from(post.likes).map((username) => ({
+              username: username,
+            })),
+            ProjectionExpression: 'username, picture, #name',
+            ExpressionAttributeNames: {
+              '#name': 'name',
+            },
           },
         },
-      },
-    };
-
-    const { Responses } = await docClient.send(
-      new BatchGetCommand(batchGetUserParams)
-    );
-    const userProfiles = Responses[USER_TABLE].reduce((acc, user) => {
-      acc[user.username] = {
-        picture: user.picture,
-        name: user.name,
       };
-      return acc;
-    }, {});
 
-    post.likes = post.likes.map((username) => ({
-      username,
-      picture: userProfiles[username].picture,
-      name: userProfiles[username].name,
-    }));
+      const { Responses } = await docClient.send(
+        new BatchGetCommand(batchGetUserParams)
+      );
+      const userProfiles = Responses[USER_TABLE].reduce((acc, user) => {
+        acc[user.username] = {
+          picture: user.picture,
+          name: user.name,
+        };
+        return acc;
+      }, {});
+
+      post.likes = post.likes.map((username) => ({
+        username,
+        picture: userProfiles[username].picture,
+        name: userProfiles[username].name,
+      }));
+    }
 
     const userParams = {
       TableName: USER_TABLE,
