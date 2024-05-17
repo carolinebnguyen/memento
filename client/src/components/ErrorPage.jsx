@@ -24,28 +24,30 @@ export default function ErrorPage() {
 
   return (
     <Flex align="center" justify="center" h="100vh" direction="column">
-      <Box align="center" justify="center" p={5}>
-        <Heading as="h1" size="4xl">
-          404
-        </Heading>
-        <Text fontSize="5xl">Page Not Found</Text>
-        <Text fontSize="xl">
-          Oops! The page you are looking for was not found.
-        </Text>
-        <Button m={5} colorScheme="blue" onClick={handleBackClick}>
-          Go Back
-        </Button>
-      </Box>
-      <VStack>
-        <Image
-          src={notFoundDog}
-          boxSize="500px"
-          objectFit="cover"
-          objectPosition="center"
-          alt="Pomeranian with Santa hat"
-        />
-        <Text as="i">Source: missyminzi</Text>
-      </VStack>
+      <Flex direction="column">
+        <Box align="center" justify="center" p={5}>
+          <Heading as="h1" size="4xl">
+            404
+          </Heading>
+          <Text fontSize="5xl">Page Not Found</Text>
+          <Text fontSize="xl">
+            Oops! The page you are looking for could not be found.
+          </Text>
+          <Button m={5} colorScheme="blue" onClick={handleBackClick}>
+            Go Back
+          </Button>
+        </Box>
+        <VStack>
+          <Image
+            src={notFoundDog}
+            boxSize="500px"
+            objectFit="cover"
+            objectPosition="center"
+            alt="Pomeranian with Santa hat"
+          />
+          <Text as="i">Source: missyminzi</Text>
+        </VStack>
+      </Flex>
     </Flex>
   );
 }

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import PostContent from '../../components/PostContent';
 import PostNotFound from '../../components/PostNotFound';
 import { getPost } from '../../utils/postUtils';
+import InternalServerError from '../../components/InternalServerError';
 
 export default function Post() {
   const { postId } = useParams();
@@ -25,7 +26,7 @@ export default function Post() {
         setPost(res);
         setPageState('DONE');
       } catch (error) {
-        setPageState('NOT_FOUND');
+        setPageState('ERROR');
       }
     };
     fetchPost();
@@ -40,6 +41,8 @@ export default function Post() {
       );
     case 'NOT_FOUND':
       return <PostNotFound />;
+    case 'ERROR':
+      return <InternalServerError />;
     default:
       return (
         <Flex direction="column" justify="center" align="center">

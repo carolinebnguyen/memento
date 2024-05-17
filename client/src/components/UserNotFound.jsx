@@ -30,7 +30,7 @@ export default function UserNotFound() {
             404
           </Heading>
           <Text fontSize="5xl">User Not Found</Text>
-          <Text fontSize="xl">Oops! No account with that username exists.</Text>
+          <Text fontSize="xl">Oops! We couldn't find that user.</Text>
           <Button m={5} colorScheme="blue" onClick={handleBackClick}>
             Go Back
           </Button>

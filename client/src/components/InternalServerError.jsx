@@ -9,9 +9,9 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import postNotFoundDog from '../assets/postNotFoundDog.jpg';
+import serverErrorCat from '../assets/serverErrorCat.jpg';
 
-export default function PostNotFound() {
+export default function InternalServerError() {
   const navigate = useNavigate();
 
   const handleBackClick = () => {
@@ -27,23 +27,25 @@ export default function PostNotFound() {
       <Flex direction="column">
         <Box align="center" justify="center" p={5}>
           <Heading as="h1" size="4xl">
-            404
+            500
           </Heading>
-          <Text fontSize="5xl">Post Not Found</Text>
-          <Text fontSize="xl">Oops! We couldn't find that post.</Text>
+          <Text fontSize="5xl">Internal Server Error</Text>
+          <Text fontSize="xl">
+            Oops! We're experiencing technical difficulties. Please try again
+            later.
+          </Text>
           <Button m={5} colorScheme="blue" onClick={handleBackClick}>
             Go Back
           </Button>
         </Box>
         <VStack>
           <Image
-            src={postNotFoundDog}
+            src={serverErrorCat}
             boxSize="500px"
             objectFit="cover"
             objectPosition="center"
-            alt="Pomeranian with Santa hat"
+            alt="Cat with glasses sitting at laptop"
           />
-          <Text as="i">Source: RudyPongki</Text>
         </VStack>
       </Flex>
     </Flex>
