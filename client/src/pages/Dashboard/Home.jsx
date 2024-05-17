@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Flex,
   Tabs,
@@ -36,6 +36,24 @@ export default function Home() {
     fetchAllPosts();
   }, []);
 
+  const handleDeletePost = useCallback(
+    (postId) => {
+      const updatedAllPosts = allPosts.filter((post) => post.postId !== postId);
+      setAllPosts(updatedAllPosts);
+
+      const updatedPhotos = updatedAllPosts.filter(
+        (post) => post.type === PostType.PHOTO
+      );
+      setPhotos(updatedPhotos);
+
+      const updatedStatuses = updatedAllPosts.filter(
+        (post) => post.type === PostType.STATUS
+      );
+      setStatuses(updatedStatuses);
+    },
+    [allPosts]
+  );
+
   switch (pageState) {
     case 'LOADING':
       return (
@@ -59,18 +77,21 @@ export default function Home() {
                 <HomePostTabContent
                   postList={allPosts}
                   postType={PostType.POST}
+                  onPostDelete={handleDeletePost}
                 />
               </TabPanel>
               <TabPanel role="tabpanel">
                 <HomePostTabContent
                   postList={photos}
                   postType={PostType.PHOTO}
+                  onPostDelete={handleDeletePost}
                 />
               </TabPanel>
               <TabPanel role="tabpanel">
                 <HomePostTabContent
                   postList={statuses}
                   postType={PostType.STATUS}
+                  onPostDelete={handleDeletePost}
                 />
               </TabPanel>
             </TabPanels>

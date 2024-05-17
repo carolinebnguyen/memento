@@ -1,9 +1,20 @@
-import React from 'react';
-import { Flex, Divider, Text, Box } from '@chakra-ui/react';
+import React, { useCallback } from 'react';
+import { Flex, Text, Box } from '@chakra-ui/react';
 import PostCard from './PostCard';
 import { PostType } from '../utils/utils';
 
-export default function HomePostTabContent({ postList, postType }) {
+export default function HomePostTabContent({
+  postList,
+  postType,
+  onPostDelete,
+}) {
+  const removePostById = useCallback(
+    (postId) => {
+      onPostDelete(postId);
+    },
+    [onPostDelete]
+  );
+
   const getPluralForm = (postType) => {
     let suffix = 's';
     if (postType === PostType.STATUS) {
@@ -17,8 +28,11 @@ export default function HomePostTabContent({ postList, postType }) {
       {postList.length > 0 ? (
         postList.map((post, index, array) => (
           <Box key={post.postId}>
-            <PostCard post={post} />
-            {index !== array.length - 1 && <Divider my={3} />}
+            <PostCard
+              post={post}
+              hasDivider={index !== array.length - 1}
+              removePost={removePostById}
+            />
           </Box>
         ))
       ) : (
