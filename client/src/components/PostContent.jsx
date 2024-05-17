@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Divider, Flex } from '@chakra-ui/react';
 import PostCard from './PostCard';
 import CommentCard from './CommentCard';
 import CommentField from './CommentField';
 import { getCurrentUserProfile } from '../utils/userUtils';
 
-export default function PostContent({ post }) {
+export default function PostContent({ post, onRemovePost }) {
   const { postId, username, comments } = post;
   const [newComments, setNewComments] = useState(comments);
   const [currentUser, setCurrentUser] = useState({});
@@ -18,13 +18,20 @@ export default function PostContent({ post }) {
     fetchCurrentUser();
   }, []);
 
+  const handleDeletePost = useCallback(
+    (postId) => {
+      onRemovePost('NOT_FOUND');
+    },
+    [onRemovePost]
+  );
+
   const handleAddComment = (comment) => {
     setNewComments((prevComments) => [...prevComments, comment]);
   };
 
   return (
     <Flex direction="column" justify="center" align="center" w="100%">
-      <PostCard post={post} />
+      <PostCard post={post} removePost={handleDeletePost} />
       <Divider my={3} />
       <CommentField addComment={handleAddComment} currentUser={currentUser} />
       {newComments.length > 0

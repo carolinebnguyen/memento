@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Center, Flex, Spinner } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import PostContent from '../../components/PostContent';
@@ -31,6 +31,13 @@ export default function Post() {
     fetchPost();
   }, [postId]);
 
+  const handleDeletePost = useCallback(
+    (state) => {
+      setPageState(state);
+    },
+    [setPageState]
+  );
+
   switch (pageState) {
     case 'LOADING':
       return (
@@ -45,7 +52,7 @@ export default function Post() {
     default:
       return (
         <Flex direction="column" justify="center" align="center">
-          <PostContent post={post} />
+          <PostContent post={post} onRemovePost={handleDeletePost} />
         </Flex>
       );
   }
