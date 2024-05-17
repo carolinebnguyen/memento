@@ -48,13 +48,14 @@ export default function Search() {
           error.response?.data?.error ?? 'An unexpected error occurred';
         setAlertMessage(errorMessage);
         setIsAlertVisible(true);
-        return;
       }
     };
     fetchAllUsers();
   }, []);
 
   const handleSearch = () => {
+    setSearched(true);
+
     if (isAlertVisible) {
       return;
     }
@@ -67,7 +68,6 @@ export default function Search() {
     }
 
     resetAlert();
-    setSearched(true);
   };
 
   const handleClearSearch = () => {
@@ -106,7 +106,7 @@ export default function Search() {
         </InputRightElement>
       </InputGroup>
       {searched && (
-        <Flex direction="column" mt={4} w="full">
+        <Flex direction="column" mt={isAlertVisible ? 4 : 8} w="full">
           {searchResults.length > 0 ? (
             searchResults.map((user, index) => (
               <Box key={user.username} mb={4}>
