@@ -39,7 +39,7 @@ export default function CommentField({ addComment, currentUser }) {
           />
         </Stack>
         {commentText && (
-          <HStack display="flex" justify="flex-end">
+          <HStack display="flex" justify="flex-end" mb={2}>
             <Button size="xs">Cancel</Button>
             <Button size="xs" colorScheme="blue" onClick={handleSubmit}>
               Comment
