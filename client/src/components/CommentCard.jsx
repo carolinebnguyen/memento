@@ -65,7 +65,7 @@ export default function CommentCard({ poster, comment, currentUser }) {
   };
 
   const onSubmit = (values, { setSubmitting }) => {
-    if (values.text === '') {
+    if (values.text.trim() === '') {
       onOpen();
     } else {
       setTimeout(() => {

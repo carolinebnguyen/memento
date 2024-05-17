@@ -30,6 +30,7 @@ app.use('/api/**', verifyAccessToken);
 app.use('/api/users', require('./routes/users'));
 app.use('/api/posts', require('./routes/posts'));
 app.use('/api/notifications', require('./routes/notifications'));
+app.use('/api/comments', require('./routes/comments'));
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
