@@ -12,7 +12,7 @@ import {
   Avatar,
   Text,
 } from '@chakra-ui/react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { MdLogout, MdOutlineSettings } from 'react-icons/md';
 import logo from '../assets/logoBlack.png';
 import {
@@ -20,21 +20,25 @@ import {
   logOutUser,
   setUserLoggedOut,
 } from '../utils/authUtils';
-import caroline from '../assets/placeholders/carolineAvatarClear.png';
 import styles from '../components/BottomNav/BottomNav.module.css';
-import { getCurrentUsername } from '../utils/userUtils';
+import { getCurrentUserProfile } from '../utils/userUtils';
 
 export default function Navbar() {
   const isLoggedIn = isUserLoggedIn();
   const navigate = useNavigate();
-  const [currentUsername, setCurrentUsername] = useState('');
+  const [currentUser, setCurrentUser] = useState({});
+  const { username, picture } = currentUser;
 
   useEffect(() => {
-    const fetchCurrentUsername = async () => {
-      const username = await getCurrentUsername();
-      setCurrentUsername(username);
+    const fetchCurrentUser = async () => {
+      try {
+        const { user } = await getCurrentUserProfile();
+        setCurrentUser(user);
+      } catch (error) {
+        return;
+      }
     };
-    fetchCurrentUsername();
+    fetchCurrentUser();
   }, []);
 
   const handleLogout = async () => {
@@ -66,28 +70,32 @@ export default function Navbar() {
         <Menu>
           <MenuButton
             as={Avatar}
-            src={caroline}
+            src={picture}
             cursor="pointer"
             variant="ghost"
           />
           <MenuList>
             <MenuItem
-              as="a"
-              href={`/profile/${currentUsername}`}
+              as={NavLink}
+              to={`/profile/${username}`}
               className={styles['menu-link']}
             >
               <Image
                 boxSize="3rem"
                 borderRadius="full"
-                src={caroline}
-                alt="User profile picture"
-                mr={2}
+                objectFit="cover"
+                src={picture}
+                mr={4}
                 size="lg"
               />
               <Text>My Profile</Text>
             </MenuItem>
             <MenuDivider />
-            <MenuItem as="a" href="/settings" className={styles['menu-link']}>
+            <MenuItem
+              as={NavLink}
+              to="/settings"
+              className={styles['menu-link']}
+            >
               <Icon as={MdOutlineSettings} boxSize={5} mr={3} />
               Settings
             </MenuItem>

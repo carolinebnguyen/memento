@@ -22,26 +22,30 @@ import {
 import { FaRegUser, FaUser, FaSearch, FaRegBell, FaBell } from 'react-icons/fa';
 import { FiPlusCircle } from 'react-icons/fi';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import { useNavigate, useParams } from 'react-router-dom';
-import caroline from '../../assets/placeholders/carolineAvatarClear.png';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { CompactIconButton } from '../CompactNavLink/CompactNavLink';
 import { headerHeight, sidebarWidth } from '../../utils/constants';
 import styles from './BottomNav.module.css';
 import { logOutUser, setUserLoggedOut } from '../../utils/authUtils';
-import { getCurrentUsername } from '../../utils/userUtils';
+import { getCurrentUserProfile } from '../../utils/userUtils';
 
 export default function BottomNav() {
   const isWide = useBreakpointValue({ base: false, md: true });
   const navigate = useNavigate();
   const { username } = useParams();
-  const [currentUsername, setCurrentUsername] = useState('');
+  const [currentUser, setCurrentUser] = useState({});
+  const { username: currentUsername, picture } = currentUser;
 
   useEffect(() => {
-    const fetchCurrentUsername = async () => {
-      const username = await getCurrentUsername();
-      setCurrentUsername(username);
+    const fetchCurrentUser = async () => {
+      try {
+        const { user } = await getCurrentUserProfile();
+        setCurrentUser(user);
+      } catch (error) {
+        return;
+      }
     };
-    fetchCurrentUsername();
+    fetchCurrentUser();
   }, []);
 
   const handleLogout = async () => {
@@ -95,22 +99,22 @@ export default function BottomNav() {
         />
         <MenuList>
           <MenuItem
-            as="a"
-            href={`/profile/${currentUsername}`}
+            as={NavLink}
+            to={`/profile/${currentUsername}`}
             className={styles['menu-link']}
           >
             <Image
               boxSize="3rem"
               borderRadius="full"
-              src={caroline}
-              alt="User profile picture"
-              mr={2}
+              objectFit="cover"
+              src={picture}
+              mr={4}
               size="lg"
             />
             <Text>My Profile</Text>
           </MenuItem>
           <MenuDivider />
-          <MenuItem as="a" href="/settings" className={styles['menu-link']}>
+          <MenuItem as={NavLink} to="/settings" className={styles['menu-link']}>
             <Icon as={MdOutlineSettings} boxSize={5} mr={3} />
             Settings
           </MenuItem>
