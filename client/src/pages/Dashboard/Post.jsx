@@ -9,34 +9,48 @@ export default function Post() {
   const { postId } = useParams();
 
   const [post, setPost] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+  const [pageState, setPageState] = useState('LOADING');
 
   useEffect(() => {
-    setIsLoading(true);
     const fetchPost = async () => {
-      const res = await getPost(postId);
+      try {
+        const res = await getPost(postId);
 
-      if (!res && res === null) {
-        setPost(null);
-        setIsLoading(false);
-        return;
+        if (!res && res === null) {
+          setPost(null);
+          setPageState('NOT_FOUND');
+          return;
+        }
+
+        setPost(res);
+        setPageState('DONE');
+      } catch (error) {
+        setPageState('NOT_FOUND');
       }
-
-      setPost(res);
-      setIsLoading(false);
     };
     fetchPost();
   }, [postId]);
 
-  return (
-    <Flex direction="column" justify="center" align="center">
-      {isLoading ? (
+  switch (pageState) {
+    case 'LOADING':
+      return (
         <Center>
           <Spinner />
         </Center>
-      ) : (
-        <>{!post ? <PostNotFound /> : <PostContent post={post} />}</>
-      )}
-    </Flex>
-  );
+      );
+    case 'NOT_FOUND':
+      return <PostNotFound />;
+    default:
+      return (
+        <Flex direction="column" justify="center" align="center">
+          {pageState === 'LOADING' ? (
+            <Center>
+              <Spinner />
+            </Center>
+          ) : (
+            <>{!post ? <PostNotFound /> : <PostContent post={post} />}</>
+          )}
+        </Flex>
+      );
+  }
 }
