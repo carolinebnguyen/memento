@@ -126,15 +126,6 @@ router.get('/', async (req, res) => {
   }
 
   async function getAllPosts(usernames) {
-    const userPromises = usernames.map((username) =>
-      docClient.send(
-        new GetCommand({
-          TableName: USER_TABLE,
-          Key: { username: username },
-        })
-      )
-    );
-
     const postPromises = usernames.map((username) =>
       docClient.send(
         new QueryCommand({
@@ -147,23 +138,53 @@ router.get('/', async (req, res) => {
       )
     );
 
-    const users = await Promise.all(userPromises);
     const postsByUser = await Promise.all(postPromises);
+    const posts = postsByUser.flatMap((postData) => postData.Items);
 
-    const profilePictures = users.reduce((acc, userData) => {
-      if (userData.Item) {
-        acc[userData.Item.username] = userData.Item.picture;
-      }
+    const uniqueUsernames = new Set();
+    posts.forEach((post) => {
+      (post.likes || new Set()).forEach((username) =>
+        uniqueUsernames.add(username)
+      );
+      uniqueUsernames.add(post.username);
+    });
+
+    const batchGetUserParams = {
+      RequestItems: {
+        [USER_TABLE]: {
+          Keys: Array.from(uniqueUsernames).map((username) => ({
+            username: username,
+          })),
+          ProjectionExpression: 'username, picture, #name',
+          ExpressionAttributeNames: {
+            '#name': 'name',
+          },
+        },
+      },
+    };
+
+    const { Responses } = await docClient.send(
+      new BatchGetCommand(batchGetUserParams)
+    );
+    const userProfiles = Responses[USER_TABLE].reduce((acc, user) => {
+      acc[user.username] = {
+        picture: user.picture,
+        name: user.name,
+      };
       return acc;
     }, {});
 
-    const posts = postsByUser.flatMap((postData) => {
-      return postData.Items.map((post) => ({
-        ...post,
-        comments: Array.from(post?.comments || []),
-        likes: Array.from(post?.likes || []),
-        profilePicture: profilePictures[post.username],
-      }));
+    posts.forEach((post) => {
+      post.comments = Array.from(post?.comments || new Set());
+      post.likes = Array.from(post?.likes || new Set());
+      if (post.likes.length > 0) {
+        post.likes = post.likes.map((username) => ({
+          username,
+          picture: userProfiles[username].picture,
+          name: userProfiles[username].name,
+        }));
+      }
+      post.profilePicture = userProfiles[post.username]?.picture;
     });
 
     return posts;
