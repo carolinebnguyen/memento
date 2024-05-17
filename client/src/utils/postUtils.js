@@ -4,6 +4,10 @@ import { PostType } from './utils';
 const sortReverseChronologicalOrder = (a, b) =>
   new Date(b.postedAt) - new Date(a.postedAt);
 
+const sortPosts = (posts) => {
+  return posts.sort(sortReverseChronologicalOrder);
+};
+
 const sortPostsByType = (posts) => {
   const photos = [];
   const statuses = [];
@@ -100,6 +104,7 @@ const getAllHomeFeedPosts = async () => {
 };
 
 export {
+  sortPosts,
   sortPostsByType,
   getPost,
   createPost,

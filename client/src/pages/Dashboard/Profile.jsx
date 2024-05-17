@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Flex,
   Tabs,
@@ -58,6 +58,14 @@ export default function Profile() {
     fetchUserProfile();
   }, [username]);
 
+  const handleDeleteStatus = useCallback(
+    (postId) => {
+      const updatedStatuses = statuses.filter((post) => post.postId !== postId);
+      setStatuses(updatedStatuses);
+    },
+    [statuses]
+  );
+
   if (pageState === 'LOADING') {
     return (
       <Center>
@@ -69,6 +77,7 @@ export default function Profile() {
   } else if (pageState === 'ERROR') {
     return <ErrorComponent errorType="SERVER" />;
   }
+
   return (
     <Flex direction="column" align="center" w="100%">
       <ProfileHeader profile={profile} isFollowingUser={isFollowing} />
@@ -83,7 +92,10 @@ export default function Profile() {
               <ProfilePhotoTabContent photos={photos} />
             </TabPanel>
             <TabPanel role="tabpanel">
-              <ProfileStatusTabContent statuses={statuses} />
+              <ProfileStatusTabContent
+                statuses={statuses}
+                onDeleteStatus={handleDeleteStatus}
+              />
             </TabPanel>
           </TabPanels>
         </Tabs>
