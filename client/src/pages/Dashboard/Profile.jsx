@@ -21,19 +21,19 @@ export default function Profile() {
   const [profile, setProfile] = useState({});
   const [photos, setPhotos] = useState({});
   const [statuses, setStatuses] = useState({});
-  const [profileState, setProfileState] = useState('LOADING');
+  const [pageState, setPageState] = useState('LOADING');
   const [isFollowing, setIsFollowing] = useState(false);
 
   const { username } = useParams();
 
   useEffect(() => {
-    setProfileState('LOADING');
+    setPageState('LOADING');
     const fetchUserProfile = async () => {
       try {
         const res = await getUserProfile(username);
 
         if (!res && res === null) {
-          setProfileState('NOT_FOUND');
+          setPageState('NOT_FOUND');
           return;
         }
 
@@ -50,47 +50,44 @@ export default function Profile() {
         setProfile(fullProfileInfo);
         setPhotos(photos);
         setStatuses(statuses);
-        setProfileState('DONE');
+        setPageState('DONE');
       } catch (error) {
-        setProfileState('NOT_FOUND');
+        setPageState('ERROR');
       }
     };
     fetchUserProfile();
   }, [username]);
 
+  if (pageState === 'LOADING') {
+    return (
+      <Center>
+        <Spinner />
+      </Center>
+    );
+  } else if (pageState === 'NOT_FOUND') {
+    return <ErrorComponent errorType="USER" />;
+  } else if (pageState === 'ERROR') {
+    return <ErrorComponent errorType="SERVER" />;
+  }
   return (
     <Flex direction="column" align="center" w="100%">
-      {profileState === 'LOADING' ? (
-        <Center>
-          <Spinner />
-        </Center>
-      ) : (
-        <>
-          {profileState === 'NOT_FOUND' ? (
-            <ErrorComponent errorType="USER" />
-          ) : (
-            <>
-              <ProfileHeader profile={profile} isFollowingUser={isFollowing} />
-              <Flex justify="center" align="center" w="100%">
-                <Tabs align="center" w="90vw">
-                  <TabList role="tablist">
-                    <PhotoTab>Photos</PhotoTab>
-                    <StatusTab>Statuses</StatusTab>
-                  </TabList>
-                  <TabPanels>
-                    <TabPanel role="tabpanel">
-                      <ProfilePhotoTabContent photos={photos} />
-                    </TabPanel>
-                    <TabPanel role="tabpanel">
-                      <ProfileStatusTabContent statuses={statuses} />
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </Flex>
-            </>
-          )}
-        </>
-      )}
+      <ProfileHeader profile={profile} isFollowingUser={isFollowing} />
+      <Flex justify="center" align="center" w="100%">
+        <Tabs align="center" w="90vw">
+          <TabList role="tablist">
+            <PhotoTab>Photos</PhotoTab>
+            <StatusTab>Statuses</StatusTab>
+          </TabList>
+          <TabPanels>
+            <TabPanel role="tabpanel">
+              <ProfilePhotoTabContent photos={photos} />
+            </TabPanel>
+            <TabPanel role="tabpanel">
+              <ProfileStatusTabContent statuses={statuses} />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Flex>
     </Flex>
   );
 }

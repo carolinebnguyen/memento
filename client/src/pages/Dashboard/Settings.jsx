@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Flex,
   Heading,
@@ -8,11 +8,33 @@ import {
   Stack,
   Divider,
   Box,
+  Center,
+  Spinner,
 } from '@chakra-ui/react';
 import ProfileInfoCard from '../../components/ProfileInfoCard';
 import AccountInfoCard from '../../components/AccountInfoCard';
+import ErrorComponent from '../../components/ErrorComponent';
 
 export default function Settings() {
+  const [pageStatus, setPageStatus] = useState('');
+
+  const setPageState = useCallback(
+    (state) => {
+      setPageStatus(state);
+    },
+    [setPageStatus]
+  );
+
+  if (pageStatus === 'LOADING') {
+    return (
+      <Center>
+        <Spinner />
+      </Center>
+    );
+  } else if (pageStatus === 'ERROR') {
+    return <ErrorComponent errorType="SERVER" />;
+  }
+
   return (
     <Flex w="100%">
       <Card w={{ sm: '100vw', md: '60vw', xl: '40vw' }}>
@@ -23,7 +45,7 @@ export default function Settings() {
         </CardHeader>
         <CardBody>
           <Stack divider={<Divider />} spacing={4}>
-            <ProfileInfoCard />
+            <ProfileInfoCard setPageState={setPageState} />
             <Box>
               <AccountInfoCard />
             </Box>

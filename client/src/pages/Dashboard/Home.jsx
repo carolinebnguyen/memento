@@ -12,7 +12,7 @@ import { AllTab, PhotoTab, StatusTab } from '../../components/Tabs';
 import HomePostTabContent from '../../components/HomePostTabContent';
 import { PostType } from '../../utils/utils';
 import { getAllHomeFeedPosts, sortPostsByType } from '../../utils/postUtils';
-import ErrorPage from '../../components/ErrorPage';
+import ErrorComponent from '../../components/ErrorComponent';
 
 export default function Home() {
   const [allPosts, setAllPosts] = useState([]);
@@ -30,55 +30,52 @@ export default function Home() {
         setStatuses(statuses);
         setPageState('DONE');
       } catch (error) {
-        setPageState('NOT_FOUND');
+        setPageState('ERROR');
       }
     };
     fetchAllPosts();
   }, []);
 
-  return (
-    <Flex justify="center" align="center" w="100%">
-      {pageState === 'LOADING' ? (
+  switch (pageState) {
+    case 'LOADING':
+      return (
         <Center>
           <Spinner />
         </Center>
-      ) : (
-        <>
-          {pageState === 'NOT_FOUND' ? (
-            <ErrorPage />
-          ) : (
-            <>
-              <Tabs align="center" w="100vw">
-                <TabList role="tablist">
-                  <AllTab>All</AllTab>
-                  <PhotoTab>Photos</PhotoTab>
-                  <StatusTab>Statuses</StatusTab>
-                </TabList>
-                <TabPanels>
-                  <TabPanel role="tabpanel">
-                    <HomePostTabContent
-                      postList={allPosts}
-                      postType={PostType.POST}
-                    />
-                  </TabPanel>
-                  <TabPanel role="tabpanel">
-                    <HomePostTabContent
-                      postList={photos}
-                      postType={PostType.PHOTO}
-                    />
-                  </TabPanel>
-                  <TabPanel role="tabpanel">
-                    <HomePostTabContent
-                      postList={statuses}
-                      postType={PostType.STATUS}
-                    />
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </>
-          )}
-        </>
-      )}
-    </Flex>
-  );
+      );
+    case 'ERROR':
+      return <ErrorComponent errorType="SERVER" />;
+    default:
+      return (
+        <Flex justify="center" align="center" w="100%">
+          <Tabs align="center" w="100vw">
+            <TabList role="tablist">
+              <AllTab>All</AllTab>
+              <PhotoTab>Photos</PhotoTab>
+              <StatusTab>Statuses</StatusTab>
+            </TabList>
+            <TabPanels>
+              <TabPanel role="tabpanel">
+                <HomePostTabContent
+                  postList={allPosts}
+                  postType={PostType.POST}
+                />
+              </TabPanel>
+              <TabPanel role="tabpanel">
+                <HomePostTabContent
+                  postList={photos}
+                  postType={PostType.PHOTO}
+                />
+              </TabPanel>
+              <TabPanel role="tabpanel">
+                <HomePostTabContent
+                  postList={statuses}
+                  postType={PostType.STATUS}
+                />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </Flex>
+      );
+  }
 }
