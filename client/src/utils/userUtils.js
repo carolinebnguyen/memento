@@ -80,7 +80,7 @@ const followUser = async (username) => {
 
 const unfollowUser = async (username) => {
   try {
-    await mementoBackend.put(`/users/${username}/unfollow`);
+    await mementoBackend.delete(`/users/${username}/follow`);
   } catch (error) {
     throw error;
   }

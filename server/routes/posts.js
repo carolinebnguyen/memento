@@ -387,8 +387,8 @@ router.put('/:postId/like', async (req, res) => {
   }
 });
 
-// PUT api/posts/:postId/unlike
-router.put('/:postId/unlike', async (req, res) => {
+// DELETE api/posts/:postId/like
+router.delete('/:postId/like', async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: 'User is not authenticated' });
   }
@@ -415,7 +415,7 @@ router.put('/:postId/unlike', async (req, res) => {
     const post = Items[0];
     const { username: poster } = post;
 
-    const unlikeParams = {
+    const likeParams = {
       TableName: POST_TABLE,
       Key: {
         username: poster,
@@ -427,7 +427,7 @@ router.put('/:postId/unlike', async (req, res) => {
       },
     };
 
-    await docClient.send(new UpdateCommand(unlikeParams));
+    await docClient.send(new UpdateCommand(likeParams));
 
     return res.status(200).json({ success: true });
   } catch (error) {

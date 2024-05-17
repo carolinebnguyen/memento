@@ -87,7 +87,7 @@ const likePost = async (postId) => {
 
 const unlikePost = async (postId) => {
   try {
-    await mementoBackend.put(`/posts/${postId}/unlike`);
+    await mementoBackend.delete(`/posts/${postId}/like`);
   } catch (error) {
     throw error;
   }

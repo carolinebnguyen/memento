@@ -378,8 +378,8 @@ router.put('/:username/follow', async (req, res) => {
   }
 });
 
-// PUT api/users/:username/unfollow
-router.put('/:username/unfollow', async (req, res) => {
+// DELETE api/users/:username/follow
+router.delete('/:username/follow', async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: 'User is not authenticated' });
   }
