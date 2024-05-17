@@ -62,6 +62,10 @@ export default function Profile() {
     (postId) => {
       const updatedStatuses = statuses.filter((post) => post.postId !== postId);
       setStatuses(updatedStatuses);
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        statusCount: updatedStatuses.length,
+      }));
     },
     [statuses]
   );
