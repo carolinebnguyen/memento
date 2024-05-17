@@ -45,9 +45,9 @@ const createPost = async (post) => {
       formData.append('type', type);
       formData.append('text', text);
 
-      await mementoBackend.post('/post', formData);
+      await mementoBackend.post('/posts', formData);
     } else {
-      await mementoBackend.post('/post', {
+      await mementoBackend.post('/posts', {
         type,
         text,
       });
