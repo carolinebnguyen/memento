@@ -20,27 +20,26 @@ import {
 } from '@chakra-ui/react';
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import { FaEllipsis } from 'react-icons/fa6';
-import { getProfile } from '../utils/testData';
 import { formatDate, formatDateDistanceToNow } from '../utils/utils';
 import { useNavigate } from 'react-router-dom';
 import styles from '../components/BottomNav/BottomNav.module.css';
 import ConfirmationModal from './ConfirmationModal';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
-export default function CommentCard({ poster, comment }) {
-  const { user, content, postedAt } = comment;
-  const commenter = getProfile(user);
-  const { username, picture } = commenter;
+export default function CommentCard({ poster, comment, currentUser }) {
+  const { username, text, postedAt } = comment;
   const navigate = useNavigate();
   const [isCommentVisible, setIsCommentVisible] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
-  const [isEditable, setIsEditable] = useState(false);
-  const [editedComment, setEditedComment] = useState(content);
+  const { username: currentUsername, picture } = currentUser;
 
-  const isCommentSelfPosted = username === 'carolibn';
-  const isOwnPost = poster === 'carolibn';
+  const [isEditable, setIsEditable] = useState(false);
+  const [editedComment, setEditedComment] = useState(text);
+
+  const isCommentSelfPosted = username === currentUsername;
+  const isOwnPost = poster === currentUsername;
 
   const handleUserNavigation = () => {
     navigate(`/profile/${username}`);
@@ -68,11 +67,11 @@ export default function CommentCard({ poster, comment }) {
   };
 
   const initialValues = {
-    content: editedComment.content || editedComment,
+    text: editedComment.text || editedComment,
   };
 
   const onSubmit = (values, { setSubmitting }) => {
-    if (values.content === '') {
+    if (values.text === '') {
       onOpen();
     } else {
       setTimeout(() => {
@@ -115,20 +114,18 @@ export default function CommentCard({ poster, comment }) {
                       touched,
                     }) => (
                       <Form>
-                        <FormControl
-                          isInvalid={errors.content && touched.content}
-                        >
+                        <FormControl isInvalid={errors.text && touched.text}>
                           <Field
                             as={Textarea}
                             type="text"
-                            name="content"
-                            id="content"
+                            name="text"
+                            id="text"
                             mb={2}
                             size="sm"
                             borderRadius={5}
                             rows="1"
                           />
-                          <ErrorMessage name="content">
+                          <ErrorMessage name="text">
                             {(msg) => <Text color="red">{msg}</Text>}
                           </ErrorMessage>
                         </FormControl>
@@ -157,25 +154,25 @@ export default function CommentCard({ poster, comment }) {
                 <>
                   <Avatar size="sm" src={picture} mr={2} />
                   <Stack gap={0}>
-                    <HStack w="full" gap={1}>
+                    <HStack w="full" gap={2}>
                       <Link color="black" onClick={handleUserNavigation}>
                         <Text as="b" fontSize="sm">
                           {username}
                         </Text>
                       </Link>
-                      <Text fontSize="sm" fontWeight={400}>
-                        {initialValues.content}
-                      </Text>
+                      <Tooltip
+                        label={formatDate(postedAt)}
+                        placement="bottom"
+                        openDelay={500}
+                      >
+                        <Text fontSize="xs" color="gray" fontWeight={500}>
+                          {formatDateDistanceToNow(postedAt)}
+                        </Text>
+                      </Tooltip>
                     </HStack>
-                    <Tooltip
-                      label={formatDate(postedAt)}
-                      placement="bottom"
-                      openDelay={500}
-                    >
-                      <Text fontSize="xs" color="gray" fontWeight={500}>
-                        {formatDateDistanceToNow(postedAt)}
-                      </Text>
-                    </Tooltip>
+                    <Text fontSize="sm" fontWeight={400} whiteSpace="pre-line">
+                      {initialValues.text}
+                    </Text>
                   </Stack>
                 </>
               )}
