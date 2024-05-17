@@ -28,9 +28,22 @@ const getUserProfile = async (username) => {
   }
 };
 
+const getUserInformation = async (username) => {
+  if (typeof username !== 'string') {
+    return username;
+  }
+
+  try {
+    const res = await mementoBackend.get(`/users/${username}/info`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const getAllUsers = async () => {
   try {
-    const res = await mementoBackend.get('/user');
+    const res = await mementoBackend.get('/users/');
     const users = res.data;
     return users;
   } catch (error) {
@@ -86,6 +99,7 @@ export {
   getCurrentUsername,
   getCurrentUserProfile,
   getUserProfile,
+  getUserInformation,
   getAllUsers,
   updateUserProfile,
   updateProfilePicture,

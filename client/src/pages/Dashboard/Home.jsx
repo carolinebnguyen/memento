@@ -11,7 +11,7 @@ import {
 import { AllTab, PhotoTab, StatusTab } from '../../components/Tabs';
 import HomePostTabContent from '../../components/HomePostTabContent';
 import { PostType } from '../../utils/utils';
-import { getAllHomeFeedPosts } from '../../utils/postUtils';
+import { getAllHomeFeedPosts, sortPostsByType } from '../../utils/postUtils';
 import ErrorPage from '../../components/ErrorPage';
 
 export default function Home() {
@@ -24,7 +24,10 @@ export default function Home() {
     const fetchAllPosts = async () => {
       try {
         const allPosts = await getAllHomeFeedPosts();
+        const { photos, statuses } = sortPostsByType(allPosts);
         setAllPosts(allPosts);
+        setPhotos(photos);
+        setStatuses(statuses);
         setPageState('DONE');
       } catch (error) {
         setPageState('NOT_FOUND');

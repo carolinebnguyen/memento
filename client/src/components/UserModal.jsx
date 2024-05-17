@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -10,8 +10,30 @@ import {
   Box,
 } from '@chakra-ui/react';
 import UserCard from './UserCard';
+import { getUserInformation } from '../utils/userUtils';
 
 export default function UserModal({ isOpen, onClose, title, usersList }) {
+  const [users, setUsers] = useState(usersList);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const modifiedUsers = await Promise.all(
+          usersList.map(async (user) => {
+            if (typeof user === 'string') {
+              return getUserInformation(user);
+            }
+            return user;
+          })
+        );
+        setUsers(modifiedUsers);
+      } catch (error) {
+        return;
+      }
+    };
+    fetchUserInfo();
+  }, [usersList]);
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="md" scrollBehavior="inside">
       <ModalOverlay />
@@ -19,11 +41,11 @@ export default function UserModal({ isOpen, onClose, title, usersList }) {
         <ModalHeader textAlign="center">{title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody mb={3}>
-          {usersList && usersList.length > 0 ? (
-            usersList.map((user, index) => (
+          {users && users.length > 0 ? (
+            users.map((user, index) => (
               <Box
                 key={user.username || user}
-                mb={index !== usersList.length - 1 ? 3 : 0}
+                mb={index !== users.length - 1 ? 3 : 0}
               >
                 <UserCard user={user} handleClose={onClose} />
               </Box>

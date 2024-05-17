@@ -77,7 +77,9 @@ export default function PostCard({ post }) {
     const fetchInfo = async () => {
       try {
         const currentUsername = await getCurrentUsername();
-        const isLiked = likes.includes(currentUsername);
+        const isLiked =
+          Array.isArray(likes) &&
+          likes.some((like) => like.username === currentUsername);
         setCurrentUsername(currentUsername);
         setIsLiked(isLiked);
         setIsLoading(false);
@@ -188,12 +190,11 @@ export default function PostCard({ post }) {
       } else {
         await unlikePost(postId);
         setModifiedLikes(
-          modifiedLikes.filter((user) => user !== currentUsername)
+          modifiedLikes.filter((user) => user.username !== currentUsername)
         );
       }
       setIsLiked(!isLiked);
     } catch (error) {
-      console.log('error: ', error);
       toast({
         title: 'Error',
         description: `An error occurred while attempting to ${getLikeAction(

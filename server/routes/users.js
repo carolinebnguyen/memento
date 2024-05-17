@@ -151,6 +151,27 @@ router.get('/:username', async (req, res) => {
   }
 });
 
+// GET api/users/:username/info
+router.get('/:username/info', async (req, res) => {
+  try {
+    const { username } = req.params;
+
+    const params = {
+      TableName: USER_TABLE,
+      Key: {
+        username: username,
+      },
+    };
+
+    const { Item: user } = await docClient.send(new GetCommand(params));
+
+    return res.status(200).json(user);
+  } catch (error) {
+    console.error('Error getting user: ', error);
+    return res.status(500).json({ error: 'Inernal server error getting user' });
+  }
+});
+
 // GET api/users/
 router.get('/', async (req, res) => {
   try {
