@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Flex, Text, Box } from '@chakra-ui/react';
 import PostCard from './PostCard';
-import { PostType } from '../utils/utils';
+import { PostType } from '../utils/postUtils';
 
 export default function HomePostTabContent({
   postList,

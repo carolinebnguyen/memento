@@ -33,7 +33,6 @@ import { useNavigate } from 'react-router-dom';
 import { FaRegHeart, FaHeart, FaRegComment, FaEllipsis } from 'react-icons/fa6';
 import UserModal from './UserModal';
 import {
-  PostType,
   formatDate,
   formatDateDistanceToNow,
   getLikeAction,
@@ -47,6 +46,7 @@ import {
   likePost,
   unlikePost,
   updatePost,
+  PostType,
 } from '../utils/postUtils';
 
 export default function PostCard({

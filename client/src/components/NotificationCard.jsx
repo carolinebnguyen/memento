@@ -10,30 +10,26 @@ import {
   Image,
   Box,
 } from '@chakra-ui/react';
-import {
-  formatDateDistanceToNow,
-  formatDate,
-  getNotificationMessage,
-} from '../utils/utils';
-import { getPost } from '../utils/testData';
+import { formatDateDistanceToNow, formatDate } from '../utils/utils';
 import { useNavigate } from 'react-router-dom';
+import { getPost } from '../utils/postUtils';
+import { getNotificationMessage } from '../utils/notificationUtils';
 
 export default function NotificationCard({ notification }) {
   const {
-    user,
+    sender,
     postId,
     postType,
     notificationType,
     createdAt,
     commentContent,
   } = notification;
-  const { username, picture } = user;
   const post = getPost(postId);
   const { imageSrc } = post;
   const navigate = useNavigate();
 
   const handleUserNavigation = () => {
-    navigate(`/profile/${username}`);
+    navigate(`/profile/${sender}`);
   };
 
   const handlePostNavigation = () => {
@@ -44,13 +40,13 @@ export default function NotificationCard({ notification }) {
     <Flex align="center" w="full" p={2} _hover={{ backgroundColor: '#f5fbfc' }}>
       <Flex justify="space-between" w="100%" align="center" gap={8}>
         <Stack direction="row" display="flex" align="center">
-          <Avatar size="md" src={picture} mr={2} />
+          <Avatar size="md" src={sender.picture} mr={2} />
           <Stack gap={0}>
             <HStack w="full" gap={1}>
               <Box>
                 <Link color="black" onClick={handleUserNavigation}>
                   <Text as="b" fontSize="sm">
-                    {username}
+                    {sender}
                   </Text>
                 </Link>
                 <Text fontSize="sm" fontWeight={400}>

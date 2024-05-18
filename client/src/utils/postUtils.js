@@ -1,11 +1,13 @@
-import { mementoBackend } from './utils';
-import { PostType } from './utils';
-
-const sortReverseChronologicalOrder = (a, b) =>
-  new Date(b.postedAt) - new Date(a.postedAt);
+import { mementoBackend, sortReverseChronologicalOrder } from './utils';
 
 const sortPosts = (posts) => {
   return posts.sort(sortReverseChronologicalOrder);
+};
+
+const PostType = {
+  PHOTO: 'photo',
+  STATUS: 'status',
+  POST: 'post',
 };
 
 const sortPostsByType = (posts) => {
@@ -105,6 +107,7 @@ const getAllHomeFeedPosts = async () => {
 
 export {
   sortPosts,
+  PostType,
   sortPostsByType,
   getPost,
   createPost,

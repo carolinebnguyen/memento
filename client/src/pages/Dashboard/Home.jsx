@@ -10,8 +10,11 @@ import {
 } from '@chakra-ui/react';
 import { AllTab, PhotoTab, StatusTab } from '../../components/Tabs';
 import HomePostTabContent from '../../components/HomePostTabContent';
-import { PostType } from '../../utils/utils';
-import { getAllHomeFeedPosts, sortPostsByType } from '../../utils/postUtils';
+import {
+  getAllHomeFeedPosts,
+  sortPostsByType,
+  PostType,
+} from '../../utils/postUtils';
 import ErrorComponent from '../../components/ErrorComponent';
 
 export default function Home() {

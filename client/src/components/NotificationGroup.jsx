@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Flex, Heading } from '@chakra-ui/react';
 import NotificationCard from '../components/NotificationCard';
-import { notificationGroupToHeadingMap } from '../utils/utils';
+import { getNotificationGroupHeading } from '../utils/notificationUtils';
 
 export default function NotificationGroup({ groupName, notifications }) {
   return (
@@ -9,10 +9,10 @@ export default function NotificationGroup({ groupName, notifications }) {
       {notifications.length > 0 ? (
         <>
           <Heading as="h2" size="md">
-            {notificationGroupToHeadingMap[groupName]}
+            {getNotificationGroupHeading(groupName)}
           </Heading>
-          {notifications.map((notification, index, array) => (
-            <Box key={notification.id} w="100%" my={3}>
+          {notifications.map((notification) => (
+            <Box key={notification.notificationId} w="100%" my={3}>
               <NotificationCard notification={notification} />
             </Box>
           ))}
