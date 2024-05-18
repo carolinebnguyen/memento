@@ -81,6 +81,7 @@ export default function Navbar() {
               className={styles['menu-link']}
             >
               <Image
+                as={Avatar}
                 boxSize="3rem"
                 borderRadius="full"
                 objectFit="cover"
