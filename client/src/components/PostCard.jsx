@@ -429,7 +429,11 @@ export default function PostCard({
                     _hover={{ opacity: '50%' }}
                   />
                 </Button>
-                <Button size="xs" colorScheme="whiteAlpha">
+                <Button
+                  size="xs"
+                  colorScheme="whiteAlpha"
+                  onClick={handlePostNavigate}
+                >
                   <Icon
                     as={FaRegComment}
                     boxSize={18}
