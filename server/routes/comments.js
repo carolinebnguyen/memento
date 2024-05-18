@@ -11,6 +11,7 @@ const {
   QueryCommand,
   GetCommand,
   BatchGetCommand,
+  TransactWriteCommand,
 } = require('@aws-sdk/lib-dynamodb');
 
 const {
@@ -92,8 +93,6 @@ router.post('/', async (req, res) => {
       },
     };
 
-    await docClient.send(new PutCommand(commentParams));
-
     const postParams = {
       TableName: POST_TABLE,
       Key: {
@@ -111,7 +110,17 @@ router.post('/', async (req, res) => {
       },
     };
 
-    await docClient.send(new UpdateCommand(postParams));
+    const postComment = new PutCommand(commentParams);
+    const updateCommentCount = new UpdateCommand(postParams);
+
+    const transactionParams = {
+      TransactItems: [
+        { Put: postComment.input },
+        { Update: updateCommentCount.input },
+      ],
+    };
+
+    await docClient.send(new TransactWriteCommand(transactionParams));
 
     return res.status(200).json({ success: true });
   } catch (error) {
@@ -207,7 +216,7 @@ router.delete('/:commentId', async (req, res) => {
       },
     };
 
-    await docClient.send(new DeleteCommand(commentParams));
+    const deleteComment = new DeleteCommand(commentParams);
 
     const getPostParams = {
       TableName: POST_TABLE,
@@ -241,7 +250,16 @@ router.delete('/:commentId', async (req, res) => {
       },
     };
 
-    await docClient.send(new UpdateCommand(updatePostParams));
+    const updateCommentCount = new UpdateCommand(updatePostParams);
+
+    const transactionParams = {
+      TransactItems: [
+        { Delete: deleteComment.input },
+        { Update: updateCommentCount.input },
+      ],
+    };
+
+    await docClient.send(new TransactWriteCommand(transactionParams));
 
     return res.status(200).json({ success: true });
   } catch (error) {
