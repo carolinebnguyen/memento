@@ -14,6 +14,7 @@ const {
   QueryCommand,
   GetCommand,
   BatchGetCommand,
+  TransactWriteCommand,
 } = require('@aws-sdk/lib-dynamodb');
 
 const {
@@ -503,15 +504,41 @@ router.delete('/:postId', async (req, res) => {
         .json({ error: 'User is not authorized to delete this post' });
     }
 
-    const dynamoParams = {
-      TableName: POST_TABLE,
-      Key: {
-        username: username,
-        postId: postId,
+    const postParams = {
+      Delete: {
+        TableName: POST_TABLE,
+        Key: {
+          username: username,
+          postId: postId,
+        },
       },
     };
 
-    await docClient.send(new DeleteCommand(dynamoParams));
+    const commentParams = {
+      TableName: COMMENT_TABLE,
+      IndexName: 'postId-index',
+      KeyConditionExpression: 'postId = :postId',
+      ExpressionAttributeValues: {
+        ':postId': postId,
+      },
+    };
+
+    const { Items } = await docClient.send(new QueryCommand(commentParams));
+
+    const commentDeletes = Items.map((item) => ({
+      Delete: {
+        TableName: COMMENT_TABLE,
+        Key: {
+          commentId: item.commentId,
+        },
+      },
+    }));
+
+    const transactionParams = {
+      TransactItems: [postParams, ...commentDeletes],
+    };
+
+    await docClient.send(new TransactWriteCommand(transactionParams));
 
     if (imageSrc) {
       const s3Key = imageSrc.substring(imageSrc.lastIndexOf('/') + 1);
