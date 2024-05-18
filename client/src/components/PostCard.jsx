@@ -122,7 +122,7 @@ export default function PostCard({
         removePost(postId);
         toast({
           title: 'Post Deleted',
-          description: 'The post has been deleted',
+          description: 'Your post has been deleted',
           status: 'success',
           duration: 3000,
           variant: 'subtle',
@@ -133,10 +133,10 @@ export default function PostCard({
         });
       }, 500);
     } catch (error) {
-      setIsLoading(false);
+      onCloseConfirmation();
       toast({
         title: 'Error',
-        description: 'The post could not be deleted',
+        description: 'Your post could not be deleted',
         status: 'error',
         duration: 3000,
         variant: 'subtle',
