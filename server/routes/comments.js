@@ -122,7 +122,7 @@ router.post('/', async (req, res) => {
 
     await docClient.send(new TransactWriteCommand(transactionParams));
 
-    return res.status(200).json({ success: true });
+    return res.status(200).json({ commentId });
   } catch (error) {
     console.error('Error creating comment: ', error);
     return res

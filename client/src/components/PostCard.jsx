@@ -49,7 +49,12 @@ import {
   updatePost,
 } from '../utils/postUtils';
 
-export default function PostCard({ post, hasDivider, removePost }) {
+export default function PostCard({
+  post,
+  hasDivider,
+  removePost,
+  updatedCount,
+}) {
   const {
     postId,
     username,
@@ -457,8 +462,10 @@ export default function PostCard({ post, hasDivider, removePost }) {
                   _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
                   onClick={handlePostNavigate}
                 >
-                  {commentCount || 0}{' '}
-                  {commentCount === 1 ? 'comment' : 'comments'}
+                  {updatedCount || commentCount || 0}{' '}
+                  {updatedCount === 1 || commentCount === 1
+                    ? 'comment'
+                    : 'comments'}
                 </Text>
               </Stack>
             </Flex>

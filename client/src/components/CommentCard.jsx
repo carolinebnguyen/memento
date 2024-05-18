@@ -21,7 +21,12 @@ import CommentMenu from './CommentMenu';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { deleteComment, updateComment } from '../utils/commentUtils';
 
-export default function CommentCard({ poster, comment, currentUser }) {
+export default function CommentCard({
+  poster,
+  comment,
+  currentUser,
+  handleDeleteComment,
+}) {
   const { username, text, postedAt, picture, commentId } = comment;
   const navigate = useNavigate();
   const [isCommentVisible, setIsCommentVisible] = useState(true);
@@ -43,6 +48,7 @@ export default function CommentCard({ poster, comment, currentUser }) {
   const confirmDeleteComment = async () => {
     try {
       await deleteComment(commentId);
+      handleDeleteComment(commentId);
       setTimeout(() => {
         setIsCommentVisible(false);
         onClose();
@@ -58,6 +64,7 @@ export default function CommentCard({ poster, comment, currentUser }) {
         });
       }, 500);
     } catch (error) {
+      onClose();
       toast({
         title: 'Error',
         description: 'The comment could not be deleted',

@@ -6,6 +6,7 @@ import {
   Stack,
   Button,
   HStack,
+  useToast,
 } from '@chakra-ui/react';
 import { postComment } from '../utils/commentUtils';
 
@@ -17,12 +18,14 @@ export default function CommentField({
 }) {
   const [commentText, setCommentText] = useState('');
   const { username, picture } = currentUser;
+  const toast = useToast();
 
   const handleSubmit = async () => {
     try {
-      await postComment(commentText, postId, poster);
-      if (commentText.trim() !== '') {
+      const commentId = await postComment(commentText, postId, poster);
+      if (commentId && commentText.trim() !== '') {
         const newComment = {
+          commentId: commentId,
           picture: picture,
           username: username,
           text: commentText.trim(),
@@ -32,7 +35,17 @@ export default function CommentField({
         setCommentText('');
       }
     } catch (error) {
-      console.log('error creating post: ', error);
+      toast({
+        title: 'Error',
+        description: `An error occurred while attempting to comment`,
+        status: 'error',
+        duration: 3000,
+        variant: 'subtle',
+        position: 'top',
+        containerStyle: {
+          zIndex: '9999',
+        },
+      });
     }
   };
 

@@ -26,13 +26,27 @@ export default function PostContent({ post, onRemovePost }) {
     [onRemovePost]
   );
 
-  const handleAddComment = (comment) => {
+  const handleAddComment = useCallback((comment) => {
     setNewComments((prevComments) => [...prevComments, comment]);
-  };
+  }, []);
+
+  const handleDeleteComment = useCallback(
+    (commentId) => {
+      const updatedComments = newComments.filter(
+        (comment) => comment.commentId !== commentId
+      );
+      setNewComments(updatedComments);
+    },
+    [newComments, setNewComments]
+  );
 
   return (
     <Flex direction="column" justify="center" align="center" w="100%">
-      <PostCard post={post} removePost={handleDeletePost} />
+      <PostCard
+        post={post}
+        removePost={handleDeletePost}
+        updatedCount={newComments.length}
+      />
       <Divider my={3} />
       <CommentField
         postId={postId}
@@ -42,11 +56,12 @@ export default function PostContent({ post, onRemovePost }) {
       />
       {newComments.length > 0
         ? newComments.map((comment, index) => (
-            <Box key={`${postId}-${index}`} w="full">
+            <Box key={comment.commentId} w="full">
               <CommentCard
                 poster={username}
                 comment={comment}
                 currentUser={currentUser}
+                handleDeleteComment={handleDeleteComment}
               />
             </Box>
           ))

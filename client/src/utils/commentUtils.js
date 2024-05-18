@@ -9,7 +9,13 @@ const sortComments = (comments) => {
 
 const postComment = async (text, postId, poster) => {
   try {
-    await mementoBackend.post('/comments', { text, postId, poster });
+    const res = await mementoBackend.post('/comments', {
+      text,
+      postId,
+      poster,
+    });
+    const { commentId } = res.data;
+    return commentId;
   } catch (error) {
     throw error;
   }
