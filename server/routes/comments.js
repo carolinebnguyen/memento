@@ -132,6 +132,25 @@ router.put('/:commentId', async (req, res) => {
     const { commentId } = req.params;
     const { text } = req.body;
 
+    const checkComment = {
+      TableName: COMMENT_TABLE,
+      Key: {
+        commentId: commentId,
+      },
+    };
+
+    const { Item } = await docClient.send(new GetCommand(checkComment));
+
+    if (!Item) {
+      return res.status(404).json({ error: 'Comment not found' });
+    }
+
+    if (Item.username !== username) {
+      return res
+        .status(403)
+        .json({ error: 'User is not authorized to update this comment' });
+    }
+
     const commentParams = {
       TableName: COMMENT_TABLE,
       Key: {
@@ -141,11 +160,8 @@ router.put('/:commentId', async (req, res) => {
       ExpressionAttributeNames: {
         '#text': 'text',
       },
-      ConditionExpression:
-        'attribute_exists(commentId) AND username = :username',
       ExpressionAttributeValues: {
-        ':text': text.trim(),
-        ':username': username,
+        ':text': text,
       },
     };
 

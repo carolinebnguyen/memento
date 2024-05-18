@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import ConfirmationModal from './ConfirmationModal';
 import CommentMenu from './CommentMenu';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { deleteComment } from '../utils/commentUtils';
+import { deleteComment, updateComment } from '../utils/commentUtils';
 
 export default function CommentCard({ poster, comment, currentUser }) {
   const { username, text, postedAt, picture, commentId } = comment;
@@ -79,25 +79,42 @@ export default function CommentCard({ poster, comment, currentUser }) {
     text: editedComment.text || editedComment,
   };
 
-  const onSubmit = (values, { setSubmitting }) => {
-    if (values.text.trim() === '') {
+  const onSubmit = async (values, { setSubmitting }) => {
+    const { text: updatedText } = values;
+
+    if (updatedText.trim() === '') {
       onOpen();
     } else {
-      setTimeout(() => {
-        setSubmitting(false);
-        toggleEditMode();
-        setEditedComment(values);
+      try {
+        await updateComment(updatedText, commentId);
+
+        setTimeout(() => {
+          setSubmitting(false);
+          toggleEditMode();
+          setEditedComment(values);
+          toast({
+            title: 'Comment Edited',
+            description: 'Your comment has been edited',
+            status: 'success',
+            variant: 'subtle',
+            position: 'top',
+            containerStyle: {
+              zIndex: '9999',
+            },
+          });
+        }, 1000);
+      } catch (error) {
         toast({
-          title: 'Comment Edited',
-          description: 'Your comment has been edited',
-          status: 'success',
+          title: 'Error',
+          description: 'Your comment could not be updated',
+          status: 'error',
           variant: 'subtle',
           position: 'top',
           containerStyle: {
             zIndex: '9999',
           },
         });
-      }, 1000);
+      }
     }
   };
 
