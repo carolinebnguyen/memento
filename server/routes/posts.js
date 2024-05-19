@@ -414,24 +414,27 @@ router.put('/:postId/like', async (req, res) => {
       ConditionExpression: 'attribute_exists(username)',
     };
 
-    const notification = {
-      sender: username,
-      recipient: poster,
-      notificationType: 'like',
-      postId: postId,
-      postType: type,
-    };
-
-    const notificationParams = await createNotification(notification);
-
     const updateLikes = new UpdateCommand(likeParams);
-    const putNotification = new PutCommand(notificationParams);
+
+    const transactionItems = [{ Update: updateLikes.input }];
+
+    if (username !== poster) {
+      const notification = {
+        sender: username,
+        recipient: poster,
+        notificationType: 'like',
+        postId: postId,
+        postType: type,
+      };
+
+      const notificationParams = await createNotification(notification);
+
+      const putNotification = new PutCommand(notificationParams);
+      transactionItems.push({ Put: putNotification.input });
+    }
 
     const transactionParams = {
-      TransactItems: [
-        { Update: updateLikes.input },
-        { Put: putNotification.input },
-      ],
+      TransactItems: transactionItems,
     };
 
     await docClient.send(new TransactWriteCommand(transactionParams));
