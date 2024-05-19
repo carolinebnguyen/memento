@@ -22,6 +22,7 @@ const {
   PutObjectCommand,
   DeleteObjectCommand,
 } = require('@aws-sdk/client-s3');
+const { createNotification } = require('../utils/notificationUtils');
 
 const USER_TABLE = 'User';
 const POST_TABLE = 'Post';
@@ -397,7 +398,7 @@ router.put('/:postId/like', async (req, res) => {
     }
 
     const post = Items[0];
-    const { username: poster } = post;
+    const { username: poster, type } = post;
 
     const likeParams = {
       TableName: POST_TABLE,
@@ -412,7 +413,27 @@ router.put('/:postId/like', async (req, res) => {
       ConditionExpression: 'attribute_exists(username)',
     };
 
-    await docClient.send(new UpdateCommand(likeParams));
+    const notification = {
+      sender: username,
+      recipient: poster,
+      notificationType: 'like',
+      postId: postId,
+      postType: type,
+    };
+
+    const notificationParams = await createNotification(notification);
+
+    const updateLikes = new UpdateCommand(likeParams);
+    const putNotification = new PutCommand(notificationParams);
+
+    const transactionParams = {
+      TransactItems: [
+        { Update: updateLikes.input },
+        { Put: putNotification.input },
+      ],
+    };
+
+    await docClient.send(new TransactWriteCommand(transactionParams));
 
     return res.status(200).json({ success: true });
   } catch (error) {

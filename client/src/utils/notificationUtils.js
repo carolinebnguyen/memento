@@ -1,4 +1,4 @@
-import { mementoBackend, sortReverseChronologicalOrder } from './utils';
+import { mementoBackend } from './utils';
 import {
   isToday,
   isWithinInterval,
@@ -6,6 +6,9 @@ import {
   subWeeks,
   subMonths,
 } from 'date-fns';
+
+const sortReverseChronologicalOrder = (a, b) =>
+  new Date(b.createdAt) - new Date(a.createdAt);
 
 const groupNotificationsByDate = (notifications) => {
   const today = startOfToday();

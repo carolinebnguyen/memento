@@ -25,7 +25,6 @@ export default function NotificationCard({ notification }) {
     commentContent,
   } = notification;
   const { username, picture } = sender;
-  const [post, setPost] = useState();
   const [imageSrc, setImageSrc] = useState('');
   const navigate = useNavigate();
 
@@ -35,15 +34,14 @@ export default function NotificationCard({ notification }) {
         if (postId) {
           const post = await getPost(postId);
           const { imageSrc } = post;
-          setPost(post);
           setImageSrc(imageSrc);
         }
       } catch (error) {
-        console.log('error fetching post: ', post);
+        return;
       }
     };
     fetchPost();
-  }, [post, postId]);
+  }, [postId]);
 
   const handleUserNavigation = () => {
     navigate(`/profile/${sender}`);
