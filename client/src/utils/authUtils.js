@@ -34,15 +34,15 @@ const logOutUser = async () => {
 };
 
 const setUserLoggedIn = () => {
-  localStorage.setItem('isLoggedIn', 'true');
+  sessionStorage.setItem('isLoggedIn', 'true');
 };
 
 const setUserLoggedOut = () => {
-  localStorage.removeItem('isLoggedIn');
+  sessionStorage.removeItem('isLoggedIn');
 };
 
 const isUserLoggedIn = () => {
-  return localStorage.getItem('isLoggedIn') === 'true';
+  return sessionStorage.getItem('isLoggedIn') === 'true';
 };
 
 const updatePassword = async (currentPassword, newPassword) => {
