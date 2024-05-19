@@ -226,7 +226,7 @@ router.delete('/:commentId', async (req, res) => {
       return res.status(404).json({ error: 'Comment not found' });
     }
 
-    const { postId } = Item;
+    const { postId, username: commenter } = Item;
 
     const commentParams = {
       TableName: COMMENT_TABLE,
@@ -253,11 +253,12 @@ router.delete('/:commentId', async (req, res) => {
     }
 
     const post = Items[0];
+    const { username: poster } = post;
 
     const updatePostParams = {
       TableName: POST_TABLE,
       Key: {
-        username: post.username,
+        username: poster,
         postId: postId,
       },
       UpdateExpression: 'SET #commentCount = #commentCount - :dec',
@@ -269,13 +270,48 @@ router.delete('/:commentId', async (req, res) => {
       },
     };
 
+    const commentNotificationParams = {
+      TableName: NOTIFICATION_TABLE,
+      KeyConditionExpression: 'recipient = :poster',
+      FilterExpression:
+        'sender = :commenter AND notificationType = :type AND commentId = :commentId',
+      ExpressionAttributeValues: {
+        ':poster': poster,
+        ':commenter': commenter,
+        ':type': 'comment',
+        ':commentId': commentId,
+      },
+    };
+
+    const { Items: notifications } = await docClient.send(
+      new QueryCommand(commentNotificationParams)
+    );
+
     const updateCommentCount = new UpdateCommand(updatePostParams);
 
+    const transactionItems = [
+      { Delete: deleteComment.input },
+      { Update: updateCommentCount.input },
+    ];
+
+    if (notifications && notifications.length > 0) {
+      const notificationToDelete = notifications[0];
+      const { notificationId } = notificationToDelete;
+
+      const deleteParams = {
+        TableName: NOTIFICATION_TABLE,
+        Key: {
+          recipient: poster,
+          notificationId: notificationId,
+        },
+      };
+
+      const deleteNotification = new DeleteCommand(deleteParams);
+      transactionItems.push({ Delete: deleteNotification.input });
+    }
+
     const transactionParams = {
-      TransactItems: [
-        { Delete: deleteComment.input },
-        { Update: updateCommentCount.input },
-      ],
+      TransactItems: transactionItems,
     };
 
     await docClient.send(new TransactWriteCommand(transactionParams));

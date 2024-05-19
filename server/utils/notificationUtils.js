@@ -54,10 +54,7 @@ const createNotification = async (notification) => {
       return new Error('Post not found');
     }
 
-    const { type } = Item;
-
     notificationItem.postId = postId;
-    notificationItem.postType = type;
   }
 
   const notificationParams = {
