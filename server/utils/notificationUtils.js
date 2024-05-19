@@ -5,6 +5,7 @@ const {
   PutCommand,
   QueryCommand,
   GetCommand,
+  DeleteCommand,
 } = require('@aws-sdk/lib-dynamodb');
 
 const NOTIFICATION_TABLE = 'Notification';
@@ -68,4 +69,17 @@ const createNotification = async (notification) => {
   return { success: true, notificationId: notificationId };
 };
 
-module.exports = { createNotification };
+const deleteNotification = async (recipient, notificationId) => {
+  const deleteParams = {
+    TableName: NOTIFICATION_TABLE,
+    Key: {
+      recipient: recipient,
+      notificationId: notificationId,
+    },
+  };
+
+  await docClient.send(new DeleteCommand(deleteParams));
+  return { success: true };
+};
+
+module.exports = { createNotification, deleteNotification };
