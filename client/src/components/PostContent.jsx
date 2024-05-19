@@ -45,7 +45,7 @@ export default function PostContent({ post, onRemovePost }) {
       <PostCard
         post={post}
         removePost={handleDeletePost}
-        updatedCount={newComments.length}
+        updatedCount={newComments.length || 0}
       />
       <Divider my={3} />
       <CommentField

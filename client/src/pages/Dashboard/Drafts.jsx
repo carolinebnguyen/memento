@@ -164,6 +164,7 @@ export default function Drafts() {
         description: `Your draft ${values.type} has been saved`,
         status: 'success',
         duration: 3000,
+        variant: 'subtle',
         position: 'top',
         containerStyle: {
           zIndex: '9999',

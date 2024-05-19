@@ -90,7 +90,7 @@ export default function ProfileHeader({ profile, isFollowingUser }) {
   };
 
   return (
-    <Flex mb={2} maxW="100%">
+    <Flex mb={2} w="100%" justify="center">
       <Avatar size="xl" mr={5} src={picture} />
       <Stack direction="column">
         <Stack direction="row" gap={5}>

@@ -20,6 +20,8 @@ import LandingLayout from './components/layouts/LandingLayout';
 import FooterLayout from './components/layouts/FooterLayout';
 import DashboardLayout from './components/layouts/DashboardLayout';
 
+import theme from './theme/theme';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -60,7 +62,7 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <RouterProvider router={router} />
     </ChakraProvider>
   );
