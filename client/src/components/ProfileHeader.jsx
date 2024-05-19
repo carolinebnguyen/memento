@@ -68,7 +68,11 @@ export default function ProfileHeader({ profile, isFollowingUser }) {
       } else {
         await unfollowUser(userParam);
         setFollowersList((followersList) =>
-          followersList.filter((follower) => follower !== currentUsername)
+          followersList.filter(
+            (follower) =>
+              (typeof follower === 'string' ? follower : follower.username) !==
+              currentUsername
+          )
         );
       }
       setIsFollowing(!isFollowing);
