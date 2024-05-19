@@ -32,19 +32,22 @@ export default function Create() {
   const [file, setFile] = useState(null);
   const toast = useToast();
   const navigate = useNavigate();
-  const draftPost = localStorage.getItem('draftPost');
-  const [hasDraft, setHasDraft] = useState(!!draftPost);
+  const [hasDraft, setHasDraft] = useState(false);
   const [currentUsername, setCurrentUsername] = useState('');
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
-    const fetchCurrentUsername = async () => {
+    const fetchCurrentUserData = async () => {
       const username = await getCurrentUsername();
       setCurrentUsername(username);
+      const draftPost = localStorage.getItem(`draftPost_${currentUsername}`);
+      if (draftPost) {
+        setHasDraft(true);
+      }
     };
-    fetchCurrentUsername();
-  }, []);
+    fetchCurrentUserData();
+  }, [currentUsername]);
 
   const initialValues = {
     type: 'status',
@@ -113,7 +116,7 @@ export default function Create() {
     const reader = new FileReader();
     reader.onload = () => {
       const photoData = reader.result;
-      localStorage.setItem('draftPhoto', photoData);
+      localStorage.setItem(`draftPhoto_${currentUsername}`, photoData);
     };
     reader.readAsDataURL(file);
   };
@@ -138,7 +141,10 @@ export default function Create() {
       savePhotoLocally(file);
     }
 
-    localStorage.setItem('draftPost', JSON.stringify(values));
+    localStorage.setItem(
+      `draftPost_${currentUsername}`,
+      JSON.stringify(values)
+    );
     setTimeout(() => {
       toast({
         title: 'Draft Saved',

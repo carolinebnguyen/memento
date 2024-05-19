@@ -19,6 +19,7 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
+  Spinner,
 } from '@chakra-ui/react';
 import { IoMdClose } from 'react-icons/io';
 import * as yup from 'yup';
@@ -29,13 +30,13 @@ import styles from '../../components/Sidebar/Sidebar.module.css';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import { getCurrentUsername } from '../../utils/userUtils';
 import { createPost } from '../../utils/postUtils';
+import ErrorComponent from '../../components/ErrorComponent';
 
 export default function Drafts() {
   const toast = useToast();
   const navigate = useNavigate();
-  const draftPostString = localStorage.getItem('draftPost');
-  const draftPost = draftPostString ? JSON.parse(draftPostString) : {};
-  const { type, text } = draftPost;
+  const [text, setText] = useState('');
+  const [type, setType] = useState('status');
   const [file, setFile] = useState(null);
   const [isFileLoaded, setIsFileLoaded] = useState(false);
   const [isFileChanged, setIsFileChanged] = useState(false);
@@ -44,47 +45,61 @@ export default function Drafts() {
   const [currentUsername, setCurrentUsername] = useState('');
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+  const [pageState, setPageState] = useState('LOADING');
 
   useEffect(() => {
-    const fetchCurrentUsername = async () => {
-      const username = await getCurrentUsername();
-      setCurrentUsername(username);
+    const loadImageLocally = async () => {
+      const photoData = localStorage.getItem(`draftPhoto_${currentUsername}`);
+      if (photoData && !isFileLoaded) {
+        const blob = await (await fetch(photoData)).blob();
+        const extension = blob.type.slice(blob.type.indexOf('/') + 1);
+        const file = new File([blob], `draftFile.${extension}`, {
+          type: blob.type,
+        });
+        const fileWithPreview = Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        });
+        setFile(fileWithPreview);
+        setIsFileLoaded(true);
+      }
     };
-    fetchCurrentUsername();
-  }, []);
+
+    const fetchCurrentUserData = async () => {
+      try {
+        const username = await getCurrentUsername();
+        setCurrentUsername(username);
+        const draftPostString = localStorage.getItem(`draftPost_${username}`);
+        const draftPost = draftPostString ? JSON.parse(draftPostString) : {};
+        if (Object.keys(draftPost).length === 0) {
+          setPageState('NOT_FOUND');
+          return;
+        }
+        const { type, text } = draftPost;
+        setType(type);
+        setText(text);
+        if (type === 'photo' && !isFileLoaded) {
+          await loadImageLocally();
+        }
+        setPageState('DONE');
+      } catch (error) {
+        setPageState('ERROR');
+      }
+    };
+    fetchCurrentUserData();
+  }, [isFileLoaded, currentUsername]);
 
   const initialValues = {
-    type: type || '',
+    type: type,
     imageSrc: '',
-    text: text || '',
-  };
-
-  useEffect(() => {
-    if (type === 'photo' && !isFileLoaded) {
-      loadImageLocally();
-    }
-  });
-
-  const loadImageLocally = async () => {
-    const photoData = localStorage.getItem('draftPhoto');
-    if (photoData && !isFileLoaded) {
-      const blob = await (await fetch(photoData)).blob();
-      const extension = blob.type.slice(blob.type.indexOf('/') + 1);
-      const file = new File([blob], `draftFile.${extension}`, {
-        type: blob.type,
-      });
-      const fileWithPreview = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
-      setFile(fileWithPreview);
-      setIsFileLoaded(true);
-    }
+    text: text,
   };
 
   const PhotoSetter = () => {
     const { setFieldValue } = useFormikContext();
 
     useEffect(() => {
+      setFieldValue('type', type);
+      setFieldValue('text', text);
       if (type === 'photo' && isFileLoaded) {
         setFieldValue('imageSrc', file);
       }
@@ -114,7 +129,7 @@ export default function Drafts() {
     const reader = new FileReader();
     reader.onload = () => {
       const photoData = reader.result;
-      localStorage.setItem('draftPhoto', photoData);
+      localStorage.setItem(`draftPhoto_${currentUsername}`, photoData);
     };
     reader.readAsDataURL(file);
   };
@@ -139,7 +154,10 @@ export default function Drafts() {
       savePhotoLocally(file);
     }
 
-    localStorage.setItem('draftPost', JSON.stringify(values));
+    localStorage.setItem(
+      `draftPost_${currentUsername}`,
+      JSON.stringify(values)
+    );
     setTimeout(() => {
       toast({
         title: 'Draft Saved',
@@ -155,8 +173,8 @@ export default function Drafts() {
   };
 
   const removeLocalDraft = () => {
-    localStorage.removeItem('draftPost');
-    localStorage.removeItem('draftPhoto');
+    localStorage.removeItem(`draftPost_${currentUsername}`);
+    localStorage.removeItem(`draftPhoto_${currentUsername}`);
   };
 
   const confirmDeleteDraft = () => {
@@ -219,6 +237,34 @@ export default function Drafts() {
       setSubmitting(false);
     }
   };
+
+  if (pageState === 'LOADING') {
+    return (
+      <Center>
+        <Spinner />
+      </Center>
+    );
+  } else if (pageState === 'ERROR') {
+    return <ErrorComponent errorType="SERVER" />;
+  } else if (pageState === 'NOT_FOUND') {
+    return (
+      <Flex direction="column" align="center" w="100vw" gap={5}>
+        <Heading as="h1" size="lg" mb={2}>
+          Drafts
+        </Heading>
+        <Text>No drafts to display</Text>
+        <Box>
+          <NavLink
+            to={'/create'}
+            className={styles['footer-link']}
+            style={{ color: 'steelblue' }}
+          >
+            Create New Post
+          </NavLink>
+        </Box>
+      </Flex>
+    );
+  }
 
   return (
     <Flex direction="column" align="center" w="100vw">
