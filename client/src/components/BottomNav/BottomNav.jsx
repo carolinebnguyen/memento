@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Flex,
   Text,
@@ -11,6 +11,8 @@ import {
   Icon,
   useBreakpointValue,
   IconButton,
+  Avatar,
+  useToast,
 } from '@chakra-ui/react';
 import {
   MdOutlineHome,
@@ -27,26 +29,13 @@ import { CompactIconButton } from '../CompactNavLink/CompactNavLink';
 import { headerHeight, sidebarWidth } from '../../utils/constants';
 import styles from './BottomNav.module.css';
 import { logOutUser, setUserLoggedOut } from '../../utils/authUtils';
-import { getCurrentUserProfile } from '../../utils/userUtils';
 
-export default function BottomNav() {
+export default function BottomNav({ currentUser }) {
   const isWide = useBreakpointValue({ base: false, md: true });
+  const { username: currentUsername, picture } = currentUser;
   const navigate = useNavigate();
   const { username } = useParams();
-  const [currentUser, setCurrentUser] = useState({});
-  const { username: currentUsername, picture } = currentUser;
-
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const { user } = await getCurrentUserProfile();
-        setCurrentUser(user);
-      } catch (error) {
-        return;
-      }
-    };
-    fetchCurrentUser();
-  }, []);
+  const toast = useToast();
 
   const handleLogout = async () => {
     try {
@@ -56,7 +45,16 @@ export default function BottomNav() {
         navigate('/');
       }, 1500);
     } catch (error) {
-      console.error('Error logging out ', error);
+      toast({
+        title: 'Error',
+        description: 'Error logging out. Please try again later.',
+        status: 'error',
+        variant: 'subtle',
+        position: 'top',
+        containerStyle: {
+          zIndex: '9999',
+        },
+      });
     }
   };
 
@@ -104,6 +102,7 @@ export default function BottomNav() {
             className={styles['menu-link']}
           >
             <Image
+              as={Avatar}
               boxSize="3rem"
               borderRadius="full"
               objectFit="cover"

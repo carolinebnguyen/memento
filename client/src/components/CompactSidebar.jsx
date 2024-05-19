@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Image, Stack, Divider } from '@chakra-ui/react';
+import { Flex, Image, Stack, Divider, useToast } from '@chakra-ui/react';
 import {
   MdOutlineHome,
   MdHome,
@@ -44,6 +44,7 @@ export default function CompactSidebar() {
 
 function CompactSidebarContent() {
   const navigate = useNavigate();
+  const toast = useToast();
   const [currentUsername, setCurrentUsername] = useState('');
 
   useEffect(() => {
@@ -60,7 +61,16 @@ function CompactSidebarContent() {
       setUserLoggedOut();
       navigate('/');
     } catch (error) {
-      console.error('Error logging out ', error);
+      toast({
+        title: 'Error',
+        description: 'Error logging out. Please try again later.',
+        status: 'error',
+        variant: 'subtle',
+        position: 'top',
+        containerStyle: {
+          zIndex: '9999',
+        },
+      });
     }
   };
 

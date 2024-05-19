@@ -39,7 +39,7 @@ import {
 } from '../../utils/authUtils';
 import { getCurrentUsername } from '../../utils/userUtils';
 
-export default function Sidebar() {
+export default function Sidebar({ currentUser }) {
   const isCollapsed = useBreakpointValue({ base: true, sm: false });
   const isCompact = useBreakpointValue({ sm: true, md: false });
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ export default function Sidebar() {
       {isCollapsed ? (
         <>
           <Header />
-          <BottomNav />
+          <BottomNav currentUser={currentUser} />
         </>
       ) : isCompact ? (
         <CompactSidebar />

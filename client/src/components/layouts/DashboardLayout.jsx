@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Flex } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../Sidebar/Sidebar';
@@ -7,11 +7,25 @@ import {
   sidebarWidth,
   compactSidebarWidth,
 } from '../../utils/constants';
+import { getCurrentUserProfile } from '../../utils/userUtils';
 
 export default function DashboardLayout() {
+  const [currentUser, setCurrentUser] = useState({});
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const { user } = await getCurrentUserProfile();
+        setCurrentUser(user);
+      } catch (error) {
+        return;
+      }
+    };
+    fetchCurrentUser();
+  }, []);
+
   return (
     <>
-      <Sidebar />
+      <Sidebar currentUser={currentUser} />
       <Flex justify="center" align="center">
         <Flex
           px={{ base: 4, sm: 16 }}
