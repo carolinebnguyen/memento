@@ -9,6 +9,7 @@ const {
   QueryCommand,
   GetCommand,
   BatchGetCommand,
+  TransactWriteCommand,
 } = require('@aws-sdk/lib-dynamodb');
 
 const NOTIFICATION_TABLE = 'Notification';
@@ -172,6 +173,54 @@ router.get('/', async (req, res) => {
     return res
       .status(500)
       .json({ error: 'Internal server error getting notifications' });
+  }
+});
+
+// PUT api/notifications/status
+router.put('/status', async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ error: 'User is not authenticated' });
+  }
+
+  try {
+    const username = req.user.username;
+    const { notificationIds } = req.body;
+
+    if (!notificationIds || notificationIds.length < 1) {
+      return res
+        .status(401)
+        .json({ error: 'A list of notificationIds is required' });
+    }
+
+    const transactionItems = notificationIds.map((notificationId) => ({
+      Update: {
+        TableName: NOTIFICATION_TABLE,
+        Key: {
+          recipient: username,
+          notificationId: notificationId,
+        },
+        UpdateExpression: 'set #status = :status',
+        ExpressionAttributeNames: {
+          '#status': 'status',
+        },
+        ExpressionAttributeValues: {
+          ':status': 'READ',
+        },
+      },
+    }));
+
+    const params = {
+      TransactItems: transactionItems,
+    };
+
+    await docClient.send(new TransactWriteCommand(params));
+
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    console.error('Error marking notifications as read', error);
+    return res
+      .status(500)
+      .json({ error: 'Internal server error marking notifications as read' });
   }
 });
 

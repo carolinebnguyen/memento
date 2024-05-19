@@ -7,6 +7,29 @@ import {
   subMonths,
 } from 'date-fns';
 
+const NotificationStatus = {
+  READ: 'READ',
+  UNREAD: 'UNREAD',
+};
+
+const sortNotificationsByStatus = (notifications) => {
+  const unreadNotifications = [];
+  const readNotifications = [];
+
+  notifications.forEach((notification) => {
+    if (notification.status === NotificationStatus.UNREAD) {
+      unreadNotifications.push(JSON.parse(JSON.stringify(notification)));
+    } else {
+      readNotifications.push(JSON.parse(JSON.stringify(notification)));
+    }
+  });
+
+  return {
+    unreadNotifications,
+    readNotifications,
+  };
+};
+
 const sortReverseChronologicalOrder = (a, b) =>
   new Date(b.createdAt) - new Date(a.createdAt);
 
@@ -15,14 +38,18 @@ const groupNotificationsByDate = (notifications) => {
   const oneWeekAgo = subWeeks(today, 1);
   const oneMonthAgo = subMonths(today, 1);
 
+  const { unreadNotifications, readNotifications } =
+    sortNotificationsByStatus(notifications);
+
   const groupedNotifications = {
+    unread: unreadNotifications,
     today: [],
     thisWeek: [],
     thisMonth: [],
     earlier: [],
   };
 
-  notifications.forEach((notification) => {
+  readNotifications.forEach((notification) => {
     const createdAt = new Date(notification.createdAt);
     if (isToday(createdAt)) {
       groupedNotifications.today.push(notification);
@@ -51,6 +78,7 @@ const NotificationType = {
 };
 
 const notificationGroupToHeadingMap = {
+  unread: 'Unread',
   today: 'Today',
   thisWeek: 'This Week',
   thisMonth: 'This Month',
@@ -80,9 +108,25 @@ const getNotifications = async () => {
   }
 };
 
+const markNotificationsAsRead = async (notificationIds) => {
+  try {
+    await mementoBackend.put('/notifications/status', { notificationIds });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const filterUnreadNotifications = (notifications) => {
+  return notifications
+    .filter((notification) => notification.status === NotificationStatus.UNREAD)
+    .map((notification) => notification.notificationId);
+};
+
 export {
   groupNotificationsByDate,
   getNotificationGroupHeading,
   getNotificationMessage,
   getNotifications,
+  markNotificationsAsRead,
+  filterUnreadNotifications,
 };

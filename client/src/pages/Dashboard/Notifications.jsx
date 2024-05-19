@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Box, Flex, Divider, Heading, Text, Spinner } from '@chakra-ui/react';
 import NotificationGroup from '../../components/NotificationGroup';
 import {
+  filterUnreadNotifications,
   getNotifications,
   groupNotificationsByDate,
+  markNotificationsAsRead,
 } from '../../utils/notificationUtils';
 import ErrorComponent from '../../components/ErrorComponent';
 
@@ -19,6 +21,10 @@ export default function Notifications() {
           const notificationGroupsByDate =
             groupNotificationsByDate(notifications);
           setGroupedNotifications(notificationGroupsByDate);
+        }
+        const notificationIds = filterUnreadNotifications(notifications);
+        if (notificationIds && notificationIds.length > 0) {
+          await markNotificationsAsRead(notificationIds);
         }
         setPageState('DONE');
       } catch (error) {
