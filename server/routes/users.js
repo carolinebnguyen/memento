@@ -19,6 +19,7 @@ const {
   TransactWriteCommand,
   BatchGetCommand,
   DeleteCommand,
+  PutCommand,
 } = require('@aws-sdk/lib-dynamodb');
 const { marshall, unmarshall } = require('@aws-sdk/util-dynamodb');
 
@@ -360,25 +361,28 @@ router.put('/:username/follow', async (req, res) => {
       ConditionExpression: 'attribute_exists(username)',
     };
 
-    const updateFollowers = new UpdateCommand(followParams);
-    const updateFollowing = new UpdateCommand(followingParams);
-
-    const transactionParams = {
-      TransactItems: [
-        { Update: updateFollowers.input },
-        { Update: updateFollowing.input },
-      ],
-    };
-
-    await docClient.send(new TransactWriteCommand(transactionParams));
-
     const notification = {
       sender: follower,
       recipient: username,
       notificationType: 'follow',
     };
 
-    await createNotification(notification);
+    const notificationParams = await createNotification(notification);
+
+    const updateFollowers = new UpdateCommand(followParams);
+    const updateFollowing = new UpdateCommand(followingParams);
+    const putNotification = new PutCommand(notificationParams);
+
+    const transactionParams = {
+      TransactItems: [
+        { Update: updateFollowers.input },
+        { Update: updateFollowing.input },
+        { Put: putNotification.input },
+      ],
+    };
+
+    await docClient.send(new TransactWriteCommand(transactionParams));
+
     return res.status(200).json({ success: true });
   } catch (error) {
     console.error('Error following user: ', error);

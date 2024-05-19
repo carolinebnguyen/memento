@@ -66,7 +66,7 @@ const createNotification = async (notification) => {
   };
 
   await docClient.send(new PutCommand(notificationParams));
-  return { success: true, notificationId: notificationId };
+  return notificationParams;
 };
 
 const deleteNotification = async (recipient, notificationId) => {
