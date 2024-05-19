@@ -19,10 +19,12 @@ const {
   PutObjectCommand,
   DeleteObjectCommand,
 } = require('@aws-sdk/client-s3');
+const { createNotification } = require('../utils/notificationUtils');
 
 const USER_TABLE = 'User';
 const POST_TABLE = 'Post';
 const COMMENT_TABLE = 'Comment';
+const NOTIFICATION_TABLE = 'Notification';
 
 const dynamoDBClient = new DynamoDBClient({
   region: process.env.AWS_REGION,
@@ -113,11 +115,28 @@ router.post('/', async (req, res) => {
     const postComment = new PutCommand(commentParams);
     const updateCommentCount = new UpdateCommand(postParams);
 
+    const transactionItems = [
+      { Put: postComment.input },
+      { Update: updateCommentCount.input },
+    ];
+
+    if (username !== poster) {
+      const notification = {
+        sender: username,
+        recipient: poster,
+        notificationType: 'comment',
+        commentId: commentId,
+        postId: postId,
+      };
+
+      const notificationParams = await createNotification(notification);
+
+      const putNotification = new PutCommand(notificationParams);
+      transactionItems.push({ Put: putNotification.input });
+    }
+
     const transactionParams = {
-      TransactItems: [
-        { Put: postComment.input },
-        { Update: updateCommentCount.input },
-      ],
+      TransactItems: transactionItems,
     };
 
     await docClient.send(new TransactWriteCommand(transactionParams));

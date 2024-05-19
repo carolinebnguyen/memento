@@ -23,6 +23,7 @@ export default function NotificationCard({ notification }) {
     notificationType,
     createdAt,
     commentContent,
+    statusContent,
   } = notification;
   const { username, picture } = sender;
   const navigate = useNavigate();
@@ -43,17 +44,20 @@ export default function NotificationCard({ notification }) {
           <Stack gap={0}>
             <HStack w="full" gap={1}>
               <Box>
-                <Link color="black" onClick={handleUserNavigation}>
-                  <Text as="b" fontSize="sm">
-                    {username}
-                  </Text>
-                </Link>
-                <Text fontSize="sm" fontWeight={400}>
+                <Text fontSize="sm" fontWeight={400} noOfLines={2}>
+                  <Link
+                    color="black"
+                    onClick={handleUserNavigation}
+                    fontWeight={600}
+                  >
+                    {`${username} `}
+                  </Link>
                   {getNotificationMessage(notificationType)}
                   <Link onClick={handlePostNavigation} fontWeight={600}>
                     {postType}
                   </Link>
                   {commentContent && `: ${commentContent}`}
+                  {statusContent && `: ${statusContent}`}
                 </Text>
               </Box>
             </HStack>

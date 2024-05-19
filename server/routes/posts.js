@@ -399,7 +399,7 @@ router.put('/:postId/like', async (req, res) => {
     }
 
     const post = Items[0];
-    const { username: poster, type } = post;
+    const { username: poster } = post;
 
     const likeParams = {
       TableName: POST_TABLE,
@@ -424,7 +424,6 @@ router.put('/:postId/like', async (req, res) => {
         recipient: poster,
         notificationType: 'like',
         postId: postId,
-        postType: type,
       };
 
       const notificationParams = await createNotification(notification);

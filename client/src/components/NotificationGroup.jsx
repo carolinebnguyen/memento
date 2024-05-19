@@ -12,7 +12,7 @@ export default function NotificationGroup({ groupName, notifications }) {
             {getNotificationGroupHeading(groupName)}
           </Heading>
           {notifications.map((notification) => (
-            <Box key={notification.notificationId} w="100%" my={3}>
+            <Box key={notification.notificationId} w="100%">
               <NotificationCard notification={notification} />
             </Box>
           ))}

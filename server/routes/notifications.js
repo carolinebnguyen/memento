@@ -84,33 +84,40 @@ router.get('/', async (req, res) => {
     }
 
     // get all postIds to perform batch get of post imageSrcs
-    const postIds = notifications
+    let postIds = new Set();
+    notifications
       .filter((notification) => notification.postId)
-      .map((notification) => ({ postId: notification.postId }));
+      .forEach((notification) => {
+        postIds.add(notification.postId);
+      });
 
     let posts = [];
 
-    if (postIds.length > 0) {
-      const batchGetPostImageParams = {
+    if (postIds.size > 0) {
+      const batchGetPostParams = {
         RequestItems: {
           [POST_TABLE]: {
-            Keys: postIds.map((postId) => ({
+            Keys: Array.from(postIds).map((postId) => ({
               username: username,
-              postId: postId.postId,
+              postId: postId,
             })),
           },
         },
       };
 
       const { Responses } = await docClient.send(
-        new BatchGetCommand(batchGetPostImageParams)
+        new BatchGetCommand(batchGetPostParams)
       );
 
       posts = Responses[POST_TABLE];
     }
 
     const postMap = posts.reduce((acc, post) => {
-      acc[post.postId] = post.imageSrc;
+      acc[post.postId] = {
+        imageSrc: post.imageSrc,
+        type: post.type,
+        text: post.text,
+      };
       return acc;
     }, {});
 
@@ -147,7 +154,14 @@ router.get('/', async (req, res) => {
         notification.commentContent = commentMap[notification.commentId];
       }
       if (notification.postId && postMap[notification.postId]) {
-        notification.postImage = postMap[notification.postId];
+        notification.postImage = postMap[notification.postId].imageSrc;
+        notification.postType = postMap[notification.postId].type;
+      }
+      if (
+        notification.postType === 'status' &&
+        notification.notificationType === 'like'
+      ) {
+        notification.statusContent = postMap[notification.postId].text;
       }
       return notification;
     });
