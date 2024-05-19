@@ -584,19 +584,44 @@ router.delete('/:postId', async (req, res) => {
       },
     };
 
-    const { Items } = await docClient.send(new QueryCommand(commentParams));
+    const { Items: comments } = await docClient.send(
+      new QueryCommand(commentParams)
+    );
 
-    const commentDeletes = Items.map((item) => ({
+    const commentDeletes = comments.map((comment) => ({
       Delete: {
         TableName: COMMENT_TABLE,
         Key: {
-          commentId: item.commentId,
+          commentId: comment.commentId,
+        },
+      },
+    }));
+
+    const notificationParams = {
+      TableName: NOTIFICATION_TABLE,
+      IndexName: 'postId-index',
+      KeyConditionExpression: 'postId = :postId',
+      ExpressionAttributeValues: {
+        ':postId': postId,
+      },
+    };
+
+    const { Items: notifications } = await docClient.send(
+      new QueryCommand(notificationParams)
+    );
+
+    const notificationDeletes = notifications.map((notification) => ({
+      Delete: {
+        TableName: NOTIFICATION_TABLE,
+        Key: {
+          recipient: username,
+          notificationId: notification.notificationId,
         },
       },
     }));
 
     const transactionParams = {
-      TransactItems: [postParams, ...commentDeletes],
+      TransactItems: [postParams, ...commentDeletes, ...notificationDeletes],
     };
 
     await docClient.send(new TransactWriteCommand(transactionParams));
