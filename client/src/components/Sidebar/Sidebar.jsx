@@ -10,6 +10,7 @@ import {
   Icon,
   Spinner,
   Center,
+  useToast,
 } from '@chakra-ui/react';
 import {
   MdOutlineHome,
@@ -87,6 +88,7 @@ function SidebarContent() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [currentUsername, setCurrentUsername] = useState('');
+  const toast = useToast();
 
   useEffect(() => {
     const fetchCurrentUsername = async () => {
@@ -105,7 +107,17 @@ function SidebarContent() {
         navigate('/');
       }, 1500);
     } catch (error) {
-      console.error('Error logging out ', error);
+      setIsLoading(false);
+      toast({
+        title: 'Error',
+        description: 'Error logging out. Please try again later.',
+        status: 'error',
+        variant: 'subtle',
+        position: 'top',
+        containerStyle: {
+          zIndex: '9999',
+        },
+      });
     }
   };
 
