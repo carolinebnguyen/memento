@@ -14,6 +14,7 @@ const {
 const NOTIFICATION_TABLE = 'Notification';
 const COMMENT_TABLE = 'Comment';
 const USER_TABLE = 'User';
+const POST_TABLE = 'Post';
 
 const dynamoDBClient = new DynamoDBClient({
   region: process.env.AWS_REGION,
@@ -82,6 +83,37 @@ router.get('/', async (req, res) => {
       });
     }
 
+    // get all postIds to perform batch get of post imageSrcs
+    const postIds = notifications
+      .filter((notification) => notification.postId)
+      .map((notification) => ({ postId: notification.postId }));
+
+    let posts = [];
+
+    if (postIds.length > 0) {
+      const batchGetPostImageParams = {
+        RequestItems: {
+          [POST_TABLE]: {
+            Keys: postIds.map((postId) => ({
+              username: username,
+              postId: postId.postId,
+            })),
+          },
+        },
+      };
+
+      const { Responses } = await docClient.send(
+        new BatchGetCommand(batchGetPostImageParams)
+      );
+
+      posts = Responses[POST_TABLE];
+    }
+
+    const postMap = posts.reduce((acc, post) => {
+      acc[post.postId] = post.imageSrc;
+      return acc;
+    }, {});
+
     // get all commentIds to perform batch get of comments
     const commentIds = notifications
       .filter((notification) => notification.commentId)
@@ -113,6 +145,9 @@ router.get('/', async (req, res) => {
     const detailedNotifications = notifications.map((notification) => {
       if (notification.commentId && commentMap[notification.commentId]) {
         notification.commentContent = commentMap[notification.commentId];
+      }
+      if (notification.postId && postMap[notification.postId]) {
+        notification.postImage = postMap[notification.postId];
       }
       return notification;
     });

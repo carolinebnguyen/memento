@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Flex,
   Text,
@@ -12,7 +12,6 @@ import {
 } from '@chakra-ui/react';
 import { formatDateDistanceToNow, formatDate } from '../utils/utils';
 import { useNavigate } from 'react-router-dom';
-import { getPost } from '../utils/postUtils';
 import { getNotificationMessage } from '../utils/notificationUtils';
 
 export default function NotificationCard({ notification }) {
@@ -20,28 +19,13 @@ export default function NotificationCard({ notification }) {
     sender,
     postId,
     postType,
+    postImage,
     notificationType,
     createdAt,
     commentContent,
   } = notification;
   const { username, picture } = sender;
-  const [imageSrc, setImageSrc] = useState('');
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        if (postId) {
-          const post = await getPost(postId);
-          const { imageSrc } = post;
-          setImageSrc(imageSrc);
-        }
-      } catch (error) {
-        return;
-      }
-    };
-    fetchPost();
-  }, [postId]);
 
   const handleUserNavigation = () => {
     navigate(`/profile/${sender}`);
@@ -84,9 +68,9 @@ export default function NotificationCard({ notification }) {
             </Tooltip>
           </Stack>
         </Stack>
-        {imageSrc && (
+        {postImage && (
           <Image
-            src={imageSrc}
+            src={postImage}
             boxSize={70}
             objectFit="cover"
             onClick={handlePostNavigation}
