@@ -498,31 +498,28 @@ router.delete('/:postId/like', async (req, res) => {
       new QueryCommand(likeNotificationParams)
     );
 
-    if (!notifications || notifications.length === 0) {
-      return res
-        .status(404)
-        .json({ error: 'Like notification could not be found' });
+    const updateLikes = new UpdateCommand(likeParams);
+
+    const transactionItems = [{ Update: updateLikes.input }];
+
+    if (notifications && notifications.length > 0) {
+      const notificationToDelete = notifications[0];
+      const { notificationId } = notificationToDelete;
+
+      const deleteParams = {
+        TableName: NOTIFICATION_TABLE,
+        Key: {
+          recipient: poster,
+          notificationId: notificationId,
+        },
+      };
+
+      const deleteNotification = new DeleteCommand(deleteParams);
+      transactionItems.push({ Delete: deleteNotification.input });
     }
 
-    const notificationToDelete = notifications[0];
-    const { notificationId } = notificationToDelete;
-
-    const deleteParams = {
-      TableName: NOTIFICATION_TABLE,
-      Key: {
-        recipient: poster,
-        notificationId: notificationId,
-      },
-    };
-
-    const updateLikes = new UpdateCommand(likeParams);
-    const deleteNotification = new DeleteCommand(deleteParams);
-
     const transactionParams = {
-      TransactItems: [
-        { Update: updateLikes.input },
-        { Delete: deleteNotification.input },
-      ],
+      TransactItems: transactionItems,
     };
 
     await docClient.send(new TransactWriteCommand(transactionParams));

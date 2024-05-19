@@ -445,33 +445,32 @@ router.delete('/:username/follow', async (req, res) => {
       new QueryCommand(followNotificationParams)
     );
 
-    if (!Items || Items.length === 0) {
-      return res
-        .status(404)
-        .json({ error: 'Follow notification could not be found' });
-    }
-
-    const notificationToDelete = Items[0];
-    const { notificationId } = notificationToDelete;
-
-    const deleteParams = {
-      TableName: NOTIFICATION_TABLE,
-      Key: {
-        recipient: username,
-        notificationId: notificationId,
-      },
-    };
-
     const updateFollowers = new UpdateCommand(followParams);
     const updateFollowing = new UpdateCommand(followingParams);
-    const deleteNotification = new DeleteCommand(deleteParams);
+
+    const transactionItems = [
+      { Update: updateFollowers.input },
+      { Update: updateFollowing.input },
+    ];
+
+    if (Items && Items.length > 0) {
+      const notificationToDelete = Items[0];
+      const { notificationId } = notificationToDelete;
+
+      const deleteParams = {
+        TableName: NOTIFICATION_TABLE,
+        Key: {
+          recipient: username,
+          notificationId: notificationId,
+        },
+      };
+
+      const deleteNotification = new DeleteCommand(deleteParams);
+      transactionItems.push({ Delete: deleteNotification.input });
+    }
 
     const transactionParams = {
-      TransactItems: [
-        { Update: updateFollowers.input },
-        { Update: updateFollowing.input },
-        { Delete: deleteNotification.input },
-      ],
+      TransactItems: transactionItems,
     };
 
     await docClient.send(new TransactWriteCommand(transactionParams));
