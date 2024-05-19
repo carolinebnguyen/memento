@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Flex,
   Text,
@@ -24,9 +24,26 @@ export default function NotificationCard({ notification }) {
     createdAt,
     commentContent,
   } = notification;
-  const post = getPost(postId);
-  const { imageSrc } = post;
+  const { username, picture } = sender;
+  const [post, setPost] = useState();
+  const [imageSrc, setImageSrc] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        if (postId) {
+          const post = await getPost(postId);
+          const { imageSrc } = post;
+          setPost(post);
+          setImageSrc(imageSrc);
+        }
+      } catch (error) {
+        console.log('error fetching post: ', post);
+      }
+    };
+    fetchPost();
+  }, [post, postId]);
 
   const handleUserNavigation = () => {
     navigate(`/profile/${sender}`);
@@ -40,13 +57,13 @@ export default function NotificationCard({ notification }) {
     <Flex align="center" w="full" p={2} _hover={{ backgroundColor: '#f5fbfc' }}>
       <Flex justify="space-between" w="100%" align="center" gap={8}>
         <Stack direction="row" display="flex" align="center">
-          <Avatar size="md" src={sender.picture} mr={2} />
+          <Avatar size="md" src={picture} mr={2} />
           <Stack gap={0}>
             <HStack w="full" gap={1}>
               <Box>
                 <Link color="black" onClick={handleUserNavigation}>
                   <Text as="b" fontSize="sm">
-                    {sender}
+                    {username}
                   </Text>
                 </Link>
                 <Text fontSize="sm" fontWeight={400}>

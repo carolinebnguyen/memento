@@ -1,9 +1,51 @@
-import React from 'react';
-import { Box, Flex, Divider, Heading, Text } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import { Box, Flex, Divider, Heading, Text, Spinner } from '@chakra-ui/react';
 import NotificationGroup from '../../components/NotificationGroup';
+import {
+  getNotifications,
+  groupNotificationsByDate,
+} from '../../utils/notificationUtils';
+import ErrorComponent from '../../components/ErrorComponent';
 
 export default function Notifications() {
-  const groupedNotifications = [];
+  const [groupedNotifications, setGroupedNotifications] = useState([]);
+  const [pageState, setPageState] = useState('LOADING');
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const notifications = await getNotifications();
+        if (notifications && notifications.length > 0) {
+          const notificationGroupsByDate =
+            groupNotificationsByDate(notifications);
+          setGroupedNotifications(notificationGroupsByDate);
+        }
+        setPageState('DONE');
+      } catch (error) {
+        setPageState('ERROR');
+      }
+    };
+    fetchNotifications();
+  }, []);
+
+  if (pageState === 'LOADING') {
+    return (
+      <Flex
+        justify="center"
+        align="center"
+        w="100vw"
+        direction="column"
+        px={{ base: 5, sm: 0 }}
+      >
+        <Heading as="h1" size="lg" mb={5}>
+          Notifications
+        </Heading>
+        <Spinner />
+      </Flex>
+    );
+  } else if (pageState === 'ERROR') {
+    return <ErrorComponent errorType="SERVER" />;
+  }
 
   return (
     <Flex

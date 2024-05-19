@@ -1,4 +1,4 @@
-import { mementoBackend } from './utils';
+import { mementoBackend, sortReverseChronologicalOrder } from './utils';
 import {
   isToday,
   isWithinInterval,
@@ -32,6 +32,10 @@ const groupNotificationsByDate = (notifications) => {
     } else {
       groupedNotifications.earlier.push(notification);
     }
+  });
+
+  Object.keys(groupedNotifications).forEach((group) => {
+    groupedNotifications[group].sort(sortReverseChronologicalOrder);
   });
 
   return groupedNotifications;
