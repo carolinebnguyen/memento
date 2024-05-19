@@ -143,6 +143,26 @@ router.get('/:username', async (req, res) => {
       });
     }
 
+    // get the current number of unread notifications
+    const notificationParams = {
+      TableName: NOTIFICATION_TABLE,
+      KeyConditionExpression: 'recipient = :username',
+      FilterExpression: '#status = :status',
+      ExpressionAttributeNames: {
+        '#status': 'status',
+      },
+      ExpressionAttributeValues: {
+        ':username': username,
+        ':status': 'UNREAD',
+      },
+    };
+
+    const { Items } = await docClient.send(
+      new QueryCommand(notificationParams)
+    );
+
+    user.unreadCount = Items.length;
+
     const result = {
       user,
       posts,
