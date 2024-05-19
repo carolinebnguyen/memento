@@ -27,6 +27,7 @@ const { createNotification } = require('../utils/notificationUtils');
 const USER_TABLE = 'User';
 const POST_TABLE = 'Post';
 const COMMENT_TABLE = 'Comment';
+const NOTIFICATION_TABLE = 'Notification';
 
 const dynamoDBClient = new DynamoDBClient({
   region: process.env.AWS_REGION,
@@ -482,7 +483,49 @@ router.delete('/:postId/like', async (req, res) => {
       },
     };
 
-    await docClient.send(new UpdateCommand(likeParams));
+    const likeNotificationParams = {
+      TableName: NOTIFICATION_TABLE,
+      KeyConditionExpression: 'recipient = :poster',
+      FilterExpression: 'sender = :username AND notificationType = :type',
+      ExpressionAttributeValues: {
+        ':username': username,
+        ':poster': poster,
+        ':type': 'like',
+      },
+    };
+
+    const { Items: notifications } = await docClient.send(
+      new QueryCommand(likeNotificationParams)
+    );
+
+    if (!notifications || notifications.length === 0) {
+      return res
+        .status(404)
+        .json({ error: 'Like notification could not be found' });
+    }
+
+    const notificationToDelete = notifications[0];
+    const { notificationId } = notificationToDelete;
+
+    const deleteParams = {
+      TableName: NOTIFICATION_TABLE,
+      Key: {
+        recipient: poster,
+        notificationId: notificationId,
+      },
+    };
+
+    const updateLikes = new UpdateCommand(likeParams);
+    const deleteNotification = new DeleteCommand(deleteParams);
+
+    const transactionParams = {
+      TransactItems: [
+        { Update: updateLikes.input },
+        { Delete: deleteNotification.input },
+      ],
+    };
+
+    await docClient.send(new TransactWriteCommand(transactionParams));
 
     return res.status(200).json({ success: true });
   } catch (error) {

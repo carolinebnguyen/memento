@@ -445,6 +445,12 @@ router.delete('/:username/follow', async (req, res) => {
       new QueryCommand(followNotificationParams)
     );
 
+    if (!Items || Items.length === 0) {
+      return res
+        .status(404)
+        .json({ error: 'Follow notification could not be found' });
+    }
+
     const notificationToDelete = Items[0];
     const { notificationId } = notificationToDelete;
 
@@ -455,12 +461,6 @@ router.delete('/:username/follow', async (req, res) => {
         notificationId: notificationId,
       },
     };
-
-    if (!Items || Items.length === 0) {
-      return res
-        .status(404)
-        .json({ error: 'Follow notification could not be found' });
-    }
 
     const updateFollowers = new UpdateCommand(followParams);
     const updateFollowing = new UpdateCommand(followingParams);
