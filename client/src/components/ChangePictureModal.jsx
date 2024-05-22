@@ -52,7 +52,6 @@ export default function ChangePictureModal({ isOpen, onClose, setAvatarSrc }) {
         });
       }, 1000);
     } catch (error) {
-      console.error('Error uploading profile picture', error);
       toast({
         title: 'Error',
         description: 'Your profile picture could not be updated',
