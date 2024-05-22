@@ -11,6 +11,7 @@ import {
   Icon,
   Avatar,
   Text,
+  useToast,
 } from '@chakra-ui/react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { MdLogout, MdOutlineSettings } from 'react-icons/md';
@@ -26,6 +27,7 @@ import { getCurrentUserProfile } from '../utils/userUtils';
 export default function Navbar() {
   const isLoggedIn = isUserLoggedIn();
   const navigate = useNavigate();
+  const toast = useToast();
   const [currentUser, setCurrentUser] = useState({});
   const { username, picture } = currentUser;
 
@@ -47,7 +49,16 @@ export default function Navbar() {
       setUserLoggedOut();
       navigate('/');
     } catch (error) {
-      console.error('Error logging out ', error);
+      toast({
+        title: 'Error',
+        description: 'Error logging out. Please try again later.',
+        status: 'error',
+        variant: 'subtle',
+        position: 'top',
+        containerStyle: {
+          zIndex: '9999',
+        },
+      });
     }
   };
 
