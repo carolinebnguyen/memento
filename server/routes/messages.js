@@ -12,6 +12,7 @@ const {
   PutCommand,
   UpdateCommand,
 } = require('@aws-sdk/lib-dynamodb');
+const { createParticipantKey } = require('../utils/messageUtils');
 
 const USER_TABLE = 'User';
 const CONVERSATION_TABLE = 'Conversation';
@@ -209,7 +210,7 @@ router.get('/:username/conversation', async (req, res) => {
     const { username } = req.params;
     const recipient = username.toLowerCase();
 
-    const participantKey = [sender, recipient].sort().join('-');
+    const participantKey = createParticipantKey(sender, recipient);
 
     const conversationParams = {
       TableName: CONVERSATION_TABLE,
@@ -267,7 +268,7 @@ router.post('/', async (req, res) => {
     };
 
     const participants = new Set([sender, recipient]);
-    const participantKey = [sender, recipient].sort().join('-');
+    const participantKey = createParticipantKey(sender, recipient);
 
     const conversation = {
       conversationId: conversationId,
