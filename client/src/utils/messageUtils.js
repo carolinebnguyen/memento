@@ -2,7 +2,8 @@ import { mementoBackend } from './utils';
 
 const getAllConversations = async () => {
   try {
-    await mementoBackend.get('/messages');
+    const res = await mementoBackend.get('/messages');
+    return res.data;
   } catch (error) {
     throw error;
   }
@@ -10,7 +11,8 @@ const getAllConversations = async () => {
 
 const getConversation = async (conversationId) => {
   try {
-    await mementoBackend.get(`/messages/${conversationId}`);
+    const res = await mementoBackend.get(`/messages/${conversationId}`);
+    return res.data;
   } catch (error) {
     throw error;
   }
