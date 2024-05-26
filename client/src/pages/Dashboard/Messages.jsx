@@ -17,8 +17,6 @@ export default function Messages() {
         <Spinner />
       </Center>
     );
-  } else if (pageState === 'NOT_FOUND') {
-    return <ErrorComponent errorType="USER" />;
   } else if (pageState === 'ERROR') {
     return <ErrorComponent errorType="SERVER" />;
   }
