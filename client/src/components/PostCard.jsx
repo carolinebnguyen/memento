@@ -400,7 +400,7 @@ export default function PostCard({
                     <Image
                       src={imageSrc}
                       mt={3}
-                      boxSize={500}
+                      boxSize={{ base: 400, sm: 500 }}
                       objectFit="cover"
                     />
                   </Center>

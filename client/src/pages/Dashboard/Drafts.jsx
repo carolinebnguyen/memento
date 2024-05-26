@@ -249,7 +249,7 @@ export default function Drafts() {
     return <ErrorComponent errorType="SERVER" />;
   } else if (pageState === 'NOT_FOUND') {
     return (
-      <Flex direction="column" align="center" w="100vw" gap={5}>
+      <Flex direction="column" align="center" gap={5}>
         <Heading as="h1" size="lg" mb={2}>
           Drafts
         </Heading>
@@ -268,7 +268,7 @@ export default function Drafts() {
   }
 
   return (
-    <Flex direction="column" align="center" w="100vw">
+    <Flex direction="column" align="center">
       <Heading as="h1" size="lg" mb={2}>
         Edit Draft
       </Heading>

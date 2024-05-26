@@ -68,8 +68,8 @@ export default function Home() {
       return <ErrorComponent errorType="SERVER" />;
     default:
       return (
-        <Flex justify="center" align="center" w="100%">
-          <Tabs align="center" w="100vw">
+        <Flex justify="center" align="center" w={{ base: '90vw', sm: '100vw' }}>
+          <Tabs align="center" w="100%">
             <TabList role="tablist">
               <AllTab>All</AllTab>
               <PhotoTab>Photos</PhotoTab>

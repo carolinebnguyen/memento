@@ -39,7 +39,6 @@ export default function Notifications() {
       <Flex
         justify="center"
         align="center"
-        w="100vw"
         direction="column"
         px={{ base: 5, sm: 0 }}
       >
@@ -57,7 +56,6 @@ export default function Notifications() {
     <Flex
       justify="center"
       align="center"
-      w="100vw"
       direction="column"
       px={{ base: 5, sm: 0 }}
     >
