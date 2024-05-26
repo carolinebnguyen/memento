@@ -110,11 +110,17 @@ export default function ProfileInfoCard({ setPageState }) {
   };
 
   return (
-    <Box w="full">
+    <Box w={{ base: '80vw', md: 'full' }}>
       <Heading as="h2" size="sm" textTransform="uppercase" color="gray">
         Profile
       </Heading>
-      <Stack direction="row" justifyContent="space-between" px={5} mt={5}>
+      <Stack
+        direction={{ base: 'column', md: 'row' }}
+        justifyContent="space-between"
+        px={5}
+        mt={5}
+        gap={{ base: 4, sm: 10 }}
+      >
         <Avatar size="2xl" src={avatarSrc}>
           <AvatarBadge
             as={IconButton}
@@ -133,7 +139,11 @@ export default function ProfileInfoCard({ setPageState }) {
           setAvatarSrc={handleSetAvatarSrc}
         />
         {isEditable ? (
-          <Flex direction="column" w="50%" justify="center">
+          <Flex
+            direction="column"
+            w={{ base: '100%', sm: '50%' }}
+            justify="center"
+          >
             <Formik
               initialValues={initialValues}
               validationSchema={validationSchema}
@@ -239,7 +249,11 @@ export default function ProfileInfoCard({ setPageState }) {
             </Formik>
           </Flex>
         ) : (
-          <Flex direction="column" w="50%" justify="center">
+          <Flex
+            direction="column"
+            w={{ base: '100%', sm: '50%' }}
+            justify="center"
+          >
             <Stack pt={2} gap={0}>
               <Text as="b" fontSize="sm">
                 Username

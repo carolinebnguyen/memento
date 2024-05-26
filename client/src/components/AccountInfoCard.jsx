@@ -95,12 +95,16 @@ export default function AccountInfoCard() {
   };
 
   return (
-    <Box>
+    <Box w="full">
       <Heading as="h2" size="sm" textTransform="uppercase" color="gray">
         Account
       </Heading>
       {isEditable ? (
-        <Flex direction="column" w="50%" justify="center">
+        <Flex
+          direction="column"
+          w={{ base: '100%', sm: '60%', md: '50%' }}
+          justify="center"
+        >
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
