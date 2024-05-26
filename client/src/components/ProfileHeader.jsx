@@ -117,7 +117,7 @@ export default function ProfileHeader({ profile, isFollowingUser }) {
             </Button>
           )}
         </Stack>
-        <Stack direction="row" gap={6} mt={2}>
+        <Stack direction="row" gap={{ base: 2.5, sm: 6 }} mt={2}>
           <Stack
             direction={{ base: 'column', sm: 'row' }}
             gap={{ base: 0, sm: 1 }}
@@ -126,7 +126,7 @@ export default function ProfileHeader({ profile, isFollowingUser }) {
             <Text as="b" fontSize="sm">
               {photoCount}
             </Text>
-            <Text fontSize="sm" fontWeight={500}>
+            <Text fontSize={{ base: 'xs', sm: 'sm' }} fontWeight={500}>
               {photoCount === 1 ? 'photo' : 'photos'}
             </Text>
           </Stack>
@@ -138,7 +138,7 @@ export default function ProfileHeader({ profile, isFollowingUser }) {
             <Text as="b" fontSize="sm">
               {statusCount}
             </Text>
-            <Text fontSize="sm" fontWeight={500}>
+            <Text fontSize={{ base: 'xs', sm: 'sm' }} fontWeight={500}>
               {statusCount === 1 ? 'status' : 'statuses'}
             </Text>
           </Stack>
@@ -152,7 +152,7 @@ export default function ProfileHeader({ profile, isFollowingUser }) {
             <Text as="b" fontSize="sm">
               {(followersList && followersList.length) || 0}
             </Text>
-            <Text fontSize="sm" fontWeight={500}>
+            <Text fontSize={{ base: 'xs', sm: 'sm' }} fontWeight={500}>
               {followersList && followersList.length === 1
                 ? 'follower'
                 : 'followers'}
@@ -174,7 +174,7 @@ export default function ProfileHeader({ profile, isFollowingUser }) {
             <Text as="b" fontSize="sm">
               {(following && following.length) || 0}
             </Text>
-            <Text fontSize="sm" fontWeight={500}>
+            <Text fontSize={{ base: 'xs', sm: 'sm' }} fontWeight={500}>
               following
             </Text>
           </Stack>

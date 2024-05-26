@@ -51,7 +51,12 @@ export default function Post() {
       return <ErrorComponent errorType="SERVER" />;
     default:
       return (
-        <Flex direction="column" justify="center" align="center" w="100vw">
+        <Flex
+          direction="column"
+          justify="center"
+          align="center"
+          w={{ base: '90vw', sm: '100vw' }}
+        >
           <PostContent post={post} onRemovePost={handleDeletePost} />
         </Flex>
       );
