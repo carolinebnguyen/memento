@@ -2,8 +2,10 @@ import React from 'react';
 import { Flex, Image, useBreakpointValue } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 import { headerHeight, sidebarWidth } from '../../utils/constants';
+import { FaRegBell, FaBell } from 'react-icons/fa';
 
 import logo from '../../assets/logoBlack.png';
+import { CompactIconButton } from '../CompactNavLink/CompactNavLink';
 
 export default function Header() {
   const isWide = useBreakpointValue({ base: false, md: true });
@@ -12,7 +14,7 @@ export default function Header() {
     <Flex
       as="header"
       align="center"
-      justify="center"
+      justify="space-between"
       w={isWide ? `calc(100vw - ${sidebarWidth})` : `full`}
       px={5}
       borderBottomWidth="1px"
@@ -25,6 +27,11 @@ export default function Header() {
       <NavLink to="/home">
         <Image src={logo} boxSize={24} objectFit="contain" />
       </NavLink>
+      <CompactIconButton
+        to="/notifications"
+        icon={FaRegBell}
+        filledIcon={FaBell}
+      />
     </Flex>
   );
 }

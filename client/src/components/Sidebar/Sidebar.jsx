@@ -23,6 +23,7 @@ import {
 import { FaRegBell, FaBell, FaRegUser, FaUser, FaSearch } from 'react-icons/fa';
 import { FiPlusCircle } from 'react-icons/fi';
 import { AiFillPlusCircle } from 'react-icons/ai';
+import { MdMailOutline, MdMail } from 'react-icons/md';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import logo from '../../assets/logoBlack.png';
 import StyledNavLink from '../StyledNavLink/StyledNavLink';
@@ -141,6 +142,12 @@ function SidebarContent() {
           icon={FiPlusCircle}
           filledIcon={AiFillPlusCircle}
           label="Create"
+        />
+        <StyledNavLink
+          to="/messages"
+          icon={MdMailOutline}
+          filledIcon={MdMail}
+          label="Direct Messages"
         />
         <StyledNavLink
           to="/notifications"

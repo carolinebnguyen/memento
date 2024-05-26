@@ -21,9 +21,10 @@ import {
   MdLogout,
   MdOutlineSettings,
 } from 'react-icons/md';
-import { FaRegUser, FaUser, FaSearch, FaRegBell, FaBell } from 'react-icons/fa';
+import { FaRegUser, FaUser, FaSearch } from 'react-icons/fa';
 import { FiPlusCircle } from 'react-icons/fi';
 import { AiFillPlusCircle } from 'react-icons/ai';
+import { MdMailOutline, MdMail } from 'react-icons/md';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { CompactIconButton } from '../CompactNavLink/CompactNavLink';
 import { headerHeight, sidebarWidth } from '../../utils/constants';
@@ -84,9 +85,9 @@ export default function BottomNav({ currentUser }) {
         filledIcon={AiFillPlusCircle}
       />
       <CompactIconButton
-        to="/notifications"
-        icon={FaRegBell}
-        filledIcon={FaBell}
+        to="/messages"
+        icon={MdMailOutline}
+        filledIcon={MdMail}
       />
       <Menu>
         <MenuButton

@@ -11,6 +11,7 @@ import {
 import { FaRegBell, FaBell, FaRegUser, FaUser, FaSearch } from 'react-icons/fa';
 import { FiPlusCircle } from 'react-icons/fi';
 import { AiFillPlusCircle } from 'react-icons/ai';
+import { MdMailOutline, MdMail } from 'react-icons/md';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { compactSidebarWidth } from '../utils/constants';
 import FooterMenu from './FooterMenu/FooterMenu';
@@ -87,6 +88,11 @@ function CompactSidebarContent() {
           to="/create"
           icon={FiPlusCircle}
           filledIcon={AiFillPlusCircle}
+        />
+        <CompactNavLink
+          to="/messages"
+          icon={MdMailOutline}
+          filledIcon={MdMail}
         />
         <CompactNavLink
           to="/notifications"

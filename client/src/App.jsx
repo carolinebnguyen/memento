@@ -11,6 +11,7 @@ import Home from './pages/Dashboard/Home';
 import Search from './pages/Dashboard/Search';
 import Create from './pages/Dashboard/Create';
 import Drafts from './pages/Dashboard/Drafts';
+import Messages from './pages/Dashboard/Messages';
 import Notifications from './pages/Dashboard/Notifications';
 import Profile from './pages/Dashboard/Profile';
 import Settings from './pages/Dashboard/Settings';
@@ -52,6 +53,7 @@ const router = createBrowserRouter([
       { path: 'search', element: <Search /> },
       { path: 'create', element: <Create /> },
       { path: 'create/draft', element: <Drafts /> },
+      { path: 'messages', element: <Messages /> },
       { path: 'notifications', element: <Notifications /> },
       { path: 'profile/:username', element: <Profile /> },
       { path: 'settings', element: <Settings /> },
