@@ -29,7 +29,7 @@ export default function DashboardLayout() {
       <Flex justify="center" align="center">
         <Flex
           px={{ base: 4, sm: 16 }}
-          py={8}
+          py={{ base: 4, sm: 8 }}
           ml={{ base: 0, sm: compactSidebarWidth, md: sidebarWidth }}
           my={{ base: headerHeight, sm: 0 }}
           maxW={{ sm: '80vw', md: '60vw', xl: '50vw' }}
