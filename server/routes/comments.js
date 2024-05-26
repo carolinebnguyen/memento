@@ -37,7 +37,7 @@ const docClient = DynamoDBDocumentClient.from(dynamoDBClient, {
 });
 
 // GET api/comments/:postId
-router.get('/', async (req, res) => {
+router.get('/:postId', async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: 'User is not authenticated' });
   }

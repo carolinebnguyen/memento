@@ -26,7 +26,83 @@ const docClient = DynamoDBDocumentClient.from(dynamoDBClient, {
   },
 });
 
-// GET api/messages
+// GET api/messages/:conversationId
+router.get('/:conversationId', async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ error: 'User is not authenticated' });
+  }
+
+  try {
+    const username = req.user.username;
+    const { conversationId } = req.params;
+
+    if (!conversationId) {
+      return res.status(400).json({ error: 'ConversationId is required' });
+    }
+
+    const checkConversationParams = {
+      TableName: CONVERSATION_TABLE,
+      Key: {
+        conversationId: conversationId,
+      },
+    };
+
+    const { Item: conversation } = await docClient.send(
+      new GetCommand(checkConversationParams)
+    );
+
+    if (!conversation) {
+      return res.status(404).json({ error: 'Conversation not found' });
+    }
+
+    conversation.participants = Array.from(conversation.participants);
+
+    if (!conversation.participants.includes(username)) {
+      return res
+        .status(403)
+        .json({ error: 'User is not authorized to view conversation' });
+    }
+
+    const batchGetUserParams = {
+      RequestItems: {
+        [USER_TABLE]: {
+          Keys: conversation.participants.map((username) => ({
+            username: username,
+          })),
+          ProjectionExpression: 'username, picture, #name',
+          ExpressionAttributeNames: {
+            '#name': 'name',
+          },
+        },
+      },
+    };
+
+    const { Responses } = await docClient.send(
+      new BatchGetCommand(batchGetUserParams)
+    );
+
+    const userProfiles = Responses[USER_TABLE].reduce((acc, user) => {
+      acc[user.username] = {
+        picture: user.picture,
+        name: user.name,
+      };
+      return acc;
+    }, {});
+
+    conversation.participants = conversation.participants.map((username) => ({
+      username,
+      picture: userProfiles[username].picture,
+      name: userProfiles[username].name,
+    }));
+
+    return res.status(200).json(conversation);
+  } catch (error) {
+    console.error('Error getting conversation: ', error);
+    return res
+      .status(500)
+      .json({ error: 'Internal server error getting conversation' });
+  }
+});
 
 // POST api/messages
 router.post('/', async (req, res) => {
@@ -60,7 +136,7 @@ router.post('/', async (req, res) => {
       conversationId: conversationId,
       participants: participants,
       messages: [message],
-      lastUpdated: timestamp,
+      lastUpdatedAt: timestamp,
     };
 
     const conversationParams = {
@@ -146,7 +222,6 @@ router.put('/:conversationId', async (req, res) => {
     }
 
     const timestamp = new Date().toISOString();
-    const { messages } = conversation;
 
     const message = {
       text: text,
@@ -161,9 +236,10 @@ router.put('/:conversationId', async (req, res) => {
       Key: {
         conversationId: conversationId,
       },
-      UpdateExpression: 'SET messages = :messages',
+      UpdateExpression: 'SET messages = :messages, lastUpdatedAt = :timestamp',
       ExpressionAttributeValues: {
         ':messages': conversation.messages,
+        ':timestamp': timestamp,
       },
     };
 
