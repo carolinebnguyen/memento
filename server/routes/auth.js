@@ -74,7 +74,7 @@ router.post('/signup', async (req, res) => {
     const userParams = {
       TableName: USER_TABLE,
       Item: {
-        username,
+        username: username.toLowerCase(),
         email,
         name,
         picture: '',

@@ -43,7 +43,7 @@ router.get('/:postId', async (req, res) => {
   }
 
   try {
-    const username = req.user.username;
+    const username = req.user.username.toLowerCase();
     const { postId } = req.params;
 
     const commentsByPostIdParams = {
@@ -79,8 +79,9 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    const username = req.user.username;
-    const { text, postId, poster } = req.body;
+    const username = req.user.username.toLowerCase();
+    const { text, postId, poster: originalPoster } = req.body;
+    const poster = originalPoster.toLowerCase();
 
     const commentId = crypto.randomUUID();
 
@@ -156,7 +157,7 @@ router.put('/:commentId', async (req, res) => {
     return res.status(401).json({ error: 'User is not authenticated' });
   }
   try {
-    const username = req.user.username;
+    const username = req.user.username.toLowerCase();
     const { commentId } = req.params;
     const { text } = req.body;
 
@@ -210,7 +211,7 @@ router.delete('/:commentId', async (req, res) => {
     return res.status(401).json({ error: 'User is not authenticated' });
   }
   try {
-    const username = req.user.username;
+    const username = req.user.username.toLowerCase();
     const { commentId } = req.params;
 
     const checkComment = {
@@ -253,7 +254,8 @@ router.delete('/:commentId', async (req, res) => {
     }
 
     const post = Items[0];
-    const { username: poster } = post;
+    const { username: originalPoster } = post;
+    const poster = originalPoster.toLowerCase();
 
     const updatePostParams = {
       TableName: POST_TABLE,

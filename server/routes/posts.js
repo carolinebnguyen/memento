@@ -102,7 +102,7 @@ router.get('/:postId', async (req, res) => {
         RequestItems: {
           [USER_TABLE]: {
             Keys: Array.from(uniqueUsernames).map((username) => ({
-              username: username,
+              username: username.toLowerCase(),
             })),
             ProjectionExpression: 'username, picture, #name',
             ExpressionAttributeNames: {
@@ -193,7 +193,7 @@ router.get('/', async (req, res) => {
       RequestItems: {
         [USER_TABLE]: {
           Keys: Array.from(uniqueUsernames).map((username) => ({
-            username: username,
+            username: username.toLowerCase(),
           })),
           ProjectionExpression: 'username, picture, #name',
           ExpressionAttributeNames: {
@@ -232,13 +232,13 @@ router.get('/', async (req, res) => {
   }
 
   try {
-    const username = req.user.username;
+    const username = req.user.username.toLowerCase();
 
     // get user to get their following list
     const getUserParams = {
       TableName: USER_TABLE,
       Key: {
-        username: username.toLowerCase(),
+        username: username,
       },
     };
     const { Item: user } = await docClient.send(new GetCommand(getUserParams));
@@ -263,7 +263,7 @@ router.post('/', upload.single('file'), async (req, res) => {
   }
 
   try {
-    const username = req.user.username;
+    const username = req.user.username.toLowerCase();
     let imageSrc = '';
 
     // postId and photoName will share UUID
@@ -323,7 +323,7 @@ router.put('/:postId', async (req, res) => {
   }
 
   try {
-    const username = req.user.username;
+    const username = req.user.username.toLowerCase();
     const { postId } = req.params;
     const { text } = req.body;
 
@@ -380,7 +380,7 @@ router.put('/:postId/like', async (req, res) => {
   }
 
   try {
-    const username = req.user.username;
+    const username = req.user.username.toLowerCase();
     const { postId } = req.params;
 
     const getPostParams = {
@@ -399,7 +399,8 @@ router.put('/:postId/like', async (req, res) => {
     }
 
     const post = Items[0];
-    const { username: poster } = post;
+    const { username: originalPoster } = post;
+    const poster = originalPoster.toLowerCase();
 
     const likeParams = {
       TableName: POST_TABLE,
@@ -452,7 +453,7 @@ router.delete('/:postId/like', async (req, res) => {
   }
 
   try {
-    const username = req.user.username;
+    const username = req.user.username.toLowerCase();
     const { postId } = req.params;
 
     const getPostParams = {
@@ -471,7 +472,8 @@ router.delete('/:postId/like', async (req, res) => {
     }
 
     const post = Items[0];
-    const { username: poster } = post;
+    const { username: originalPoster } = post;
+    const poster = originalPoster.toLowerCase();
 
     const likeParams = {
       TableName: POST_TABLE,
@@ -542,7 +544,7 @@ router.delete('/:postId', async (req, res) => {
   }
 
   try {
-    const username = req.user.username;
+    const username = req.user.username.toLowerCase();
     const { postId } = req.params;
 
     const checkPost = {

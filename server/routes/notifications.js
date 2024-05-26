@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
   }
 
   try {
-    const username = req.user.username;
+    const username = req.user.username.toLowerCase();
 
     const notificationParams = {
       TableName: NOTIFICATION_TABLE,
@@ -54,7 +54,7 @@ router.get('/', async (req, res) => {
         RequestItems: {
           [USER_TABLE]: {
             Keys: Array.from(uniqueUsernames).map((username) => ({
-              username: username,
+              username: username.toLowerCase(),
             })),
             ProjectionExpression: 'username, picture, #name',
             ExpressionAttributeNames: {
@@ -183,7 +183,7 @@ router.put('/status', async (req, res) => {
   }
 
   try {
-    const username = req.user.username;
+    const username = req.user.username.toLowerCase();
     const { notificationIds } = req.body;
 
     if (!notificationIds || notificationIds.length < 1) {

@@ -63,7 +63,7 @@ router.get('/', async (req, res) => {
       RequestItems: {
         [USER_TABLE]: {
           Keys: Array.from(uniqueUsernames).map((username) => ({
-            username: username,
+            username: username.toLowerCase(),
           })),
           ProjectionExpression: 'username, picture, #name',
           ExpressionAttributeNames: {
@@ -127,7 +127,7 @@ router.get('/:conversationId', async (req, res) => {
   }
 
   try {
-    const username = req.user.username;
+    const username = req.user.username.toLowerCase();
     const { conversationId } = req.params;
 
     if (!conversationId) {

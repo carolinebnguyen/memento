@@ -51,17 +51,19 @@ const s3Client = new S3Client({
 
 // GET api/users/:username
 router.get('/:username', async (req, res) => {
-  const { username } = req.params;
+  const { username: originalUsername } = req.params;
 
-  if (!username) {
+  if (!originalUsername) {
     return res.status(400).json({ error: 'Username is required' });
   }
+
+  const username = originalUsername.toLowerCase();
 
   try {
     const userParams = {
       TableName: USER_TABLE,
       Key: {
-        username: username.toLowerCase(),
+        username: username,
       },
     };
 
@@ -69,7 +71,7 @@ router.get('/:username', async (req, res) => {
       TableName: POST_TABLE,
       KeyConditionExpression: 'username = :username',
       ExpressionAttributeValues: {
-        ':username': username.toLowerCase(),
+        ':username': username,
       },
     };
 
@@ -99,7 +101,7 @@ router.get('/:username', async (req, res) => {
       RequestItems: {
         [USER_TABLE]: {
           Keys: Array.from(uniqueUsernames).map((username) => ({
-            username: username,
+            username: username.toLowerCase(),
           })),
           ProjectionExpression: 'username, picture, #name',
           ExpressionAttributeNames: {
@@ -180,7 +182,8 @@ router.get('/:username', async (req, res) => {
 // GET api/users/:username/info
 router.get('/:username/info', async (req, res) => {
   try {
-    const { username } = req.params;
+    const { username: originalUsername } = req.params;
+    const username = originalUsername.toLowerCase();
 
     const params = {
       TableName: USER_TABLE,
@@ -223,7 +226,7 @@ router.put('/account', async (req, res) => {
   }
 
   try {
-    const username = req.user.username;
+    const username = req.user.username.toLowerCase();
     const { name, email, bio } = req.body;
 
     const checkEmailParams = {
@@ -295,7 +298,7 @@ router.put('/picture', upload.single('file'), async (req, res) => {
   }
 
   try {
-    const username = req.user.username;
+    const username = req.user.username.toLowerCase();
 
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
@@ -322,7 +325,7 @@ router.put('/picture', upload.single('file'), async (req, res) => {
     const dynamoParams = {
       TableName: USER_TABLE,
       Key: {
-        username: username.toLowerCase(),
+        username: username,
       },
       UpdateExpression: 'set picture = :url',
       ExpressionAttributeValues: {
@@ -350,8 +353,9 @@ router.put('/:username/follow', async (req, res) => {
   }
 
   try {
-    const { username } = req.params;
-    const follower = req.user.username;
+    const { username: originalUsername } = req.params;
+    const username = originalUsername.toLowerCase();
+    const follower = req.user.username.toLowerCase();
 
     if (username === follower) {
       return res.status(409).json({ error: 'Users cannot follow themselves' });
@@ -419,8 +423,9 @@ router.delete('/:username/follow', async (req, res) => {
   }
 
   try {
-    const { username } = req.params;
-    const follower = req.user.username;
+    const { username: originalUsername } = req.params;
+    const username = originalUsername.toLowerCase();
+    const follower = req.user.username.toLowerCase();
 
     if (username === follower) {
       return res
