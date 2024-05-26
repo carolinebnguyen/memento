@@ -9,7 +9,7 @@ const getAllConversations = async () => {
   }
 };
 
-const getConversation = async (conversationId) => {
+const getConversationById = async (conversationId) => {
   try {
     const res = await mementoBackend.get(`/messages/${conversationId}`);
     return res.data;
@@ -34,9 +34,22 @@ const sendMessage = async (conversationId, text) => {
   }
 };
 
+const getConversationByUsername = async (recipient) => {
+  try {
+    const res = await mementoBackend.get(`/messages/${recipient}/conversation`);
+    return res.data;
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      return null;
+    }
+    throw error;
+  }
+};
+
 export {
   getAllConversations,
-  getConversation,
+  getConversationById,
   createConversation,
   sendMessage,
+  getConversationByUsername,
 };

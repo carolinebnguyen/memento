@@ -98,7 +98,7 @@ router.get('/', async (req, res) => {
   }
 
   try {
-    const username = req.user.username;
+    const username = req.user.username.toLowerCase();
 
     const getUserParams = {
       TableName: USER_TABLE,
@@ -161,7 +161,7 @@ router.get('/:conversationId', async (req, res) => {
       RequestItems: {
         [USER_TABLE]: {
           Keys: conversation.participants.map((username) => ({
-            username: username,
+            username: username.toLowerCase(),
           })),
           ProjectionExpression: 'username, picture, #name',
           ExpressionAttributeNames: {
@@ -198,6 +198,47 @@ router.get('/:conversationId', async (req, res) => {
   }
 });
 
+// GET api/messages/:username/conversation
+router.get('/:username/conversation', async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ error: 'User is not authenticated' });
+  }
+
+  try {
+    const sender = req.user.username.toLowerCase();
+    const { username } = req.params;
+    const recipient = username.toLowerCase();
+
+    const participantKey = [sender, recipient].sort().join('-');
+
+    const conversationParams = {
+      TableName: CONVERSATION_TABLE,
+      IndexName: 'participantKey-index',
+      KeyConditionExpression: 'participantKey = :participantKey',
+      ExpressionAttributeValues: {
+        ':participantKey': participantKey,
+      },
+    };
+
+    const { Items } = await docClient.send(
+      new QueryCommand(conversationParams)
+    );
+
+    if (!Items || Items.length === 0) {
+      return res.status(404).json({ error: 'Conversation not found' });
+    }
+
+    const conversation = Items[0];
+
+    return res.status(200).json(conversation);
+  } catch (error) {
+    console.error('Error getting conversation: ', error);
+    return res
+      .status(500)
+      .json({ error: 'Internal server error getting conversation' });
+  }
+});
+
 // POST api/messages
 router.post('/', async (req, res) => {
   if (!req.user) {
@@ -205,8 +246,9 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    const sender = req.user.username;
-    const { text, recipient } = req.body;
+    const sender = req.user.username.toLowerCase();
+    const recipient = req.body.recipient.toLowerCase();
+    const text = req.body.text;
 
     if (sender === recipient) {
       return res
@@ -225,12 +267,14 @@ router.post('/', async (req, res) => {
     };
 
     const participants = new Set([sender, recipient]);
+    const participantKey = [sender, recipient].sort().join('-');
 
     const conversation = {
       conversationId: conversationId,
       participants: participants,
       messages: [message],
       lastMessage: message,
+      participantKey: participantKey,
     };
 
     const conversationParams = {
@@ -292,7 +336,7 @@ router.put('/:conversationId', async (req, res) => {
   }
 
   try {
-    const sender = req.user.username;
+    const sender = req.user.username.toLowerCase();
     const { conversationId } = req.params;
     const { text } = req.body;
 
