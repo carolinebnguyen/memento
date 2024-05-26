@@ -48,7 +48,7 @@ router.get('/:postId', async (req, res) => {
   const { postId } = req.params;
 
   if (!postId) {
-    return res.status(400).json({ error: 'PostID is required' });
+    return res.status(400).json({ error: 'PostId is required' });
   }
 
   try {
