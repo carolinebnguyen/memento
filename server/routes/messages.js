@@ -12,7 +12,10 @@ const {
   PutCommand,
   UpdateCommand,
 } = require('@aws-sdk/lib-dynamodb');
-const { createParticipantKey } = require('../utils/messageUtils');
+const {
+  createParticipantKey,
+  getParticipantList,
+} = require('../utils/messageUtils');
 
 const USER_TABLE = 'User';
 const CONVERSATION_TABLE = 'Conversation';
@@ -42,7 +45,7 @@ router.get('/', async (req, res) => {
           ExpressionAttributeValues: {
             ':conversationId': conversationId,
           },
-          ProjectionExpression: 'conversationId, participants, lastMessage',
+          ProjectionExpression: 'conversationId, participantKey, lastMessage',
         })
       )
     );
@@ -55,6 +58,9 @@ router.get('/', async (req, res) => {
     const uniqueUsernames = new Set();
 
     conversations.forEach((conversation) => {
+      conversation.participants = getParticipantList(
+        conversation.participantKey
+      );
       conversation.participants.forEach((participant) => {
         uniqueUsernames.add(participant);
       });
@@ -150,7 +156,8 @@ router.get('/:conversationId', async (req, res) => {
       return res.status(404).json({ error: 'Conversation not found' });
     }
 
-    conversation.participants = Array.from(conversation.participants);
+    const { participantKey } = conversation;
+    conversation.participants = getParticipantList(participantKey);
 
     if (!conversation.participants.includes(username)) {
       return res
@@ -230,6 +237,39 @@ router.get('/:username/conversation', async (req, res) => {
     }
 
     const conversation = Items[0];
+    conversation.participants = getParticipantList(participantKey);
+
+    const batchGetUserParams = {
+      RequestItems: {
+        [USER_TABLE]: {
+          Keys: conversation.participants.map((username) => ({
+            username: username.toLowerCase(),
+          })),
+          ProjectionExpression: 'username, picture, #name',
+          ExpressionAttributeNames: {
+            '#name': 'name',
+          },
+        },
+      },
+    };
+
+    const { Responses } = await docClient.send(
+      new BatchGetCommand(batchGetUserParams)
+    );
+
+    const userProfiles = Responses[USER_TABLE].reduce((acc, user) => {
+      acc[user.username] = {
+        picture: user.picture,
+        name: user.name,
+      };
+      return acc;
+    }, {});
+
+    conversation.participants = conversation.participants.map((username) => ({
+      username,
+      picture: userProfiles[username].picture,
+      name: userProfiles[username].name,
+    }));
 
     return res.status(200).json(conversation);
   } catch (error) {
@@ -267,12 +307,10 @@ router.post('/', async (req, res) => {
       timestamp: timestamp,
     };
 
-    const participants = new Set([sender, recipient]);
     const participantKey = createParticipantKey(sender, recipient);
 
     const conversation = {
       conversationId: conversationId,
-      participants: participants,
       messages: [message],
       lastMessage: message,
       participantKey: participantKey,

@@ -58,6 +58,7 @@ export default function Notifications() {
       align="center"
       direction="column"
       px={{ base: 5, sm: 0 }}
+      w={{ base: '90vw', sm: '100vw' }}
     >
       <Heading as="h1" size="lg" mb={5}>
         Notifications

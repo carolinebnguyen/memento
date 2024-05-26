@@ -3,4 +3,9 @@ const createParticipantKey = (sender, recipient) => {
   return participantKey;
 };
 
-module.exports = { createParticipantKey };
+const getParticipantList = (participantKey) => {
+  const participants = participantKey.split('-');
+  return participants;
+};
+
+module.exports = { createParticipantKey, getParticipantList };
