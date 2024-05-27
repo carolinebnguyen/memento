@@ -147,7 +147,7 @@ function SidebarContent() {
           to="/messages"
           icon={MdMailOutline}
           filledIcon={MdMail}
-          label="Direct Messages"
+          label="Messages"
         />
         <StyledNavLink
           to="/notifications"
