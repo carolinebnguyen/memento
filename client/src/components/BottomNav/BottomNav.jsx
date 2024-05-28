@@ -92,7 +92,13 @@ export default function BottomNav({ currentUser }) {
       <Menu>
         <MenuButton
           as={IconButton}
-          icon={username === currentUsername ? <FaUser /> : <FaRegUser />}
+          icon={
+            username && username === currentUsername ? (
+              <FaUser />
+            ) : (
+              <FaRegUser />
+            )
+          }
           cursor="pointer"
           variant="ghost"
         />

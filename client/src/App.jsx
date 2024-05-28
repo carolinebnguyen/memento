@@ -20,6 +20,7 @@ import Post from './pages/Dashboard/Post';
 import LandingLayout from './components/layouts/LandingLayout';
 import FooterLayout from './components/layouts/FooterLayout';
 import DashboardLayout from './components/layouts/DashboardLayout';
+import CompactDashboardLayout from './components/layouts/CompactDashboardLayout';
 
 import theme from './theme/theme';
 
@@ -53,12 +54,17 @@ const router = createBrowserRouter([
       { path: 'search', element: <Search /> },
       { path: 'create', element: <Create /> },
       { path: 'create/draft', element: <Drafts /> },
-      { path: 'messages', element: <Messages /> },
       { path: 'notifications', element: <Notifications /> },
       { path: 'profile/:username', element: <Profile /> },
       { path: 'settings', element: <Settings /> },
       { path: 'post/:postId', element: <Post /> },
     ],
+  },
+  {
+    path: '/',
+    element: <CompactDashboardLayout />,
+    errorElement: <ErrorPage />,
+    children: [{ path: 'messages', element: <Messages /> }],
   },
 ]);
 

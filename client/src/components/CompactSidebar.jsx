@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Image, Stack, Divider, useToast } from '@chakra-ui/react';
+import {
+  Flex,
+  Image,
+  Stack,
+  Divider,
+  useToast,
+  useBreakpointValue,
+} from '@chakra-ui/react';
 import {
   MdOutlineHome,
   MdHome,
@@ -22,8 +29,20 @@ import {
 } from './CompactNavLink/CompactNavLink';
 import { logOutUser, setUserLoggedOut } from '../utils/authUtils';
 import { getCurrentUsername } from '../utils/userUtils';
+import Header from './Header/Header';
+import BottomNav from './BottomNav/BottomNav';
 
-export default function CompactSidebar() {
+export default function CompactSidebar({ currentUser }) {
+  const isCollapsed = useBreakpointValue({ base: true, sm: false });
+
+  if (isCollapsed) {
+    return (
+      <>
+        <Header />
+        <BottomNav currentUser={currentUser} />
+      </>
+    );
+  }
   return (
     <Flex
       direction="column"
