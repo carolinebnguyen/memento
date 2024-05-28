@@ -12,10 +12,12 @@ const {
   TransactWriteCommand,
 } = require('@aws-sdk/lib-dynamodb');
 
-const NOTIFICATION_TABLE = 'Notification';
-const COMMENT_TABLE = 'Comment';
-const USER_TABLE = 'User';
-const POST_TABLE = 'Post';
+const {
+  USER_TABLE,
+  POST_TABLE,
+  COMMENT_TABLE,
+  NOTIFICATION_TABLE,
+} = require('../utils/constants');
 
 const dynamoDBClient = new DynamoDBClient({
   region: process.env.AWS_REGION,

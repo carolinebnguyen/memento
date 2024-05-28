@@ -16,7 +16,7 @@ const {
 const { getSecretHash } = require('../utils/authUtils');
 
 const COGNITO_CLIENT_ID = process.env.COGNITO_CLIENT_ID;
-const USER_TABLE = 'User';
+const { USER_TABLE } = require('../utils/constants');
 
 const cognitoClient = new CognitoIdentityProviderClient({
   region: process.env.AWS_REGION,

@@ -27,9 +27,11 @@ const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const { createNotification } = require('../utils/notificationUtils');
 
 const COGNITO_CLIENT_ID = process.env.COGNITO_CLIENT_ID;
-const USER_TABLE = 'User';
-const POST_TABLE = 'Post';
-const NOTIFICATION_TABLE = 'Notification';
+const {
+  USER_TABLE,
+  POST_TABLE,
+  NOTIFICATION_TABLE,
+} = require('../utils/constants');
 
 const cognitoClient = new CognitoIdentityProviderClient({
   region: process.env.AWS_REGION,

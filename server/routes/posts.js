@@ -24,10 +24,12 @@ const {
 } = require('@aws-sdk/client-s3');
 const { createNotification } = require('../utils/notificationUtils');
 
-const USER_TABLE = 'User';
-const POST_TABLE = 'Post';
-const COMMENT_TABLE = 'Comment';
-const NOTIFICATION_TABLE = 'Notification';
+const {
+  USER_TABLE,
+  POST_TABLE,
+  COMMENT_TABLE,
+  NOTIFICATION_TABLE,
+} = require('../utils/constants');
 
 const dynamoDBClient = new DynamoDBClient({
   region: process.env.AWS_REGION,

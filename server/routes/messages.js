@@ -17,8 +17,7 @@ const {
   getParticipantList,
 } = require('../utils/messageUtils');
 
-const USER_TABLE = 'User';
-const CONVERSATION_TABLE = 'Conversation';
+const { USER_TABLE, CONVERSATION_TABLE } = require('../utils/constants');
 
 const dynamoDBClient = new DynamoDBClient({
   region: process.env.AWS_REGION,
