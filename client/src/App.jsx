@@ -20,7 +20,6 @@ import Post from './pages/Dashboard/Post';
 import LandingLayout from './components/layouts/LandingLayout';
 import FooterLayout from './components/layouts/FooterLayout';
 import DashboardLayout from './components/layouts/DashboardLayout';
-import CompactDashboardLayout from './components/layouts/CompactDashboardLayout';
 
 import theme from './theme/theme';
 
@@ -61,10 +60,9 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/',
-    element: <CompactDashboardLayout />,
+    path: '/messages',
+    element: <Messages />,
     errorElement: <ErrorPage />,
-    children: [{ path: 'messages', element: <Messages /> }],
   },
 ]);
 

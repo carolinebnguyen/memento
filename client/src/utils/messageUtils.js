@@ -1,9 +1,17 @@
 import { mementoBackend } from './utils';
 
+const sortChronologicalOrder = (a, b) =>
+  new Date(b.lastMessage.timestamp) - new Date(a.lastMessage.timestamp);
+
+const sortConversations = (conversations) => {
+  return conversations.sort(sortChronologicalOrder);
+};
+
 const getAllConversations = async () => {
   try {
     const res = await mementoBackend.get('/messages');
-    return res.data;
+    const conversations = res.data;
+    return sortConversations(conversations);
   } catch (error) {
     throw error;
   }

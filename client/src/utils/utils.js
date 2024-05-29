@@ -22,6 +22,40 @@ const formatDateDistanceToNow = (dateString) => {
   });
 };
 
+const dateUnitToAbbreviationMap = {
+  seconds: 's',
+  minutes: 'min',
+  hours: 'h',
+  days: 'd',
+  weeks: 'w',
+  months: 'mo',
+  years: 'y',
+};
+
+const getDateUnit = (unit, isSingular) => {
+  let dateUnit = unit;
+  if (isSingular) {
+    dateUnit = `${unit}s`;
+  }
+  return dateUnitToAbbreviationMap[dateUnit];
+};
+
+const formatDateDistanceToNowShortened = (dateString) => {
+  if (!dateString) {
+    return '';
+  }
+
+  const distanceString = formatDistanceToNowStrict(dateString, {
+    addSuffix: true,
+  });
+
+  const [num, unit] = distanceString.split(' ');
+  const isSingular = num === 1;
+
+  const abbreviatedUnit = getDateUnit(unit, isSingular);
+  return `${num}${abbreviatedUnit}`;
+};
+
 const formatDate = (dateString) => {
   if (!dateString) {
     return '';
@@ -100,6 +134,7 @@ const getErrorContent = (errorType) => {
 export {
   mementoBackend,
   formatDateDistanceToNow,
+  formatDateDistanceToNowShortened,
   formatDate,
   passwordRegex,
   passwordErrorMessage,

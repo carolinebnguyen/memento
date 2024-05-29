@@ -59,7 +59,7 @@ export default function Sidebar({ currentUser }) {
           <BottomNav currentUser={currentUser} />
         </>
       ) : isCompact ? (
-        <CompactSidebar currentUser={currentUser} />
+        <CompactSidebar />
       ) : (
         <FullSidebar />
       )}
