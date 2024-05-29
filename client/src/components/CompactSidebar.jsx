@@ -20,7 +20,7 @@ import { FiPlusCircle } from 'react-icons/fi';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { MdMailOutline, MdMail } from 'react-icons/md';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { compactSidebarWidth } from '../utils/constants';
+import { COMPACT_SIDEBAR_WIDTH } from '../utils/constants';
 import FooterMenu from './FooterMenu/FooterMenu';
 import logoLetter from '../assets/mementoLetter.png';
 import {
@@ -47,7 +47,7 @@ export default function CompactSidebar({ currentUser }) {
     <Flex
       direction="column"
       boxShadow="md"
-      w={compactSidebarWidth}
+      w={COMPACT_SIDEBAR_WIDTH}
       zIndex="9999"
       minH="100vh"
       h="100%"

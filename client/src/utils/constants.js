@@ -1,6 +1,14 @@
-const headerHeight = '55px';
-const sidebarWidth = '250px';
-const compactSidebarWidth = '50px';
+const HEADER_HEIGHT = '55px';
+const SIDEBAR_WIDTH = '250px';
+const COMPACT_SIDEBAR_WIDTH = '50px';
+const CONVERSATION_SIDEBAR_WIDTH = '450px';
+
 const TIME_ZONE = 'America/Los_Angeles';
 
-export { headerHeight, sidebarWidth, compactSidebarWidth, TIME_ZONE };
+export {
+  HEADER_HEIGHT,
+  SIDEBAR_WIDTH,
+  COMPACT_SIDEBAR_WIDTH,
+  CONVERSATION_SIDEBAR_WIDTH,
+  TIME_ZONE,
+};

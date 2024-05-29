@@ -1,7 +1,7 @@
 import React from 'react';
 import { Flex, Image, useBreakpointValue } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
-import { headerHeight, sidebarWidth } from '../../utils/constants';
+import { HEADER_HEIGHT, SIDEBAR_WIDTH } from '../../utils/constants';
 import { FaRegBell, FaBell } from 'react-icons/fa';
 
 import logo from '../../assets/logoBlack.png';
@@ -15,12 +15,12 @@ export default function Header() {
       as="header"
       align="center"
       justify="space-between"
-      w={isWide ? `calc(100vw - ${sidebarWidth})` : `full`}
+      w={isWide ? `calc(100vw - ${SIDEBAR_WIDTH})` : `full`}
       px={5}
       borderBottomWidth="1px"
       borderColor="blackAlpha.300"
-      h={headerHeight}
-      ml={isWide ? sidebarWidth : 0}
+      h={HEADER_HEIGHT}
+      ml={isWide ? SIDEBAR_WIDTH : 0}
       position="fixed"
       bgColor="white"
     >

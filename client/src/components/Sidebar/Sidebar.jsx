@@ -30,7 +30,7 @@ import StyledNavLink from '../StyledNavLink/StyledNavLink';
 import BottomNav from '../BottomNav/BottomNav';
 import styles from './Sidebar.module.css';
 import linkStyles from '../StyledNavLink/StyledNavLink.module.css';
-import { sidebarWidth } from '../../utils/constants';
+import { SIDEBAR_WIDTH } from '../../utils/constants';
 import Header from '../Header/Header';
 import CompactSidebar from '../CompactSidebar';
 import {
@@ -73,7 +73,7 @@ function FullSidebar() {
       direction="column"
       boxShadow="md"
       p={3}
-      w={sidebarWidth}
+      w={SIDEBAR_WIDTH}
       zIndex="9999"
     >
       <NavLink to="/home">

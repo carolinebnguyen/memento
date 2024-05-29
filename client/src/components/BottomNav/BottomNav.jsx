@@ -27,7 +27,7 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import { MdMailOutline, MdMail } from 'react-icons/md';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { CompactIconButton } from '../CompactNavLink/CompactNavLink';
-import { headerHeight, sidebarWidth } from '../../utils/constants';
+import { HEADER_HEIGHT, SIDEBAR_WIDTH } from '../../utils/constants';
 import styles from './BottomNav.module.css';
 import { logOutUser, setUserLoggedOut } from '../../utils/authUtils';
 
@@ -64,11 +64,11 @@ export default function BottomNav({ currentUser }) {
       as="nav"
       align="center"
       justify="space-between"
-      w={isWide ? `calc(100vw - ${sidebarWidth})` : `full`}
+      w={isWide ? `calc(100vw - ${SIDEBAR_WIDTH})` : `full`}
       px={5}
       borderTopWidth="1px"
       borderColor="blackAlpha.300"
-      h={headerHeight}
+      h={HEADER_HEIGHT}
       position="fixed"
       bottom="0"
       bgColor="white"

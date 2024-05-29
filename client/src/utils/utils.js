@@ -1,4 +1,4 @@
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNowStrict } from 'date-fns';
 import { format } from 'date-fns-tz';
 import axios from 'axios';
 
@@ -17,7 +17,7 @@ const formatDateDistanceToNow = (dateString) => {
   }
 
   const dateToFormat = new Date(dateString);
-  return formatDistanceToNow(dateToFormat, {
+  return formatDistanceToNowStrict(dateToFormat, {
     addSuffix: true,
   });
 };

@@ -3,9 +3,9 @@ import { Flex } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../Sidebar/Sidebar';
 import {
-  headerHeight,
-  sidebarWidth,
-  compactSidebarWidth,
+  HEADER_HEIGHT,
+  SIDEBAR_WIDTH,
+  COMPACT_SIDEBAR_WIDTH,
 } from '../../utils/constants';
 import { getCurrentUserProfile } from '../../utils/userUtils';
 
@@ -30,8 +30,8 @@ export default function DashboardLayout() {
         <Flex
           px={{ base: 4, sm: 16 }}
           py={{ base: 4, sm: 8 }}
-          ml={{ base: 0, sm: compactSidebarWidth, md: sidebarWidth }}
-          my={{ base: headerHeight, sm: 0 }}
+          ml={{ base: 0, sm: COMPACT_SIDEBAR_WIDTH, md: SIDEBAR_WIDTH }}
+          my={{ base: HEADER_HEIGHT, sm: 0 }}
           maxW={{ sm: '80vw', md: '60vw', xl: '50vw' }}
         >
           <Outlet />
