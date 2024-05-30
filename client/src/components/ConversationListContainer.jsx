@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Center, Flex } from '@chakra-ui/react';
-import ConversationCard from './ConversationCard';
+import ConversationCard from './ConversationCard/ConversationCard';
 
 export default function ConversationListContainer({ conversations }) {
   return (

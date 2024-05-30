@@ -37,7 +37,13 @@ export default function NotificationCard({ notification }) {
   };
 
   return (
-    <Flex align="center" w="full" p={2} _hover={{ backgroundColor: '#f5fbfc' }}>
+    <Flex
+      align="center"
+      w="full"
+      p={2}
+      _hover={{ backgroundColor: '#e2f4f6' }}
+      borderRadius={10}
+    >
       <Flex justify="space-between" w="100%" align="center" gap={8}>
         <Stack direction="row" display="flex" align="center">
           <Avatar size="md" src={picture} mr={2} />

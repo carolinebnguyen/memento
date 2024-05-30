@@ -8,24 +8,29 @@ import ConversationContainer from '../../components/ConversationContainer';
 import { useParams } from 'react-router-dom';
 import { UserContext } from '../../contexts/UserContext';
 import { getCurrentUserInformation } from '../../utils/userUtils';
+import { ConversationContext } from '../../contexts/ConversationContext';
 
 export default function Messages() {
   const [pageState, setPageState] = useState('LOADING');
+  const { setConversationId } = useContext(ConversationContext);
   const { setCurrentUser } = useContext(UserContext);
   const { conversationId } = useParams();
 
   useEffect(() => {
-    const fetchCurrentUser = async () => {
+    const configureContext = async () => {
       try {
         const user = await getCurrentUserInformation();
+        if (conversationId) {
+          setConversationId(conversationId);
+        }
         setCurrentUser(user);
         setPageState('DONE');
       } catch (error) {
         setPageState('ERROR');
       }
     };
-    fetchCurrentUser();
-  }, [setCurrentUser]);
+    configureContext();
+  }, [setCurrentUser, conversationId, setConversationId]);
 
   if (pageState === 'LOADING') {
     return (

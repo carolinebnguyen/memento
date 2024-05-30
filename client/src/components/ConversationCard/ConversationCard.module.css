@@ -1,0 +1,7 @@
+.conversation-card:hover {
+  background-color: #e2f4f6;
+}
+
+.conversation-card-active {
+  background-color: #d0edf0;
+}

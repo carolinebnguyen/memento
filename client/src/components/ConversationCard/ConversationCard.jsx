@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
 import { Flex, Text, Avatar, HStack, Stack } from '@chakra-ui/react';
-import { formatDateDistanceToNowShortened } from '../utils/utils';
-import { NavLink } from 'react-router-dom';
-import { ConversationContext } from '../contexts/ConversationContext';
-import { UserContext } from '../contexts/UserContext';
+import { formatDateDistanceToNowShortened } from '../../utils/utils';
+import { NavLink, useParams } from 'react-router-dom';
+import { ConversationContext } from '../../contexts/ConversationContext';
+import { UserContext } from '../../contexts/UserContext';
+import styles from './ConversationCard.module.css';
 
 export default function ConversationCard({ conversation }) {
   const { setConversationId } = useContext(ConversationContext);
@@ -14,6 +15,7 @@ export default function ConversationCard({ conversation }) {
   const partner = participants.find(
     (participant) => participant.username !== currentUsername
   );
+  const { conversationId: conversationIdParams } = useParams();
 
   return (
     <NavLink
@@ -23,9 +25,13 @@ export default function ConversationCard({ conversation }) {
       <Flex
         justify="space-between"
         align="center"
-        _hover={{ backgroundColor: '#cbebef;', cursor: 'pointer' }}
         p={3}
         borderRadius={10}
+        className={
+          convoId === conversationIdParams
+            ? styles['conversation-card-active']
+            : styles['conversation-card']
+        }
       >
         <HStack>
           <Avatar size="md" src={partner.picture} />
