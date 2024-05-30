@@ -7,14 +7,17 @@ import {
   Spinner,
   Text,
   VStack,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { getConversationById } from '../utils/messageUtils';
 import ErrorComponent from './ErrorComponent';
+import CreateConversationModal from './CreateConversationModal';
 
 export default function ConversationContainer({ conversationId }) {
   const [conversation, setConversation] = useState({});
   const [pageState, setPageState] = useState('LOADING');
   const [errorType, setErrorType] = useState();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -68,9 +71,10 @@ export default function ConversationContainer({ conversationId }) {
             Your Messages
           </Heading>
           <Text>Send a message to start a chat</Text>
-          <Button colorScheme="blue" size="sm">
+          <Button colorScheme="blue" size="sm" onClick={onOpen}>
             Send message
           </Button>
+          <CreateConversationModal isOpen={isOpen} onClose={onClose} />
         </VStack>
       </Center>
     );

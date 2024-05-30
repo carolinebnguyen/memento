@@ -10,6 +10,7 @@ import {
   Stack,
   Text,
   VStack,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { FaPenToSquare } from 'react-icons/fa6';
 import { BsExclamationCircle } from 'react-icons/bs';
@@ -19,10 +20,12 @@ import {
   CONVERSATION_SIDEBAR_WIDTH,
 } from '../utils/constants';
 import ConversationListContainer from './ConversationListContainer';
+import CreateConversationModal from './CreateConversationModal';
 
 export default function ConversationSidebar() {
   const [conversations, setConversations] = useState([]);
   const [pageState, setPageState] = useState('LOADING');
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     const fetchConversations = async () => {
@@ -93,7 +96,12 @@ export default function ConversationSidebar() {
             <Heading as="h1" size="lg" mb={2} p={2}>
               Messages
             </Heading>
-            <IconButton icon={<FaPenToSquare />} isRound={true} />
+            <IconButton
+              icon={<FaPenToSquare />}
+              isRound={true}
+              onClick={onOpen}
+            />
+            <CreateConversationModal isOpen={isOpen} onClose={onClose} />
           </Stack>
           <ConversationListContainer conversations={conversations} />
         </CardBody>

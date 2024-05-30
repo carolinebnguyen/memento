@@ -12,7 +12,7 @@ export default function UserSearchResultCard({ user }) {
       p={2}
     >
       <HStack>
-        <Avatar size="md" src={picture} />
+        <Avatar size="sm" src={picture} />
         <Stack direction="column" gap={0}>
           <Link color="black">
             <Text as="b">{username}</Text>
