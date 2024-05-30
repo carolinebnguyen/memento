@@ -4,7 +4,7 @@ import ConversationCard from './ConversationCard';
 import { getCurrentUsername } from '../utils/userUtils';
 import { HEADER_HEIGHT } from '../utils/constants';
 
-export default function ConversationContainer({ conversations }) {
+export default function ConversationListContainer({ conversations }) {
   const [currentUsername, setCurrentUsername] = useState('');
 
   useEffect(() => {

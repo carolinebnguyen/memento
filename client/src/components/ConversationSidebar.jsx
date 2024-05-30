@@ -18,7 +18,7 @@ import {
   COMPACT_SIDEBAR_WIDTH,
   CONVERSATION_SIDEBAR_WIDTH,
 } from '../utils/constants';
-import ConversationContainer from './ConversationContainer';
+import ConversationListContainer from './ConversationListContainer';
 
 export default function ConversationSidebar() {
   const [conversations, setConversations] = useState([]);
@@ -95,7 +95,7 @@ export default function ConversationSidebar() {
             </Heading>
             <IconButton icon={<FaPenToSquare />} isRound={true} />
           </Stack>
-          <ConversationContainer conversations={conversations} />
+          <ConversationListContainer conversations={conversations} />
         </CardBody>
       </Card>
     </Flex>
