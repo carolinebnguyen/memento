@@ -210,8 +210,8 @@ router.get('/:conversationId', async (req, res) => {
   }
 });
 
-// GET api/messages/:username/conversation
-router.get('/:username/conversation', async (req, res) => {
+// GET api/messages/:username/conversationId
+router.get('/:username/conversationId', async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ error: 'User is not authenticated' });
   }
@@ -241,46 +241,13 @@ router.get('/:username/conversation', async (req, res) => {
     }
 
     const conversation = Items[0];
-    conversation.participants = getParticipantList(participantKey);
 
-    const batchGetUserParams = {
-      RequestItems: {
-        [USER_TABLE]: {
-          Keys: conversation.participants.map((username) => ({
-            username: username.toLowerCase(),
-          })),
-          ProjectionExpression: 'username, picture, #name',
-          ExpressionAttributeNames: {
-            '#name': 'name',
-          },
-        },
-      },
-    };
-
-    const { Responses } = await docClient.send(
-      new BatchGetCommand(batchGetUserParams)
-    );
-
-    const userProfiles = Responses[USER_TABLE].reduce((acc, user) => {
-      acc[user.username] = {
-        picture: user.picture,
-        name: user.name,
-      };
-      return acc;
-    }, {});
-
-    conversation.participants = conversation.participants.map((username) => ({
-      username,
-      picture: userProfiles[username].picture,
-      name: userProfiles[username].name,
-    }));
-
-    return res.status(200).json(conversation);
+    return res.status(200).json(conversation.conversationId);
   } catch (error) {
-    console.error('Error getting conversation: ', error);
+    console.error('Error getting conversationId: ', error);
     return res
       .status(500)
-      .json({ error: 'Internal server error getting conversation' });
+      .json({ error: 'Internal server error getting conversationId' });
   }
 });
 

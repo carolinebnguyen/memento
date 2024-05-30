@@ -42,9 +42,11 @@ const sendMessage = async (conversationId, text) => {
   }
 };
 
-const getConversationByUsername = async (recipient) => {
+const getConversationIdByUsername = async (recipient) => {
   try {
-    const res = await mementoBackend.get(`/messages/${recipient}/conversation`);
+    const res = await mementoBackend.get(
+      `/messages/${recipient}/conversationId`
+    );
     return res.data;
   } catch (error) {
     if (error.response && error.response.status === 404) {
@@ -59,5 +61,5 @@ export {
   getConversationById,
   createConversation,
   sendMessage,
-  getConversationByUsername,
+  getConversationIdByUsername,
 };
