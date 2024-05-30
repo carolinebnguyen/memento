@@ -23,6 +23,7 @@ export default function ConversationContainer({ conversationId }) {
           setPageState('NOT_SELECTED');
           return;
         }
+
         const res = await getConversationById(conversationId);
 
         if (!res && res === null) {
@@ -61,7 +62,7 @@ export default function ConversationContainer({ conversationId }) {
     return <ErrorComponent errorType={errorType} />;
   } else if (pageState === 'NOT_SELECTED') {
     return (
-      <Center h="90vh">
+      <Center h="95vh">
         <VStack gap={3}>
           <Heading as="h2" size="md">
             Your Messages

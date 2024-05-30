@@ -113,6 +113,11 @@ router.get('/', async (req, res) => {
       },
     };
     const { Item: user } = await docClient.send(new GetCommand(getUserParams));
+
+    if (!user.conversations) {
+      return res.status(200).json([]);
+    }
+
     user.conversations = Array.from(user.conversations) || new Set();
 
     const conversations = await getAllConversations(user.conversations);

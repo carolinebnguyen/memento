@@ -22,6 +22,7 @@ import FooterLayout from './components/layouts/FooterLayout';
 import DashboardLayout from './components/layouts/DashboardLayout';
 
 import theme from './theme/theme';
+import ContextWrapper from './contexts/ContextWrapper';
 
 const router = createBrowserRouter([
   {
@@ -69,7 +70,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <ChakraProvider theme={theme}>
-      <RouterProvider router={router} />
+      <ContextWrapper>
+        <RouterProvider router={router} />
+      </ContextWrapper>
     </ChakraProvider>
   );
 }
