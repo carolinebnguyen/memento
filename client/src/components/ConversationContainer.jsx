@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Button,
   Center,
@@ -12,12 +12,21 @@ import {
 import { getConversationById } from '../utils/messageUtils';
 import ErrorComponent from './ErrorComponent';
 import CreateConversationModal from './CreateConversationModal';
+import ConversationHeader from './ConversationHeader';
+import { UserContext } from '../contexts/UserContext';
+import {
+  CONVERSATION_HEADER_HEIGHT,
+  FULL_SIDEBAR_WIDTH,
+} from '../utils/constants';
 
 export default function ConversationContainer({ conversationId }) {
   const [conversation, setConversation] = useState({});
+  const [partner, setPartner] = useState({});
   const [pageState, setPageState] = useState('LOADING');
   const [errorType, setErrorType] = useState();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { currentUser } = useContext(UserContext);
+  const { username: currentUsername } = currentUser;
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -27,15 +36,20 @@ export default function ConversationContainer({ conversationId }) {
           return;
         }
 
-        const res = await getConversationById(conversationId);
+        const conversation = await getConversationById(conversationId);
 
-        if (!res && res === null) {
+        if (!conversation && conversation === null) {
           setConversation(null);
           setPageState('NOT_FOUND');
           return;
         }
 
-        setConversation(res);
+        const partner = conversation.participants.find(
+          (participant) => participant.username !== currentUsername
+        );
+        setPartner(partner);
+
+        setConversation(conversation);
         setPageState('DONE');
       } catch (error) {
         const errorStatus = error.response.status;
@@ -53,7 +67,7 @@ export default function ConversationContainer({ conversationId }) {
       }
     };
     fetchPost();
-  }, [conversationId]);
+  }, [conversationId, currentUsername]);
 
   if (pageState === 'LOADING') {
     return (
@@ -65,7 +79,11 @@ export default function ConversationContainer({ conversationId }) {
     return <ErrorComponent errorType={errorType} />;
   } else if (pageState === 'NOT_SELECTED') {
     return (
-      <Center h="95vh">
+      <Center
+        h="100vh"
+        w={{ sm: `calc(100vw - ${FULL_SIDEBAR_WIDTH})` }}
+        ml={{ sm: FULL_SIDEBAR_WIDTH }}
+      >
         <VStack gap={3}>
           <Heading as="h2" size="md">
             Your Messages
@@ -81,8 +99,14 @@ export default function ConversationContainer({ conversationId }) {
   }
 
   return (
-    <Flex direction="column" h="100%">
-      Conversation: {conversation.participantKey}
+    <Flex
+      direction="column"
+      h="100%"
+      w={{ sm: `calc(100vw - ${FULL_SIDEBAR_WIDTH})` }}
+      ml={{ sm: FULL_SIDEBAR_WIDTH }}
+    >
+      <ConversationHeader partner={partner} />
+      <Flex mt={CONVERSATION_HEADER_HEIGHT}>{conversation.participantKey}</Flex>
     </Flex>
   );
 }

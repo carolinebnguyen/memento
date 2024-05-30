@@ -3,7 +3,6 @@ import { Flex, Spinner, Center, Stack } from '@chakra-ui/react';
 import ErrorComponent from '../../components/ErrorComponent';
 import CompactSidebar from '../../components/CompactSidebar';
 import ConversationSidebar from '../../components/ConversationSidebar';
-import { FULL_SIDEBAR_WIDTH } from '../../utils/constants';
 import ConversationContainer from '../../components/ConversationContainer';
 import { useParams } from 'react-router-dom';
 import { UserContext } from '../../contexts/UserContext';
@@ -49,14 +48,7 @@ export default function Messages() {
         <ConversationSidebar />
       </Stack>
       <Flex justify="center" align="center">
-        <Flex
-          px={16}
-          py={8}
-          ml={{ base: 0, sm: FULL_SIDEBAR_WIDTH }}
-          maxW={{ sm: '80vw', md: '60vw', xl: '50vw' }}
-        >
-          <ConversationContainer conversationId={conversationId} />
-        </Flex>
+        <ConversationContainer conversationId={conversationId} />
       </Flex>
     </>
   );
