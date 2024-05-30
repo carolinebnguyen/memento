@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Flex,
   Text,
@@ -10,18 +10,15 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import {
-  checkIsFollowing,
-  followUser,
-  getCurrentUsername,
-  unfollowUser,
-} from '../utils/userUtils';
+import { checkIsFollowing, followUser, unfollowUser } from '../utils/userUtils';
 import { getFollowAction } from '../utils/utils';
+import { UserContext } from '../contexts/UserContext';
 
 export default function UserCard({ user, handleClose }) {
   const [isFollowing, setIsFollowing] = useState(false);
   const { username, name, picture } = user;
-  const [currentUsername, setCurrentUsername] = useState('');
+  const { currentUser } = useContext(UserContext);
+  const { username: currentUsername } = currentUser;
   const [loadingState, setLoadingState] = useState('');
 
   const navigate = useNavigate();
@@ -30,9 +27,7 @@ export default function UserCard({ user, handleClose }) {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const currentUsername = await getCurrentUsername();
         const isFollowingUser = await checkIsFollowing(username);
-        setCurrentUsername(currentUsername);
         setIsFollowing(isFollowingUser);
         setLoadingState('DONE');
       } catch (error) {

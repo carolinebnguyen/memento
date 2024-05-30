@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Flex,
   FormControl,
@@ -28,9 +28,9 @@ import DropZone from '../../components/Dropzone';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styles from '../../components/Sidebar/Sidebar.module.css';
 import ConfirmationModal from '../../components/ConfirmationModal';
-import { getCurrentUsername } from '../../utils/userUtils';
 import { createPost } from '../../utils/postUtils';
 import ErrorComponent from '../../components/ErrorComponent';
+import { UserContext } from '../../contexts/UserContext';
 
 export default function Drafts() {
   const toast = useToast();
@@ -42,7 +42,8 @@ export default function Drafts() {
   const [isFileChanged, setIsFileChanged] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [currentUsername, setCurrentUsername] = useState('');
+  const { currentUser } = useContext(UserContext);
+  const { username: currentUsername } = currentUser;
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [pageState, setPageState] = useState('LOADING');
@@ -66,9 +67,9 @@ export default function Drafts() {
 
     const fetchCurrentUserData = async () => {
       try {
-        const username = await getCurrentUsername();
-        setCurrentUsername(username);
-        const draftPostString = localStorage.getItem(`draftPost_${username}`);
+        const draftPostString = localStorage.getItem(
+          `draftPost_${currentUsername}`
+        );
         const draftPost = draftPostString ? JSON.parse(draftPostString) : {};
         if (Object.keys(draftPost).length === 0) {
           setPageState('NOT_FOUND');

@@ -3,9 +3,12 @@ import { Flex, Text, Avatar, HStack, Stack } from '@chakra-ui/react';
 import { formatDateDistanceToNowShortened } from '../utils/utils';
 import { NavLink } from 'react-router-dom';
 import { ConversationContext } from '../contexts/ConversationContext';
+import { UserContext } from '../contexts/UserContext';
 
-export default function ConversationCard({ conversation, currentUsername }) {
+export default function ConversationCard({ conversation }) {
   const { setConversationId } = useContext(ConversationContext);
+  const { currentUser } = useContext(UserContext);
+  const { username: currentUsername } = currentUser;
   const { conversationId: convoId, participants, lastMessage } = conversation;
   const { sender, text, timestamp } = lastMessage;
   const partner = participants.find(

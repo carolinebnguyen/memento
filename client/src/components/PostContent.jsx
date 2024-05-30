@@ -1,23 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Box, Divider, Flex } from '@chakra-ui/react';
 import PostCard from './PostCard';
 import CommentCard from './CommentCard';
 import CommentField from './CommentField';
-import { getCurrentUserProfile } from '../utils/userUtils';
 import { sortComments } from '../utils/commentUtils';
 
 export default function PostContent({ post, onRemovePost }) {
   const { postId, username, comments } = post;
   const [newComments, setNewComments] = useState(sortComments(comments) || []);
-  const [currentUser, setCurrentUser] = useState({});
-
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      const { user } = await getCurrentUserProfile();
-      setCurrentUser(user);
-    };
-    fetchCurrentUser();
-  }, []);
 
   const handleDeletePost = useCallback(
     (postId) => {
@@ -52,7 +42,6 @@ export default function PostContent({ post, onRemovePost }) {
         postId={postId}
         poster={username}
         addComment={handleAddComment}
-        currentUser={currentUser}
       />
       {newComments.length > 0
         ? newComments.map((comment, index) => (
@@ -60,7 +49,6 @@ export default function PostContent({ post, onRemovePost }) {
               <CommentCard
                 poster={username}
                 comment={comment}
-                currentUser={currentUser}
                 handleDeleteComment={handleDeleteComment}
               />
             </Box>

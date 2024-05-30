@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Flex,
   Text,
@@ -40,7 +40,6 @@ import {
 import styles from '../components/BottomNav/BottomNav.module.css';
 import ConfirmationModal from './ConfirmationModal';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { getCurrentUsername } from '../utils/userUtils';
 import {
   deletePost,
   likePost,
@@ -48,6 +47,7 @@ import {
   updatePost,
   PostType,
 } from '../utils/postUtils';
+import { UserContext } from '../contexts/UserContext';
 
 export default function PostCard({
   post,
@@ -69,7 +69,8 @@ export default function PostCard({
   const [isLoading, setIsLoading] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [modifiedLikes, setModifiedLikes] = useState(likes || []);
-  const [currentUsername, setCurrentUsername] = useState('');
+  const { currentUser } = useContext(UserContext);
+  const { username: currentUsername } = currentUser;
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [isPostVisible, setIsPostVisible] = useState(true);
@@ -83,11 +84,9 @@ export default function PostCard({
     setIsLoading(true);
     const fetchInfo = async () => {
       try {
-        const currentUsername = await getCurrentUsername();
         const isLiked =
           Array.isArray(likes) &&
           likes.some((like) => like.username === currentUsername);
-        setCurrentUsername(currentUsername);
         setIsLiked(isLiked);
         setIsLoading(false);
       } catch (error) {
@@ -95,7 +94,7 @@ export default function PostCard({
       }
     };
     fetchInfo();
-  }, [username, postId, likes]);
+  }, [username, postId, likes, currentUsername]);
 
   const {
     isOpen: isOpenLikes,

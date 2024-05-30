@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Flex,
   Text,
@@ -30,9 +30,11 @@ import { CompactIconButton } from '../CompactNavLink/CompactNavLink';
 import { HEADER_HEIGHT, SIDEBAR_WIDTH } from '../../utils/constants';
 import styles from './BottomNav.module.css';
 import { logOutUser, setUserLoggedOut } from '../../utils/authUtils';
+import { UserContext } from '../../contexts/UserContext';
 
-export default function BottomNav({ currentUser }) {
+export default function BottomNav() {
   const isWide = useBreakpointValue({ base: false, md: true });
+  const { currentUser } = useContext(UserContext);
   const { username: currentUsername, picture } = currentUser;
   const navigate = useNavigate();
   const { username } = useParams();

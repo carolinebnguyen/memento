@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   useBreakpointValue,
   Flex,
@@ -38,9 +38,9 @@ import {
   logOutUser,
   setUserLoggedOut,
 } from '../../utils/authUtils';
-import { getCurrentUsername } from '../../utils/userUtils';
+import { UserContext } from '../../contexts/UserContext';
 
-export default function Sidebar({ currentUser }) {
+export default function Sidebar() {
   const isCollapsed = useBreakpointValue({ base: true, sm: false });
   const isCompact = useBreakpointValue({ sm: true, md: false });
   const navigate = useNavigate();
@@ -56,7 +56,7 @@ export default function Sidebar({ currentUser }) {
       {isCollapsed ? (
         <>
           <Header />
-          <BottomNav currentUser={currentUser} />
+          <BottomNav />
         </>
       ) : isCompact ? (
         <CompactSidebar />
@@ -88,16 +88,9 @@ function SidebarContent() {
   const { username } = useParams();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [currentUsername, setCurrentUsername] = useState('');
+  const { currentUser } = useContext(UserContext);
+  const { username: currentUsername } = currentUser;
   const toast = useToast();
-
-  useEffect(() => {
-    const fetchCurrentUsername = async () => {
-      const username = await getCurrentUsername();
-      setCurrentUsername(username);
-    };
-    fetchCurrentUsername();
-  }, []);
 
   const handleLogout = async () => {
     try {

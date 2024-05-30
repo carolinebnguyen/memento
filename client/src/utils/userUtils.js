@@ -15,6 +15,16 @@ const getCurrentUserProfile = async () => {
   return profile;
 };
 
+const getCurrentUserInformation = async () => {
+  try {
+    const currentUsername = await getCurrentUsername();
+    const currentUser = await getUserInformation(currentUsername);
+    return currentUser;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const getUserProfile = async (username) => {
   try {
     const res = await mementoBackend.get(`/users/${username}`);
@@ -98,6 +108,7 @@ const checkIsFollowing = async (username) => {
 export {
   getCurrentUsername,
   getCurrentUserProfile,
+  getCurrentUserInformation,
   getUserProfile,
   getUserInformation,
   getAllUsers,

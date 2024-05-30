@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import {
   Flex,
   Image,
@@ -22,26 +22,14 @@ import {
   setUserLoggedOut,
 } from '../utils/authUtils';
 import styles from '../components/BottomNav/BottomNav.module.css';
-import { getCurrentUserProfile } from '../utils/userUtils';
+import { UserContext } from '../contexts/UserContext';
 
 export default function Navbar() {
   const isLoggedIn = isUserLoggedIn();
   const navigate = useNavigate();
   const toast = useToast();
-  const [currentUser, setCurrentUser] = useState({});
+  const { currentUser } = useContext(UserContext);
   const { username, picture } = currentUser;
-
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const { user } = await getCurrentUserProfile();
-        setCurrentUser(user);
-      } catch (error) {
-        return;
-      }
-    };
-    fetchCurrentUser();
-  }, []);
 
   const handleLogout = async () => {
     try {

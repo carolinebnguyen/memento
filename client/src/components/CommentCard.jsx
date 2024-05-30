@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Flex,
   Avatar,
@@ -20,18 +20,15 @@ import ConfirmationModal from './ConfirmationModal';
 import CommentMenu from './CommentMenu';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { deleteComment, updateComment } from '../utils/commentUtils';
+import { UserContext } from '../contexts/UserContext';
 
-export default function CommentCard({
-  poster,
-  comment,
-  currentUser,
-  handleDeleteComment,
-}) {
+export default function CommentCard({ poster, comment, handleDeleteComment }) {
   const { username, text, postedAt, picture, commentId } = comment;
   const navigate = useNavigate();
   const [isCommentVisible, setIsCommentVisible] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
+  const { currentUser } = useContext(UserContext);
 
   const { username: currentUsername } = currentUser;
 

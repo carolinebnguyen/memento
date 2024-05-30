@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Avatar,
   Button,
@@ -11,16 +11,14 @@ import {
 } from '@chakra-ui/react';
 import { Link, useParams } from 'react-router-dom';
 import UserModal from './UserModal';
-import {
-  followUser,
-  getCurrentUsername,
-  unfollowUser,
-} from '../utils/userUtils';
+import { followUser, unfollowUser } from '../utils/userUtils';
 import { getFollowAction } from '../utils/utils';
+import { UserContext } from '../contexts/UserContext';
 
 export default function ProfileHeader({ profile, isFollowingUser }) {
   const [isFollowing, setIsFollowing] = useState(isFollowingUser);
-  const [currentUsername, setCurrentUsername] = useState('');
+  const { currentUser } = useContext(UserContext);
+  const { username: currentUsername } = currentUser;
   const toast = useToast();
 
   const {
@@ -35,14 +33,6 @@ export default function ProfileHeader({ profile, isFollowingUser }) {
   } = profile;
 
   const [followersList, setFollowersList] = useState(followers);
-
-  useEffect(() => {
-    const fetchCurrentUsername = async () => {
-      const currentUsername = await getCurrentUsername();
-      setCurrentUsername(currentUsername);
-    };
-    fetchCurrentUsername();
-  }, [username]);
 
   const {
     isOpen: isOpenFollower,

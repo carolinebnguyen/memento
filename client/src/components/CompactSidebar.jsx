@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { Flex, Image, Stack, Divider, useToast } from '@chakra-ui/react';
 import {
   MdOutlineHome,
@@ -21,7 +21,7 @@ import {
   CompactProfileNavLink,
 } from './CompactNavLink/CompactNavLink';
 import { logOutUser, setUserLoggedOut } from '../utils/authUtils';
-import { getCurrentUsername } from '../utils/userUtils';
+import { UserContext } from '../contexts/UserContext';
 
 export default function CompactSidebar() {
   return (
@@ -46,15 +46,8 @@ export default function CompactSidebar() {
 function CompactSidebarContent() {
   const navigate = useNavigate();
   const toast = useToast();
-  const [currentUsername, setCurrentUsername] = useState('');
-
-  useEffect(() => {
-    const fetchCurrentUsername = async () => {
-      const username = await getCurrentUsername();
-      setCurrentUsername(username);
-    };
-    fetchCurrentUsername();
-  }, []);
+  const { currentUser } = useContext(UserContext);
+  const { username: currentUsername } = currentUser;
 
   const handleLogout = async () => {
     try {
@@ -103,7 +96,6 @@ function CompactSidebarContent() {
           to={`/profile/${currentUsername}`}
           icon={FaRegUser}
           filledIcon={FaUser}
-          currentUsername={currentUsername}
         />
         <Divider />
         <CompactNavLink

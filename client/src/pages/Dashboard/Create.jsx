@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Flex,
   FormControl,
@@ -25,22 +25,21 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import DropZone from '../../components/Dropzone';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styles from '../../components/Sidebar/Sidebar.module.css';
-import { getCurrentUsername } from '../../utils/userUtils';
 import { createPost } from '../../utils/postUtils';
+import { UserContext } from '../../contexts/UserContext';
 
 export default function Create() {
   const [file, setFile] = useState(null);
   const toast = useToast();
   const navigate = useNavigate();
   const [hasDraft, setHasDraft] = useState(false);
-  const [currentUsername, setCurrentUsername] = useState('');
+  const { currentUser } = useContext(UserContext);
+  const { username: currentUsername } = currentUser;
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
     const fetchCurrentUserData = async () => {
-      const username = await getCurrentUsername();
-      setCurrentUsername(username);
       const draftPost = localStorage.getItem(`draftPost_${currentUsername}`);
       if (draftPost) {
         setHasDraft(true);

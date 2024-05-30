@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Flex, Spinner, Center, Stack } from '@chakra-ui/react';
 import ErrorComponent from '../../components/ErrorComponent';
 import CompactSidebar from '../../components/CompactSidebar';
 import ConversationSidebar from '../../components/ConversationSidebar';
 import { FULL_SIDEBAR_WIDTH } from '../../utils/constants';
-import { getCurrentUserProfile } from '../../utils/userUtils';
 import ConversationContainer from '../../components/ConversationContainer';
 import { useParams } from 'react-router-dom';
+import { UserContext } from '../../contexts/UserContext';
+import { getCurrentUserInformation } from '../../utils/userUtils';
 
 export default function Messages() {
   const [pageState, setPageState] = useState('LOADING');
-  const [currentUser, setCurrentUser] = useState({});
+  const { setCurrentUser } = useContext(UserContext);
   const { conversationId } = useParams();
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
-        const { user } = await getCurrentUserProfile();
+        const user = await getCurrentUserInformation();
         setCurrentUser(user);
         setPageState('DONE');
       } catch (error) {
@@ -24,7 +25,7 @@ export default function Messages() {
       }
     };
     fetchCurrentUser();
-  }, []);
+  }, [setCurrentUser]);
 
   if (pageState === 'LOADING') {
     return (
@@ -35,7 +36,7 @@ export default function Messages() {
   } else if (pageState === 'ERROR') {
     return (
       <>
-        <CompactSidebar currentUser={currentUser} />
+        <CompactSidebar />
         <ErrorComponent errorType="SERVER" />
       </>
     );
@@ -44,7 +45,7 @@ export default function Messages() {
   return (
     <>
       <Stack>
-        <CompactSidebar currentUser={currentUser} />
+        <CompactSidebar />
         <ConversationSidebar />
       </Stack>
       <Flex justify="center" align="center">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Flex,
   Textarea,
@@ -9,14 +9,11 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { postComment } from '../utils/commentUtils';
+import { UserContext } from '../contexts/UserContext';
 
-export default function CommentField({
-  postId,
-  poster,
-  addComment,
-  currentUser,
-}) {
+export default function CommentField({ postId, poster, addComment }) {
   const [commentText, setCommentText] = useState('');
+  const { currentUser } = useContext(UserContext);
   const { username, picture } = currentUser;
   const toast = useToast();
 
