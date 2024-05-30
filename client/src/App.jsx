@@ -60,7 +60,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/messages',
+    path: '/messages/:conversationId?',
     element: <Messages />,
     errorElement: <ErrorPage />,
   },

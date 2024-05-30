@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Spinner, Center, Text, Stack } from '@chakra-ui/react';
+import { Flex, Spinner, Center, Stack } from '@chakra-ui/react';
 import ErrorComponent from '../../components/ErrorComponent';
 import CompactSidebar from '../../components/CompactSidebar';
 import ConversationSidebar from '../../components/ConversationSidebar';
-import { FULL_SIDEBAR_WIDTH, HEADER_HEIGHT } from '../../utils/constants';
+import { FULL_SIDEBAR_WIDTH } from '../../utils/constants';
 import { getCurrentUserProfile } from '../../utils/userUtils';
+import ConversationContainer from '../../components/ConversationContainer';
+import { useParams } from 'react-router-dom';
 
 export default function Messages() {
   const [pageState, setPageState] = useState('LOADING');
   const [currentUser, setCurrentUser] = useState({});
+  const { conversationId } = useParams();
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -49,10 +52,9 @@ export default function Messages() {
           px={16}
           py={8}
           ml={{ base: 0, sm: FULL_SIDEBAR_WIDTH }}
-          my={{ base: HEADER_HEIGHT, sm: 0 }}
           maxW={{ sm: '80vw', md: '60vw', xl: '50vw' }}
         >
-          <Text>Hello</Text>
+          <ConversationContainer conversationId={conversationId} />
         </Flex>
       </Flex>
     </>

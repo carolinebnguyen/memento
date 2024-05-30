@@ -41,9 +41,11 @@ export default function ErrorComponent({ errorType }) {
           </Heading>
           <Text fontSize="5xl">{statusReason}</Text>
           <Text fontSize="xl">{errorMessage}</Text>
-          <Button m={5} colorScheme="blue" onClick={handleBackClick}>
-            Go Back
-          </Button>
+          {errorContent.back && (
+            <Button m={5} colorScheme="blue" onClick={handleBackClick}>
+              Go Back
+            </Button>
+          )}
         </Box>
         <VStack>
           <Image

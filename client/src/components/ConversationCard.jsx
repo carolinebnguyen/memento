@@ -25,7 +25,7 @@ export default function ConversationCard({ conversation, currentUsername }) {
           </Text>
           <HStack gap={1}>
             <Text fontSize="sm" color="gray" fontWeight={500} noOfLines={1}>
-              {sender === currentUsername ? 'You' : sender}: {text}
+              {sender === currentUsername && 'You: '} {text}
             </Text>
             <Text fontSize="sm" whiteSpace="pre">
               •

@@ -2,8 +2,10 @@ import { formatDistanceToNowStrict } from 'date-fns';
 import { format } from 'date-fns-tz';
 import axios from 'axios';
 
+import forbiddenDog from '../assets/forbiddenDog.png';
 import postNotFoundDog from '../assets/postNotFoundDog.jpg';
 import userNotFoundDog from '../assets/userNotFoundDog.jpg';
+import conversationNotFoundDogs from '../assets/conversationNotFoundDogs.png';
 import serverErrorCat from '../assets/serverErrorCat.jpg';
 
 const mementoBackend = axios.create({
@@ -101,6 +103,15 @@ const getLikeAction = (isLiked) => {
 };
 
 const errorContentMap = {
+  FORBIDDEN: {
+    code: '403',
+    statusReason: 'Forbidden',
+    errorMessage: `Sorry! You don't have access to this content.`,
+    imageSrc: forbiddenDog,
+    altText: 'Pomeranian with strawberry hat',
+    credits: 'Mulshie',
+    back: false,
+  },
   POST: {
     code: '404',
     statusReason: 'Post Not Found',
@@ -116,6 +127,16 @@ const errorContentMap = {
     imageSrc: userNotFoundDog,
     altText: 'Pomeranian with scarf',
     credits: 'RudyPongki',
+    back: true,
+  },
+  CONVERSATION: {
+    code: '404',
+    statusReason: 'Conversation Not Found',
+    errorMessage: `Oops! We couldn't find that conversation.`,
+    imageSrc: conversationNotFoundDogs,
+    altText: 'Two Pomeranians lying side by side',
+    credits: 'Mulshie',
+    back: false,
   },
   SERVER: {
     code: '500',
@@ -124,6 +145,7 @@ const errorContentMap = {
     imageSrc: serverErrorCat,
     altText: 'Cat with glasses sitting at laptop',
     credits: '',
+    back: true,
   },
 };
 
