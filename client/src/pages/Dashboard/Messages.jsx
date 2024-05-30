@@ -8,11 +8,9 @@ import ConversationContainer from '../../components/ConversationContainer';
 import { useParams } from 'react-router-dom';
 import { UserContext } from '../../contexts/UserContext';
 import { getCurrentUserInformation } from '../../utils/userUtils';
-import { ConversationContext } from '../../contexts/ConversationContext';
 
 export default function Messages() {
   const [pageState, setPageState] = useState('LOADING');
-  const { setConversationId } = useContext(ConversationContext);
   const { setCurrentUser } = useContext(UserContext);
   const { conversationId } = useParams();
 
@@ -20,9 +18,6 @@ export default function Messages() {
     const configureContext = async () => {
       try {
         const user = await getCurrentUserInformation();
-        if (conversationId) {
-          setConversationId(conversationId);
-        }
         setCurrentUser(user);
         setPageState('DONE');
       } catch (error) {
@@ -30,7 +25,7 @@ export default function Messages() {
       }
     };
     configureContext();
-  }, [setCurrentUser, conversationId, setConversationId]);
+  }, [setCurrentUser, conversationId]);
 
   if (pageState === 'LOADING') {
     return (

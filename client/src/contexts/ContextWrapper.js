@@ -1,11 +1,8 @@
 import React from 'react';
 import UserProvider from '../providers/UserProvider';
-import ConversationProvider from '../providers/ConversationProvider';
 
 const ContextWrapper = ({ children }) => (
-  <UserProvider>
-    <ConversationProvider>{children}</ConversationProvider>
-  </UserProvider>
+  <UserProvider>{children}</UserProvider>
 );
 
 export default ContextWrapper;

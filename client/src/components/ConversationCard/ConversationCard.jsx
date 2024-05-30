@@ -2,15 +2,13 @@ import React, { useContext } from 'react';
 import { Flex, Text, Avatar, HStack, Stack } from '@chakra-ui/react';
 import { formatDateDistanceToNowShortened } from '../../utils/utils';
 import { NavLink, useParams } from 'react-router-dom';
-import { ConversationContext } from '../../contexts/ConversationContext';
 import { UserContext } from '../../contexts/UserContext';
 import styles from './ConversationCard.module.css';
 
 export default function ConversationCard({ conversation }) {
-  const { setConversationId } = useContext(ConversationContext);
   const { currentUser } = useContext(UserContext);
   const { username: currentUsername } = currentUser;
-  const { conversationId: convoId, participants, lastMessage } = conversation;
+  const { conversationId, participants, lastMessage } = conversation;
   const { sender, text, timestamp } = lastMessage;
   const partner = participants.find(
     (participant) => participant.username !== currentUsername
@@ -18,17 +16,14 @@ export default function ConversationCard({ conversation }) {
   const { conversationId: conversationIdParams } = useParams();
 
   return (
-    <NavLink
-      to={`/messages/${convoId}`}
-      onClick={() => setConversationId(convoId)}
-    >
+    <NavLink to={`/messages/${conversationId}`}>
       <Flex
         justify="space-between"
         align="center"
         p={3}
         borderRadius={10}
         className={
-          convoId === conversationIdParams
+          conversationId === conversationIdParams
             ? styles['conversation-card-active']
             : styles['conversation-card']
         }
