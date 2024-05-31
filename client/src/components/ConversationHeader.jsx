@@ -13,7 +13,6 @@ export default function ConversationHeader({ partner }) {
       borderBottomWidth="1px"
       borderColor="blackAlpha.300"
       w="100vw"
-      mt={2}
     >
       <NavLink to={`/profile/${username}`}>
         <HStack
@@ -26,7 +25,12 @@ export default function ConversationHeader({ partner }) {
           ml={3}
           mb={2}
         >
-          <Avatar size="md" src={picture} mr={1} />
+          <Avatar
+            size="md"
+            src={picture}
+            mr={1}
+            bgColor={!picture ? 'gray.400' : ''}
+          />
           <Heading as="h2" size="sm" fontWeight={600} pr={1}>
             {username}
           </Heading>

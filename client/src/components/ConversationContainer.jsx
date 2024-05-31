@@ -20,6 +20,8 @@ import {
   FULL_SIDEBAR_WIDTH,
 } from '../utils/constants';
 import { ConversationContext } from '../contexts/ConversationContext';
+import ConversationContent from './ConversationContent';
+import { useNavigate } from 'react-router-dom';
 
 export default function ConversationContainer({ conversationId }) {
   const [conversation, setConversation] = useState({});
@@ -30,6 +32,7 @@ export default function ConversationContainer({ conversationId }) {
   const { currentUser } = useContext(UserContext);
   const { selectedPartner } = useContext(ConversationContext);
   const { username: currentUsername } = currentUser;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -38,23 +41,20 @@ export default function ConversationContainer({ conversationId }) {
           setPageState('NOT_SELECTED');
           return;
         } else if (conversationId === 'new') {
-          setPageState('NEW_CHAT');
+          if (Object.keys(selectedPartner).length > 0) {
+            setPageState('NEW_CHAT');
+            setConversation(null);
+          } else {
+            navigate('/messages');
+          }
           return;
         }
 
         const conversation = await getConversationById(conversationId);
-
-        if (!conversation && conversation === null) {
-          setConversation(null);
-          setPageState('NOT_FOUND');
-          return;
-        }
-
         const partner = conversation.participants.find(
           (participant) => participant.username !== currentUsername
         );
         setPartner(partner);
-
         setConversation(conversation);
         setPageState('DONE');
       } catch (error) {
@@ -73,7 +73,7 @@ export default function ConversationContainer({ conversationId }) {
       }
     };
     fetchPost();
-  }, [conversationId, currentUsername]);
+  }, [conversationId, currentUsername, selectedPartner, navigate]);
 
   if (pageState === 'LOADING') {
     return (
@@ -131,7 +131,11 @@ export default function ConversationContainer({ conversationId }) {
       <ConversationHeader
         partner={pageState === 'NEW_CHAT' ? selectedPartner : partner}
       />
-      <Flex mt={CONVERSATION_HEADER_HEIGHT}>{conversation.participantKey}</Flex>
+      {conversation && (
+        <Flex mt={CONVERSATION_HEADER_HEIGHT} px={5}>
+          <ConversationContent conversation={conversation} />
+        </Flex>
+      )}
     </Flex>
   );
 }

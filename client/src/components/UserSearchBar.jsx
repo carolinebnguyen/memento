@@ -80,7 +80,7 @@ export default function UserSearchBar({ setSelectedUsername }) {
         </InputLeftElement>
         <Input
           type="text"
-          placeholder={!selectedUser && 'Search...'}
+          placeholder={selectedUser ? '' : 'Search...'}
           fontSize="14px"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
