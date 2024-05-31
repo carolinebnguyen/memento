@@ -37,7 +37,7 @@ export default function ConversationCard({ conversation }) {
           <Text fontSize="sm" whiteSpace="pre">
             •
           </Text>
-          <Text fontSize="sm" color="gray" fontWeight={500} noOfLines={1}>
+          <Text fontSize="sm" color="gray" fontWeight={500}>
             {formatDateDistanceToNowShortened(timestamp)}
           </Text>
         </HStack>

@@ -27,7 +27,7 @@ const formatDateDistanceToNow = (dateString) => {
 
 const dateUnitToAbbreviationMap = {
   seconds: 's',
-  minutes: 'min',
+  minutes: 'm',
   hours: 'h',
   days: 'd',
   weeks: 'w',

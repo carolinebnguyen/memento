@@ -22,6 +22,7 @@ import {
 import { ConversationContext } from '../contexts/ConversationContext';
 import ConversationContent from './ConversationContent';
 import { useNavigate } from 'react-router-dom';
+import ChatInputField from './ChatInputField';
 
 export default function ConversationContainer({ conversationId }) {
   const [conversation, setConversation] = useState({});
@@ -74,6 +75,14 @@ export default function ConversationContainer({ conversationId }) {
     };
     fetchPost();
   }, [conversationId, currentUsername, selectedPartner, navigate]);
+
+  const handleSendMessage = (newMessage) => {
+    const updatedConversation = {
+      ...conversation,
+      messages: [...conversation.messages, newMessage],
+    };
+    setConversation(updatedConversation);
+  };
 
   if (pageState === 'LOADING') {
     return (
@@ -136,6 +145,7 @@ export default function ConversationContainer({ conversationId }) {
           <ConversationContent conversation={conversation} />
         </Flex>
       )}
+      <ChatInputField onSendMessage={handleSendMessage} />
     </Flex>
   );
 }

@@ -22,7 +22,9 @@ export default function MessageBubble({ message }) {
           placement="bottom"
           openDelay={500}
         >
-          <Text _hover={{ cursor: 'default' }}>{text}</Text>
+          <Text _hover={{ cursor: 'default' }} whiteSpace="pre-line">
+            {text}
+          </Text>
         </Tooltip>
       </Box>
     </Flex>
