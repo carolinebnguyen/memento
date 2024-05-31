@@ -27,17 +27,29 @@ export default function ChatInputField({ onSendMessage }) {
 
   useEffect(() => {
     resetField();
+    const el = document.getElementById('conversation-content');
+    el.style.marginBottom = '60px';
   }, [setMessage, location]);
 
   const handleMessageChange = (e) => {
     const textarea = e.target;
     const message = textarea.value;
 
+    const scrollHeight = textarea.scrollHeight;
+
+    const el = document.getElementById('conversation-content');
+    const textareaHeight = scrollHeight + 20;
+    el.style.marginBottom = `${textareaHeight}px`;
+
     textarea.style.height = 'auto';
-    textarea.style.height = `${textarea.scrollHeight}px`;
+    textarea.style.height = `${scrollHeight}px`;
 
     setMessage(message);
-    setTextareaHeight(`${e.target.scrollHeight}px`);
+    setTextareaHeight(`${scrollHeight}px`);
+
+    if (message.trim() === '') {
+      resetField();
+    }
   };
 
   const handleSendMessage = async () => {
