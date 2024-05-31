@@ -1,7 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import Login from './pages/Landing/Login';
-import ErrorPage from './components/ErrorPage';
 import Signup from './pages/Landing/Signup';
 import About from './pages/Footer/About';
 import Terms from './pages/Footer/Terms';
@@ -23,12 +22,13 @@ import DashboardLayout from './components/layouts/DashboardLayout';
 
 import theme from './theme/theme';
 import ContextWrapper from './contexts/ContextWrapper';
+import ErrorComponent from './components/ErrorComponent';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <LandingLayout />,
-    errorElement: <ErrorPage />,
+    errorElement: <ErrorComponent errorType="NOT_FOUND" />,
     children: [
       { index: true, element: <Login /> },
       { path: 'signup', element: <Signup /> },
@@ -37,7 +37,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <FooterLayout />,
-    errorElement: <ErrorPage />,
+    errorElement: <ErrorComponent errorType="NOT_FOUND" />,
     children: [
       { path: 'about', element: <About /> },
       { path: 'terms', element: <Terms /> },
@@ -48,7 +48,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <DashboardLayout />,
-    errorElement: <ErrorPage />,
+    errorElement: <ErrorComponent errorType="NOT_FOUND" />,
     children: [
       { path: 'home', element: <Home /> },
       { path: 'search', element: <Search /> },
@@ -63,7 +63,7 @@ const router = createBrowserRouter([
   {
     path: '/messages/:conversationId?',
     element: <Messages />,
-    errorElement: <ErrorPage />,
+    errorElement: <ErrorComponent errorType="NOT_FOUND" />,
   },
 ]);
 

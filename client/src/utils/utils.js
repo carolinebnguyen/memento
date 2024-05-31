@@ -7,6 +7,7 @@ import postNotFoundDog from '../assets/postNotFoundDog.jpg';
 import userNotFoundDog from '../assets/userNotFoundDog.jpg';
 import conversationNotFoundDogs from '../assets/conversationNotFoundDogs.png';
 import serverErrorCat from '../assets/serverErrorCat.jpg';
+import notFoundDog from '../assets/notFoundDog.jpg';
 
 const mementoBackend = axios.create({
   baseURL: '/api',
@@ -145,6 +146,15 @@ const errorContentMap = {
     imageSrc: serverErrorCat,
     altText: 'Cat with glasses sitting at laptop',
     credits: '',
+    back: true,
+  },
+  NOT_FOUND: {
+    code: '404',
+    statusReason: 'Page Not Found',
+    errorMessage: `Oops! We couldn't find that page.`,
+    imageSrc: notFoundDog,
+    altText: 'Pomeranian with Santa hat',
+    credits: 'missyminzi',
     back: true,
   },
 };

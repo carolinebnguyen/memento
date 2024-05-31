@@ -86,7 +86,7 @@ export default function ConversationContainer({ conversationId }) {
       <Center
         h="100vh"
         w={{
-          sm: `calc(100vw - ${FULL_COMPACT_SIDEBAR_WIDTH})`,
+          base: `calc(100vw - ${FULL_COMPACT_SIDEBAR_WIDTH})`,
           md: `calc(100vw - ${FULL_SIDEBAR_WIDTH})`,
         }}
         ml={{ base: FULL_COMPACT_SIDEBAR_WIDTH, md: FULL_SIDEBAR_WIDTH }}
@@ -99,7 +99,7 @@ export default function ConversationContainer({ conversationId }) {
       <Center
         h="100vh"
         w={{
-          sm: `calc(100vw - ${FULL_COMPACT_SIDEBAR_WIDTH})`,
+          base: `calc(100vw - ${FULL_COMPACT_SIDEBAR_WIDTH})`,
           md: `calc(100vw - ${FULL_SIDEBAR_WIDTH})`,
         }}
         ml={{ base: FULL_COMPACT_SIDEBAR_WIDTH, md: FULL_SIDEBAR_WIDTH }}

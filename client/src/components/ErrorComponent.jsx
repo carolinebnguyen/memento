@@ -33,14 +33,14 @@ export default function ErrorComponent({ errorType }) {
   };
 
   return (
-    <Flex direction="column" h="100%" justify="center">
+    <Flex direction="column" h="100%" justify="center" m={5}>
       <Flex direction="column">
         <Box align="center" justify="center" p={5}>
-          <Heading as="h1" size="4xl">
+          <Heading as="h1" size={{ base: '2xl', sm: '4xl' }}>
             {code}
           </Heading>
-          <Text fontSize="5xl">{statusReason}</Text>
-          <Text fontSize="xl">{errorMessage}</Text>
+          <Text fontSize={{ base: '2xl', sm: '4xl' }}>{statusReason}</Text>
+          <Text fontSize={{ base: 'md', sm: 'xl' }}>{errorMessage}</Text>
           {errorContent.back && (
             <Button m={5} colorScheme="blue" onClick={handleBackClick}>
               Go Back
@@ -50,7 +50,7 @@ export default function ErrorComponent({ errorType }) {
         <VStack>
           <Image
             src={imageSrc}
-            boxSize="500px"
+            boxSize={{ base: '250px', sm: '400px', md: '500px' }}
             objectFit="cover"
             objectPosition="center"
             alt={altText}

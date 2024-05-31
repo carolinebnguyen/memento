@@ -26,7 +26,7 @@ export default function ConversationSidebar() {
   return (
     <Flex
       direction="column"
-      h="100%"
+      h="100vh"
       ml={COMPACT_SIDEBAR_WIDTH}
       w={{
         base: COMPACT_CONVERSATION_SIDEBAR_WIDTH,
@@ -34,14 +34,15 @@ export default function ConversationSidebar() {
       }}
       position="fixed"
     >
-      <Card h="100vh" p={3}>
+      <Card h="100vh" p={5}>
         <Stack
           direction="row"
           align="center"
           justify={isWide ? 'space-between' : 'center'}
+          mb={5}
         >
           {isWide && (
-            <Heading as="h1" size="lg" mb={2} p={2}>
+            <Heading as="h1" size="lg">
               Messages
             </Heading>
           )}
@@ -49,7 +50,6 @@ export default function ConversationSidebar() {
             icon={<FaPenToSquare />}
             isRound={true}
             onClick={onOpen}
-            mb={2}
           />
           <CreateConversationModal isOpen={isOpen} onClose={onClose} />
         </Stack>

@@ -30,8 +30,7 @@ export default function CompactSidebar() {
       boxShadow="md"
       w={COMPACT_SIDEBAR_WIDTH}
       zIndex="9999"
-      minH="100vh"
-      h="100%"
+      h="100vh"
       position="fixed"
     >
       <NavLink to="/home">
