@@ -196,6 +196,9 @@ router.get('/:username/info', async (req, res) => {
 
     const { Item: user } = await docClient.send(new GetCommand(params));
 
+    user.following = Array.from(user?.following || new Set());
+    user.followers = Array.from(user?.followers || new Set());
+
     return res.status(200).json(user);
   } catch (error) {
     console.error('Error getting user: ', error);
