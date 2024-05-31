@@ -18,6 +18,7 @@ import {
   CONVERSATION_HEADER_HEIGHT,
   FULL_SIDEBAR_WIDTH,
 } from '../utils/constants';
+import { ConversationContext } from '../contexts/ConversationContext';
 
 export default function ConversationContainer({ conversationId }) {
   const [conversation, setConversation] = useState({});
@@ -26,6 +27,7 @@ export default function ConversationContainer({ conversationId }) {
   const [errorType, setErrorType] = useState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { currentUser } = useContext(UserContext);
+  const { selectedPartner } = useContext(ConversationContext);
   const { username: currentUsername } = currentUser;
 
   useEffect(() => {
@@ -33,6 +35,9 @@ export default function ConversationContainer({ conversationId }) {
       try {
         if (!conversationId) {
           setPageState('NOT_SELECTED');
+          return;
+        } else if (conversationId === 'new') {
+          setPageState('NEW_CHAT');
           return;
         }
 
@@ -95,6 +100,17 @@ export default function ConversationContainer({ conversationId }) {
           <CreateConversationModal isOpen={isOpen} onClose={onClose} />
         </VStack>
       </Center>
+    );
+  } else if (pageState === 'NEW_CHAT') {
+    return (
+      <Flex
+        direction="column"
+        h="100%"
+        w={{ sm: `calc(100vw - ${FULL_SIDEBAR_WIDTH})` }}
+        ml={{ sm: FULL_SIDEBAR_WIDTH }}
+      >
+        <ConversationHeader partner={selectedPartner} />
+      </Flex>
     );
   }
 

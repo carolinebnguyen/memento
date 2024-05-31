@@ -7,10 +7,13 @@ import ConversationContainer from '../../components/ConversationContainer';
 import { useParams } from 'react-router-dom';
 import { UserContext } from '../../contexts/UserContext';
 import { getCurrentUserInformation } from '../../utils/userUtils';
+import { getAllConversations } from '../../utils/messageUtils';
+import { ConversationContext } from '../../contexts/ConversationContext';
 
 export default function Messages() {
   const [pageState, setPageState] = useState('LOADING');
   const { setCurrentUser } = useContext(UserContext);
+  const { setConversationList } = useContext(ConversationContext);
   const { conversationId } = useParams();
 
   useEffect(() => {
@@ -18,13 +21,15 @@ export default function Messages() {
       try {
         const user = await getCurrentUserInformation();
         setCurrentUser(user);
+        const conversations = await getAllConversations();
+        setConversationList(conversations);
         setPageState('DONE');
       } catch (error) {
         setPageState('ERROR');
       }
     };
     configureContext();
-  }, [setCurrentUser, conversationId]);
+  }, [setCurrentUser, conversationId, setConversationList]);
 
   if (pageState === 'LOADING') {
     return (

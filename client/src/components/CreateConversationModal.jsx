@@ -9,14 +9,17 @@ import {
   Button,
   useToast,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import UserSearchBar from './UserSearchBar';
 import { COMPACT_SIDEBAR_WIDTH } from '../utils/constants';
 import { getConversationIdByUsername } from '../utils/messageUtils';
 import { useNavigate } from 'react-router-dom';
+import { ConversationContext } from '../contexts/ConversationContext';
+import { getUserInformation } from '../utils/userUtils';
 
 export default function CreateConversationModal({ isOpen, onClose }) {
   const [selectedUsername, setSelectedUsername] = useState('');
+  const { setSelectedPartner } = useContext(ConversationContext);
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -25,10 +28,20 @@ export default function CreateConversationModal({ isOpen, onClose }) {
       const conversationId = await getConversationIdByUsername(
         selectedUsername
       );
-      setTimeout(() => {
-        onClose();
-        navigate(`/messages/${conversationId}`);
-      }, 500);
+
+      if (!conversationId) {
+        const partner = await getUserInformation(selectedUsername);
+        setSelectedPartner(partner);
+        setTimeout(() => {
+          onClose();
+          navigate('/messages/new');
+        }, 500);
+      } else {
+        setTimeout(() => {
+          onClose();
+          navigate(`/messages/${conversationId}`);
+        }, 500);
+      }
     } catch (error) {
       toast({
         title: 'Error',
