@@ -1,5 +1,12 @@
 import React, { useContext } from 'react';
-import { Flex, Text, Avatar, HStack, Stack } from '@chakra-ui/react';
+import {
+  Flex,
+  Text,
+  Avatar,
+  HStack,
+  Stack,
+  useBreakpointValue,
+} from '@chakra-ui/react';
 import { formatDateDistanceToNowShortened } from '../../utils/utils';
 import { NavLink, useParams } from 'react-router-dom';
 import { UserContext } from '../../contexts/UserContext';
@@ -14,11 +21,36 @@ export default function ConversationCard({ conversation }) {
     (participant) => participant.username !== currentUsername
   );
   const { conversationId: conversationIdParams } = useParams();
+  const isSmall = useBreakpointValue({ base: true, md: false });
+
+  const fullContent = (
+    <HStack>
+      <Avatar size="md" src={partner.picture} />
+      <Stack direction="column" gap={0}>
+        <Text as="b" noOfLines={1}>
+          {partner.username}
+        </Text>
+        <HStack gap={1}>
+          <Text fontSize="sm" color="gray" fontWeight={500} noOfLines={1}>
+            {sender === currentUsername && 'You: '} {text}
+          </Text>
+          <Text fontSize="sm" whiteSpace="pre">
+            •
+          </Text>
+          <Text fontSize="sm" color="gray" fontWeight={500} noOfLines={1}>
+            {formatDateDistanceToNowShortened(timestamp)}
+          </Text>
+        </HStack>
+      </Stack>
+    </HStack>
+  );
+
+  const compactContent = <Avatar size="md" src={partner.picture} />;
 
   return (
     <NavLink to={`/messages/${conversationId}`}>
       <Flex
-        justify="space-between"
+        justify={isSmall ? 'center' : 'space-between'}
         align="center"
         p={3}
         borderRadius={10}
@@ -28,25 +60,7 @@ export default function ConversationCard({ conversation }) {
             : styles['conversation-card']
         }
       >
-        <HStack>
-          <Avatar size="md" src={partner.picture} />
-          <Stack direction="column" gap={0}>
-            <Text as="b" noOfLines={1}>
-              {partner.username}
-            </Text>
-            <HStack gap={1}>
-              <Text fontSize="sm" color="gray" fontWeight={500} noOfLines={1}>
-                {sender === currentUsername && 'You: '} {text}
-              </Text>
-              <Text fontSize="sm" whiteSpace="pre">
-                •
-              </Text>
-              <Text fontSize="sm" color="gray" fontWeight={500} noOfLines={1}>
-                {formatDateDistanceToNowShortened(timestamp)}
-              </Text>
-            </HStack>
-          </Stack>
-        </HStack>
+        {isSmall ? compactContent : fullContent}
       </Flex>
     </NavLink>
   );

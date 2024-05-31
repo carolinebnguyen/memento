@@ -16,6 +16,7 @@ import ConversationHeader from './ConversationHeader';
 import { UserContext } from '../contexts/UserContext';
 import {
   CONVERSATION_HEADER_HEIGHT,
+  FULL_COMPACT_SIDEBAR_WIDTH,
   FULL_SIDEBAR_WIDTH,
 } from '../utils/constants';
 import { ConversationContext } from '../contexts/ConversationContext';
@@ -84,8 +85,11 @@ export default function ConversationContainer({ conversationId }) {
     return (
       <Center
         h="100vh"
-        w={{ sm: `calc(100vw - ${FULL_SIDEBAR_WIDTH})` }}
-        ml={{ sm: FULL_SIDEBAR_WIDTH }}
+        w={{
+          sm: `calc(100vw - ${FULL_COMPACT_SIDEBAR_WIDTH})`,
+          md: `calc(100vw - ${FULL_SIDEBAR_WIDTH})`,
+        }}
+        ml={{ base: FULL_COMPACT_SIDEBAR_WIDTH, md: FULL_SIDEBAR_WIDTH }}
       >
         <ErrorComponent errorType={errorType} />
       </Center>
@@ -94,8 +98,11 @@ export default function ConversationContainer({ conversationId }) {
     return (
       <Center
         h="100vh"
-        w={{ sm: `calc(100vw - ${FULL_SIDEBAR_WIDTH})` }}
-        ml={{ sm: FULL_SIDEBAR_WIDTH }}
+        w={{
+          sm: `calc(100vw - ${FULL_COMPACT_SIDEBAR_WIDTH})`,
+          md: `calc(100vw - ${FULL_SIDEBAR_WIDTH})`,
+        }}
+        ml={{ base: FULL_COMPACT_SIDEBAR_WIDTH, md: FULL_SIDEBAR_WIDTH }}
       >
         <VStack gap={3}>
           <Heading as="h2" size="md">
@@ -115,8 +122,11 @@ export default function ConversationContainer({ conversationId }) {
     <Flex
       direction="column"
       h="100%"
-      w={{ sm: `calc(100vw - ${FULL_SIDEBAR_WIDTH})` }}
-      ml={{ sm: FULL_SIDEBAR_WIDTH }}
+      w={{
+        base: `calc(100vw - ${FULL_COMPACT_SIDEBAR_WIDTH})`,
+        md: `calc(100vw - ${FULL_SIDEBAR_WIDTH})`,
+      }}
+      ml={{ base: FULL_COMPACT_SIDEBAR_WIDTH, md: FULL_SIDEBAR_WIDTH }}
     >
       <ConversationHeader
         partner={pageState === 'NEW_CHAT' ? selectedPartner : partner}
