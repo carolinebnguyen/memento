@@ -1,4 +1,4 @@
-import { Flex, HStack, IconButton, Textarea } from '@chakra-ui/react';
+import { Flex, HStack, IconButton, Textarea, useToast } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { BsFillSendFill } from 'react-icons/bs';
 import {
@@ -18,6 +18,7 @@ export default function ChatInputField({ onSendMessage }) {
   const { selectedPartner, setSelectedPartner } =
     useContext(ConversationContext);
   const { currentUser } = useContext(UserContext);
+  const toast = useToast();
 
   const resetField = () => {
     setMessage('');
@@ -29,7 +30,13 @@ export default function ChatInputField({ onSendMessage }) {
   }, [setMessage, location]);
 
   const handleMessageChange = (e) => {
-    setMessage(e.target.value);
+    const textarea = e.target;
+    const message = textarea.value;
+
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+
+    setMessage(message);
     setTextareaHeight(`${e.target.scrollHeight}px`);
   };
 
@@ -57,7 +64,16 @@ export default function ChatInputField({ onSendMessage }) {
       onSendMessage(newMessage);
       resetField();
     } catch (error) {
-      console.error('error sending message: ', error);
+      toast({
+        title: 'Error',
+        description: 'Error sending. Please try again later.',
+        status: 'error',
+        variant: 'subtle',
+        position: 'top',
+        containerStyle: {
+          zIndex: '9999',
+        },
+      });
     }
   };
 
