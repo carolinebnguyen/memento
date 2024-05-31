@@ -53,7 +53,7 @@ const formatDateDistanceToNowShortened = (dateString) => {
   });
 
   const [num, unit] = distanceString.split(' ');
-  const isSingular = num === 1;
+  const isSingular = parseInt(num) === 1;
 
   const abbreviatedUnit = getDateUnit(unit, isSingular);
   return `${num}${abbreviatedUnit}`;
@@ -66,6 +66,17 @@ const formatDate = (dateString) => {
 
   const dateToFormat = new Date(dateString);
   return format(dateToFormat, 'PPPPPp (z)', {
+    timeZone: 'America/Los_Angeles',
+  });
+};
+
+const formatDateOnly = (dateString) => {
+  if (!dateString) {
+    return '';
+  }
+
+  const dateToFormat = new Date(dateString);
+  return format(dateToFormat, 'iiii, MMMM do, yyyy', {
     timeZone: 'America/Los_Angeles',
   });
 };
@@ -168,6 +179,7 @@ export {
   formatDateDistanceToNow,
   formatDateDistanceToNowShortened,
   formatDate,
+  formatDateOnly,
   passwordRegex,
   passwordErrorMessage,
   sortReverseChronologicalOrder,

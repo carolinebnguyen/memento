@@ -68,7 +68,13 @@ const groupNotificationsByDate = (notifications) => {
     groupedNotifications[group].sort(sortReverseChronologicalOrder);
   });
 
-  return groupedNotifications;
+  const filteredGroups = Object.fromEntries(
+    Object.entries(groupedNotifications).filter(
+      ([group, notifications]) => notifications.length > 0
+    )
+  );
+
+  return filteredGroups;
 };
 
 const NotificationType = {

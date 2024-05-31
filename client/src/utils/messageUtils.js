@@ -56,10 +56,24 @@ const getConversationIdByUsername = async (recipient) => {
   }
 };
 
+const groupMessagesByDate = (messages) => {
+  return messages.reduce((acc, message) => {
+    const date = new Date(message.timestamp);
+    date.setHours(0, 0, 0, 0);
+    const dateString = date.toDateString();
+    if (!acc[dateString]) {
+      acc[dateString] = [];
+    }
+    acc[dateString].push(message);
+    return acc;
+  }, {});
+};
+
 export {
   getAllConversations,
   getConversationById,
   createConversation,
   sendMessage,
   getConversationIdByUsername,
+  groupMessagesByDate,
 };
