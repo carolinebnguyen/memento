@@ -80,10 +80,12 @@ export default function UserSearchBar({ setSelectedUsername }) {
         </InputLeftElement>
         <Input
           type="text"
-          placeholder="Search..."
+          placeholder={!selectedUser && 'Search...'}
           fontSize="14px"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          isReadOnly={selectedUser}
+          cursor={selectedUser ? 'default' : 'text'}
         />
         {selectedUser && (
           <Badge
@@ -95,6 +97,7 @@ export default function UserSearchBar({ setSelectedUsername }) {
             left="40px"
             top="50%"
             pl={2}
+            zIndex="100"
             transform="translateY(-50%)"
             style={{ textTransform: 'lowercase' }}
           >
