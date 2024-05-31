@@ -33,7 +33,7 @@ export default function ErrorComponent({ errorType }) {
   };
 
   return (
-    <Flex direction="column" h="100%">
+    <Flex direction="column" h="100%" justify="center">
       <Flex direction="column">
         <Box align="center" justify="center" p={5}>
           <Heading as="h1" size="4xl">

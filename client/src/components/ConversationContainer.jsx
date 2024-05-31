@@ -81,7 +81,15 @@ export default function ConversationContainer({ conversationId }) {
       </Center>
     );
   } else if (pageState === 'ERROR') {
-    return <ErrorComponent errorType={errorType} />;
+    return (
+      <Center
+        h="100vh"
+        w={{ sm: `calc(100vw - ${FULL_SIDEBAR_WIDTH})` }}
+        ml={{ sm: FULL_SIDEBAR_WIDTH }}
+      >
+        <ErrorComponent errorType={errorType} />
+      </Center>
+    );
   } else if (pageState === 'NOT_SELECTED') {
     return (
       <Center
@@ -101,17 +109,6 @@ export default function ConversationContainer({ conversationId }) {
         </VStack>
       </Center>
     );
-  } else if (pageState === 'NEW_CHAT') {
-    return (
-      <Flex
-        direction="column"
-        h="100%"
-        w={{ sm: `calc(100vw - ${FULL_SIDEBAR_WIDTH})` }}
-        ml={{ sm: FULL_SIDEBAR_WIDTH }}
-      >
-        <ConversationHeader partner={selectedPartner} />
-      </Flex>
-    );
   }
 
   return (
@@ -121,7 +118,9 @@ export default function ConversationContainer({ conversationId }) {
       w={{ sm: `calc(100vw - ${FULL_SIDEBAR_WIDTH})` }}
       ml={{ sm: FULL_SIDEBAR_WIDTH }}
     >
-      <ConversationHeader partner={partner} />
+      <ConversationHeader
+        partner={pageState === 'NEW_CHAT' ? selectedPartner : partner}
+      />
       <Flex mt={CONVERSATION_HEADER_HEIGHT}>{conversation.participantKey}</Flex>
     </Flex>
   );
