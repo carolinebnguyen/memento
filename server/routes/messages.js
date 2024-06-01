@@ -268,8 +268,28 @@ router.post('/', async (req, res) => {
         .json({ error: 'Users cannot send messages to themselves' });
     }
 
-    const conversationId = crypto.randomUUID();
+    const participantKey = createParticipantKey(sender, recipient);
 
+    const checkConversationParams = {
+      TableName: CONVERSATION_TABLE,
+      IndexName: 'participantKey-index',
+      KeyConditionExpression: 'participantKey = :participantKey',
+      ExpressionAttributeValues: {
+        ':participantKey': participantKey,
+      },
+    };
+
+    const { Items } = await docClient.send(
+      new QueryCommand(checkConversationParams)
+    );
+
+    if (Items) {
+      return res
+        .status(409)
+        .json({ error: `Conversation with ${recipient} already exists` });
+    }
+
+    const conversationId = crypto.randomUUID();
     const timestamp = new Date().toISOString();
 
     const message = {
@@ -277,8 +297,6 @@ router.post('/', async (req, res) => {
       sender: sender,
       timestamp: timestamp,
     };
-
-    const participantKey = createParticipantKey(sender, recipient);
 
     const conversation = {
       conversationId: conversationId,
@@ -330,7 +348,7 @@ router.post('/', async (req, res) => {
 
     await docClient.send(new TransactWriteCommand(transactionParams));
 
-    return res.status(200).json({ success: true });
+    return res.status(200).json({ conversationId });
   } catch (error) {
     console.error('Error creating conversation: ', error);
     return res
