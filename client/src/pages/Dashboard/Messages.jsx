@@ -23,10 +23,12 @@ export default function Messages() {
         const user = await getCurrentUserInformation();
         setCurrentUser(user);
         const conversations = await getAllConversations();
-        const selectedConversation = conversations.find(
-          (conversation) => conversation.conversationId === conversationId
-        );
-        setCurrentConversationCard(selectedConversation);
+        if (conversationId) {
+          const selectedConversation = conversations.find(
+            (conversation) => conversation.conversationId === conversationId
+          );
+          setCurrentConversationCard(selectedConversation);
+        }
         setConversationList(conversations);
         setPageState('DONE');
       } catch (error) {
