@@ -20,6 +20,8 @@ export default function ChatInputField({ onSendMessage }) {
     selectedPartner,
     currentConversationCard,
     setCurrentConversationCard,
+    conversationList,
+    setConversationList,
   } = useContext(ConversationContext);
   const { currentUser } = useContext(UserContext);
   const toast = useToast();
@@ -94,6 +96,17 @@ export default function ChatInputField({ onSendMessage }) {
         ...currentConversationCard,
         lastMessage: newMessage,
       });
+
+      if (conversationList[0].conversationId !== conversationId) {
+        const index = conversationList.findIndex(
+          (conversation) => conversation.conversationId === conversationId
+        );
+        if (index !== -1) {
+          const conversationToMove = conversationList.splice(index, 1)[0];
+          conversationList.unshift(conversationToMove);
+          setConversationList(conversationList);
+        }
+      }
 
       onSendMessage(newMessage);
       resetField();
