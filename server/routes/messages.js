@@ -283,7 +283,7 @@ router.post('/', async (req, res) => {
       new QueryCommand(checkConversationParams)
     );
 
-    if (Items) {
+    if (Items && Items.length > 0) {
       return res
         .status(409)
         .json({ error: `Conversation with ${recipient} already exists` });
@@ -348,7 +348,7 @@ router.post('/', async (req, res) => {
 
     await docClient.send(new TransactWriteCommand(transactionParams));
 
-    return res.status(200).json({ conversationId });
+    return res.status(200).json(conversationId);
   } catch (error) {
     console.error('Error creating conversation: ', error);
     return res

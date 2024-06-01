@@ -6,7 +6,7 @@ import {
   FULL_COMPACT_SIDEBAR_WIDTH,
   FULL_SIDEBAR_WIDTH,
 } from '../utils/constants';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ConversationContext } from '../contexts/ConversationContext';
 import { UserContext } from '../contexts/UserContext';
 import { createConversation, sendMessage } from '../utils/messageUtils';
@@ -16,10 +16,10 @@ export default function ChatInputField({ onSendMessage }) {
   const [textareaHeight, setTextareaHeight] = useState('auto');
   const location = useLocation();
   const { conversationId } = useParams();
-  const { selectedPartner, setSelectedPartner } =
-    useContext(ConversationContext);
+  const { selectedPartner } = useContext(ConversationContext);
   const { currentUser } = useContext(UserContext);
   const toast = useToast();
+  const navigate = useNavigate();
 
   const resetField = () => {
     setMessage('');
@@ -29,7 +29,9 @@ export default function ChatInputField({ onSendMessage }) {
   useEffect(() => {
     resetField();
     const conversationContent = document.getElementById('conversation-content');
-    conversationContent.style.marginBottom = CHAT_INPUT_FIELD_HEIGHT;
+    if (conversationContent) {
+      conversationContent.style.marginBottom = CHAT_INPUT_FIELD_HEIGHT;
+    }
   }, [setMessage, location]);
 
   const handleMessageChange = (e) => {
@@ -52,7 +54,9 @@ export default function ChatInputField({ onSendMessage }) {
       marginBottom = 60;
     }
 
-    conversationContent.style.marginBottom = `${marginBottom}px`;
+    if (conversationContent) {
+      conversationContent.style.marginBottom = `${marginBottom}px`;
+    }
   };
 
   const handleSendMessage = async () => {
@@ -63,18 +67,24 @@ export default function ChatInputField({ onSendMessage }) {
     }
 
     try {
+      if (conversationId === 'new') {
+        const newConversationId = await createConversation(
+          text,
+          selectedPartner.username
+        );
+        if (newConversationId) {
+          navigate(`/messages/${newConversationId}`);
+        }
+        return;
+      }
+
       const newMessage = {
         text: text,
         sender: currentUser.username,
         timestamp: Date.now(),
       };
 
-      if (conversationId === 'new') {
-        await createConversation(text, selectedPartner.username);
-        setSelectedPartner(null);
-      } else {
-        await sendMessage(conversationId, text);
-      }
+      await sendMessage(conversationId, text);
 
       onSendMessage(newMessage);
       resetField();

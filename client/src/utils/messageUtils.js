@@ -28,7 +28,8 @@ const getConversationById = async (conversationId) => {
 
 const createConversation = async (text, recipient) => {
   try {
-    await mementoBackend.post('/messages', { text, recipient });
+    const res = await mementoBackend.post('/messages', { text, recipient });
+    return res.data;
   } catch (error) {
     throw error;
   }
