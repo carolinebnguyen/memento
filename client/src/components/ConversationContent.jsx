@@ -3,6 +3,7 @@ import { Box, Flex } from '@chakra-ui/react';
 import MessageBubble from './MessageBubble';
 import { groupMessagesByDate } from '../utils/messageUtils';
 import { formatDateOnly } from '../utils/utils';
+import { CHAT_INPUT_FIELD_HEIGHT } from '../utils/constants';
 
 export default function ConversationContent({ conversation }) {
   const groupedMessages = groupMessagesByDate(conversation.messages);
@@ -19,10 +20,9 @@ export default function ConversationContent({ conversation }) {
   return (
     <Flex
       direction="column"
-      maxH="100vh"
       w="100%"
       id="conversation-content"
-      mb="60px"
+      mb={CHAT_INPUT_FIELD_HEIGHT}
     >
       {Object.entries(groupedMessages).map(([date, messages], index) => (
         <Box key={date}>

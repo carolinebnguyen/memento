@@ -2,6 +2,7 @@ import { Flex, HStack, IconButton, Textarea, useToast } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { BsFillSendFill } from 'react-icons/bs';
 import {
+  CHAT_INPUT_FIELD_HEIGHT,
   FULL_COMPACT_SIDEBAR_WIDTH,
   FULL_SIDEBAR_WIDTH,
 } from '../utils/constants';
@@ -20,8 +21,6 @@ export default function ChatInputField({ onSendMessage }) {
   const { currentUser } = useContext(UserContext);
   const toast = useToast();
 
-  const conversationContent = document.getElementById('conversation-content');
-
   const resetField = () => {
     setMessage('');
     setTextareaHeight('auto');
@@ -29,8 +28,9 @@ export default function ChatInputField({ onSendMessage }) {
 
   useEffect(() => {
     resetField();
-    conversationContent.style.marginBottom = '60px';
-  }, [setMessage, location, conversationContent.style]);
+    const conversationContent = document.getElementById('conversation-content');
+    conversationContent.style.marginBottom = CHAT_INPUT_FIELD_HEIGHT;
+  }, [setMessage, location]);
 
   const handleMessageChange = (e) => {
     const textarea = e.target;
@@ -47,7 +47,7 @@ export default function ChatInputField({ onSendMessage }) {
     setMessage(message);
     setTextareaHeight(`${scrollHeight}px`);
 
-    if (message.trim() === '') {
+    if (message === '') {
       resetField();
       marginBottom = 60;
     }
@@ -78,6 +78,10 @@ export default function ChatInputField({ onSendMessage }) {
 
       onSendMessage(newMessage);
       resetField();
+      const conversationContent = document.getElementById(
+        'conversation-content'
+      );
+      conversationContent.style.marginBottom = CHAT_INPUT_FIELD_HEIGHT;
     } catch (error) {
       toast({
         title: 'Error',
