@@ -4,6 +4,7 @@ import { ConversationContext } from '../contexts/ConversationContext';
 const ConversationProvider = ({ children }) => {
   const [selectedPartner, setSelectedPartner] = useState({});
   const [conversationList, setConversationList] = useState([]);
+  const [currentConversationCard, setCurrentConversationCard] = useState({});
 
   return (
     <ConversationContext.Provider
@@ -12,6 +13,8 @@ const ConversationProvider = ({ children }) => {
         setSelectedPartner,
         conversationList,
         setConversationList,
+        currentConversationCard,
+        setCurrentConversationCard,
       }}
     >
       {children}

@@ -16,7 +16,11 @@ export default function ChatInputField({ onSendMessage }) {
   const [textareaHeight, setTextareaHeight] = useState('auto');
   const location = useLocation();
   const { conversationId } = useParams();
-  const { selectedPartner } = useContext(ConversationContext);
+  const {
+    selectedPartner,
+    currentConversationCard,
+    setCurrentConversationCard,
+  } = useContext(ConversationContext);
   const { currentUser } = useContext(UserContext);
   const toast = useToast();
   const navigate = useNavigate();
@@ -81,10 +85,15 @@ export default function ChatInputField({ onSendMessage }) {
       const newMessage = {
         text: text,
         sender: currentUser.username,
-        timestamp: Date.now(),
+        timestamp: new Date().toISOString(),
       };
 
       await sendMessage(conversationId, text);
+
+      setCurrentConversationCard({
+        ...currentConversationCard,
+        lastMessage: newMessage,
+      });
 
       onSendMessage(newMessage);
       resetField();

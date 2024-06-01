@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Flex,
   Text,
@@ -11,17 +11,33 @@ import { formatDateDistanceToNowShortened } from '../../utils/utils';
 import { NavLink, useParams } from 'react-router-dom';
 import { UserContext } from '../../contexts/UserContext';
 import styles from './ConversationCard.module.css';
+import { ConversationContext } from '../../contexts/ConversationContext';
 
 export default function ConversationCard({ conversation }) {
   const { currentUser } = useContext(UserContext);
+  const { currentConversationCard } = useContext(ConversationContext);
   const { username: currentUsername } = currentUser;
   const { conversationId, participants, lastMessage } = conversation;
-  const { sender, text, timestamp } = lastMessage;
   const partner = participants.find(
     (participant) => participant.username !== currentUsername
   );
   const { conversationId: conversationIdParams } = useParams();
   const isSmall = useBreakpointValue({ base: true, md: false });
+
+  const isActive = conversationId === conversationIdParams;
+  const [activeLastMessage, setActiveLastMessage] = useState(lastMessage);
+
+  useEffect(() => {
+    if (isActive) {
+      setActiveLastMessage(currentConversationCard.lastMessage);
+    }
+  }, [conversationId, conversationIdParams, currentConversationCard, isActive]);
+
+  useEffect(() => {
+    if (isActive) {
+      setActiveLastMessage(lastMessage);
+    }
+  }, [isActive, lastMessage]);
 
   const fullContent = (
     <HStack>
@@ -32,13 +48,14 @@ export default function ConversationCard({ conversation }) {
         </Text>
         <HStack gap={1}>
           <Text fontSize="sm" color="gray" fontWeight={500} noOfLines={1}>
-            {sender === currentUsername && 'You: '} {text}
+            {activeLastMessage.sender === currentUsername && 'You: '}{' '}
+            {activeLastMessage.text}
           </Text>
           <Text fontSize="sm" whiteSpace="pre">
             •
           </Text>
           <Text fontSize="sm" color="gray" fontWeight={500}>
-            {formatDateDistanceToNowShortened(timestamp)}
+            {formatDateDistanceToNowShortened(activeLastMessage.timestamp)}
           </Text>
         </HStack>
       </Stack>
@@ -55,7 +72,7 @@ export default function ConversationCard({ conversation }) {
         p={3}
         borderRadius={10}
         className={
-          conversationId === conversationIdParams
+          isActive
             ? styles['conversation-card-active']
             : styles['conversation-card']
         }

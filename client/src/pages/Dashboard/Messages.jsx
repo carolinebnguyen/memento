@@ -13,7 +13,8 @@ import { ConversationContext } from '../../contexts/ConversationContext';
 export default function Messages() {
   const [pageState, setPageState] = useState('LOADING');
   const { setCurrentUser } = useContext(UserContext);
-  const { setConversationList } = useContext(ConversationContext);
+  const { setConversationList, setCurrentConversationCard } =
+    useContext(ConversationContext);
   const { conversationId } = useParams();
 
   useEffect(() => {
@@ -22,6 +23,10 @@ export default function Messages() {
         const user = await getCurrentUserInformation();
         setCurrentUser(user);
         const conversations = await getAllConversations();
+        const selectedConversation = conversations.find(
+          (conversation) => conversation.conversationId === conversationId
+        );
+        setCurrentConversationCard(selectedConversation);
         setConversationList(conversations);
         setPageState('DONE');
       } catch (error) {
@@ -29,7 +34,12 @@ export default function Messages() {
       }
     };
     configureContext();
-  }, [setCurrentUser, conversationId, setConversationList]);
+  }, [
+    setCurrentUser,
+    conversationId,
+    setConversationList,
+    setCurrentConversationCard,
+  ]);
 
   if (pageState === 'LOADING') {
     return (
