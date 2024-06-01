@@ -20,6 +20,8 @@ export default function ChatInputField({ onSendMessage }) {
   const { currentUser } = useContext(UserContext);
   const toast = useToast();
 
+  const conversationContent = document.getElementById('conversation-content');
+
   const resetField = () => {
     setMessage('');
     setTextareaHeight('auto');
@@ -27,9 +29,8 @@ export default function ChatInputField({ onSendMessage }) {
 
   useEffect(() => {
     resetField();
-    const el = document.getElementById('conversation-content');
-    el.style.marginBottom = '60px';
-  }, [setMessage, location]);
+    conversationContent.style.marginBottom = '60px';
+  }, [setMessage, location, conversationContent.style]);
 
   const handleMessageChange = (e) => {
     const textarea = e.target;
@@ -37,9 +38,8 @@ export default function ChatInputField({ onSendMessage }) {
 
     const scrollHeight = textarea.scrollHeight;
 
-    const el = document.getElementById('conversation-content');
-    const textareaHeight = scrollHeight + 20;
-    el.style.marginBottom = `${textareaHeight}px`;
+    const conversationContent = document.getElementById('conversation-content');
+    let marginBottom = scrollHeight + 20;
 
     textarea.style.height = 'auto';
     textarea.style.height = `${scrollHeight}px`;
@@ -49,7 +49,10 @@ export default function ChatInputField({ onSendMessage }) {
 
     if (message.trim() === '') {
       resetField();
+      marginBottom = 60;
     }
+
+    conversationContent.style.marginBottom = `${marginBottom}px`;
   };
 
   const handleSendMessage = async () => {
