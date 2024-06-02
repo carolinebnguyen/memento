@@ -83,9 +83,9 @@ export default function ConversationContainer({ conversationId }) {
 
   useEffect(() => {
     const subscribeToConversationId = (conversationId) => {
-      const ws = new WebSocket(
-        `ws://${window.location.hostname}:9000/ws/conversations/subscribe/${conversationId}`
-      );
+      const wsPort = window.location.hostname === 'localhost' ? ':9000' : '';
+      const wsUrl = `ws://${window.location.hostname}${wsPort}/ws/conversations/subscribe/${conversationId}`;
+      const ws = new WebSocket(wsUrl);
       ws.onopen = () => {
         conversationWebSocket.current = ws;
       };
