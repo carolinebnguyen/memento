@@ -64,13 +64,6 @@ export default function Create() {
     text: yup.string().required('Text content is required'),
   });
 
-  const removeFile = () => {
-    if (file?.preview) {
-      URL.revokeObjectURL(file.preview);
-    }
-    setFile(null);
-  };
-
   const onSubmit = async (values, { setSubmitting }) => {
     setAlertMessage('');
     setIsAlertVisible(false);
@@ -215,6 +208,13 @@ export default function Create() {
           const updateImageSrc = (file) => {
             setFile(file);
             setFieldValue('imageSrc', file.preview);
+          };
+          const removeFile = () => {
+            if (file?.preview) {
+              URL.revokeObjectURL(file.preview);
+            }
+            setFile(null);
+            setFieldValue('imageSrc', '');
           };
           return (
             <Form>
