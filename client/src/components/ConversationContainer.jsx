@@ -119,7 +119,12 @@ export default function ConversationContainer({ conversationId }) {
         });
       };
     }
-  }, [conversationId, conversation]);
+  }, [
+    conversationId,
+    conversation,
+    currentConversationCard,
+    setCurrentConversationCard,
+  ]);
 
   useEffect(() => {
     return () => {
