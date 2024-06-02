@@ -21,12 +21,10 @@ const {
   DeleteCommand,
   PutCommand,
 } = require('@aws-sdk/lib-dynamodb');
-const { marshall, unmarshall } = require('@aws-sdk/util-dynamodb');
 
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const { createNotification } = require('../utils/notificationUtils');
 
-const COGNITO_CLIENT_ID = process.env.COGNITO_CLIENT_ID;
 const {
   USER_TABLE,
   POST_TABLE,

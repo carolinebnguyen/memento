@@ -5,9 +5,11 @@ const timeout = require('connect-timeout');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const path = require('path');
+const chalk = require('chalk');
 const { verifyAccessToken } = require('./utils/authUtils');
 
 const app = express();
+const expressWs = require('express-ws')(app);
 app.use(morgan('dev'));
 app.use(timeout('5s'));
 app.use(cookieParser());
@@ -33,11 +35,14 @@ app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api/comments', require('./routes/comments'));
 app.use('/api/messages', require('./routes/messages'));
 
+app.use('/ws/**', verifyAccessToken);
+app.use('/ws/conversations', require('./websockets/conversations'));
+
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
 });
 
 const PORT = process.env.PORT || 9000;
 app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
+  console.log(`Server listening on ${chalk.yellow(PORT)}`);
 });

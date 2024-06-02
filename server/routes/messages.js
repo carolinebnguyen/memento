@@ -16,8 +16,8 @@ const {
   createParticipantKey,
   getParticipantList,
 } = require('../utils/messageUtils');
-
 const { USER_TABLE, CONVERSATION_TABLE } = require('../utils/constants');
+const { sendMessageToConversation } = require('../websockets/conversations');
 
 const dynamoDBClient = new DynamoDBClient({
   region: process.env.AWS_REGION,
@@ -408,6 +408,8 @@ router.put('/:conversationId', async (req, res) => {
     };
 
     await docClient.send(new UpdateCommand(conversationParams));
+
+    sendMessageToConversation(conversationId, sender, message);
 
     return res.status(200).json({ success: true });
   } catch (error) {
