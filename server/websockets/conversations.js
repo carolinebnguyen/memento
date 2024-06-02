@@ -11,6 +11,10 @@ router.ws('/subscribe/:conversationId', (ws, req) => {
   const username = req.user.username.toLowerCase();
   const { conversationId } = req.params;
 
+  if (conversationId === 'new') {
+    return;
+  }
+
   if (!conversations.has(conversationId)) {
     conversations.set(conversationId, new Map());
   }
@@ -35,7 +39,7 @@ router.ws('/subscribe/:conversationId', (ws, req) => {
     console.log(
       `User ${chalk.blue(req.user.username)} has ${chalk.red(
         'unsubscribed'
-      )} to conversationId ${chalk.cyan(conversationId)}`
+      )} from conversationId ${chalk.cyan(conversationId)}`
     );
   });
 });

@@ -9,7 +9,11 @@ import {
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ConversationContext } from '../contexts/ConversationContext';
 import { UserContext } from '../contexts/UserContext';
-import { createConversation, sendMessage } from '../utils/messageUtils';
+import {
+  createConversation,
+  updateConversationListOrder,
+  sendMessage,
+} from '../utils/messageUtils';
 
 export default function ChatInputField({ onSendMessage }) {
   const [message, setMessage] = useState('');
@@ -97,16 +101,11 @@ export default function ChatInputField({ onSendMessage }) {
         lastMessage: newMessage,
       });
 
-      if (conversationList[0].conversationId !== conversationId) {
-        const index = conversationList.findIndex(
-          (conversation) => conversation.conversationId === conversationId
-        );
-        if (index !== -1) {
-          const conversationToMove = conversationList.splice(index, 1)[0];
-          conversationList.unshift(conversationToMove);
-          setConversationList(conversationList);
-        }
-      }
+      const updatedConversationList = updateConversationListOrder(
+        conversationList,
+        conversationId
+      );
+      setConversationList(updatedConversationList);
 
       onSendMessage(newMessage);
       resetField();

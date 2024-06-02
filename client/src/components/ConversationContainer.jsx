@@ -9,7 +9,10 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react';
-import { getConversationById } from '../utils/messageUtils';
+import {
+  getConversationById,
+  updateConversationListOrder,
+} from '../utils/messageUtils';
 import ErrorComponent from './ErrorComponent';
 import CreateConversationModal from './CreateConversationModal';
 import ConversationHeader from './ConversationHeader';
@@ -35,13 +38,15 @@ export default function ConversationContainer({ conversationId }) {
     currentConversationCard,
     setCurrentConversationCard,
     selectedPartner,
+    conversationList,
+    setConversationList,
   } = useContext(ConversationContext);
   const { username: currentUsername } = currentUser;
   const navigate = useNavigate();
   const conversationWebSocket = useRef(null);
 
   useEffect(() => {
-    const fetchPost = async () => {
+    const fetchConversation = async () => {
       try {
         if (!conversationId) {
           setPageState('NOT_SELECTED');
@@ -78,7 +83,7 @@ export default function ConversationContainer({ conversationId }) {
         setPageState('ERROR');
       }
     };
-    fetchPost();
+    fetchConversation();
   }, [conversationId, currentUsername, selectedPartner, navigate]);
 
   useEffect(() => {
@@ -117,6 +122,11 @@ export default function ConversationContainer({ conversationId }) {
           ...currentConversationCard,
           lastMessage: receivedMessage,
         });
+        const updatedConversationList = updateConversationListOrder(
+          conversationList,
+          conversationId
+        );
+        setConversationList(updatedConversationList);
       };
     }
   }, [
@@ -124,6 +134,8 @@ export default function ConversationContainer({ conversationId }) {
     conversation,
     currentConversationCard,
     setCurrentConversationCard,
+    conversationList,
+    setConversationList,
   ]);
 
   useEffect(() => {

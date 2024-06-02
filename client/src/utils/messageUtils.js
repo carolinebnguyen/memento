@@ -70,6 +70,23 @@ const groupMessagesByDate = (messages) => {
   }, {});
 };
 
+const updateConversationListOrder = (conversationList, conversationId) => {
+  if (!conversationList || !conversationId) {
+    return [];
+  }
+
+  if (conversationList[0].conversationId !== conversationId) {
+    const index = conversationList.findIndex(
+      (conversation) => conversation.conversationId === conversationId
+    );
+    if (index !== -1) {
+      const conversationToMove = conversationList.splice(index, 1)[0];
+      conversationList.unshift(conversationToMove);
+    }
+  }
+  return conversationList;
+};
+
 export {
   getAllConversations,
   getConversationById,
@@ -77,4 +94,5 @@ export {
   sendMessage,
   getConversationIdByUsername,
   groupMessagesByDate,
+  updateConversationListOrder,
 };
