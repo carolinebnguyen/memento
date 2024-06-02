@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   Button,
   Center,
@@ -31,9 +31,14 @@ export default function ConversationContainer({ conversationId }) {
   const [errorType, setErrorType] = useState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { currentUser } = useContext(UserContext);
-  const { selectedPartner } = useContext(ConversationContext);
+  const {
+    currentConversationCard,
+    setCurrentConversationCard,
+    selectedPartner,
+  } = useContext(ConversationContext);
   const { username: currentUsername } = currentUser;
   const navigate = useNavigate();
+  const conversationWebSocket = useRef(null);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -44,7 +49,7 @@ export default function ConversationContainer({ conversationId }) {
         } else if (conversationId === 'new') {
           if (Object.keys(selectedPartner).length > 0) {
             setPageState('NEW_CHAT');
-            setConversation(null);
+            setConversation({});
           } else {
             navigate('/messages');
           }
@@ -75,6 +80,52 @@ export default function ConversationContainer({ conversationId }) {
     };
     fetchPost();
   }, [conversationId, currentUsername, selectedPartner, navigate]);
+
+  useEffect(() => {
+    const subscribeToConversationId = (conversationId) => {
+      const ws = new WebSocket(
+        `ws://${window.location.hostname}:9000/ws/conversations/subscribe/${conversationId}`
+      );
+      ws.onopen = () => {
+        conversationWebSocket.current = ws;
+      };
+      ws.onclose = () => {
+        conversationWebSocket.current = null;
+      };
+      ws.onerror = (err) => {
+        console.error(err);
+      };
+    };
+
+    if (
+      conversationId &&
+      conversationWebSocket.current?.url.split('/').at(-1) !== conversationId
+    ) {
+      conversationWebSocket.current?.close();
+      subscribeToConversationId(conversationId);
+    }
+
+    if (conversationWebSocket.current) {
+      conversationWebSocket.current.onmessage = ({ data }) => {
+        const receivedMessage = JSON.parse(data);
+        const updatedConversation = {
+          ...conversation,
+          messages: [...conversation.messages, receivedMessage],
+        };
+        setConversation(updatedConversation);
+        setCurrentConversationCard({
+          ...currentConversationCard,
+          lastMessage: receivedMessage,
+        });
+      };
+    }
+  }, [conversationId, conversation]);
+
+  useEffect(() => {
+    return () => {
+      conversationWebSocket.current?.close();
+    };
+  }, [conversationId]);
 
   const handleSendMessage = (newMessage) => {
     const updatedConversation = {
