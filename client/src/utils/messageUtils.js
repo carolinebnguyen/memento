@@ -58,6 +58,10 @@ const getConversationIdByUsername = async (recipient) => {
 };
 
 const groupMessagesByDate = (messages) => {
+  if (!messages || messages.length < 1) {
+    return {};
+  }
+
   return messages.reduce((acc, message) => {
     const date = new Date(message.timestamp);
     date.setHours(0, 0, 0, 0);

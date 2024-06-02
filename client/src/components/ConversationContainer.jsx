@@ -42,6 +42,7 @@ export default function ConversationContainer({ conversationId }) {
     setConversationList,
   } = useContext(ConversationContext);
   const { username: currentUsername } = currentUser;
+  const isExistingConversation = conversationId !== 'new';
   const navigate = useNavigate();
   const conversationWebSocket = useRef(null);
 
@@ -51,7 +52,7 @@ export default function ConversationContainer({ conversationId }) {
         if (!conversationId) {
           setPageState('NOT_SELECTED');
           return;
-        } else if (conversationId === 'new') {
+        } else if (!isExistingConversation) {
           if (Object.keys(selectedPartner).length > 0) {
             setPageState('NEW_CHAT');
             setConversation({});
@@ -84,7 +85,13 @@ export default function ConversationContainer({ conversationId }) {
       }
     };
     fetchConversation();
-  }, [conversationId, currentUsername, selectedPartner, navigate]);
+  }, [
+    conversationId,
+    currentUsername,
+    selectedPartner,
+    navigate,
+    isExistingConversation,
+  ]);
 
   useEffect(() => {
     const subscribeToConversationId = (conversationId) => {
@@ -103,7 +110,7 @@ export default function ConversationContainer({ conversationId }) {
     };
 
     if (
-      conversationId &&
+      isExistingConversation &&
       conversationWebSocket.current?.url.split('/').at(-1) !== conversationId
     ) {
       conversationWebSocket.current?.close();
@@ -136,6 +143,7 @@ export default function ConversationContainer({ conversationId }) {
     setCurrentConversationCard,
     conversationList,
     setConversationList,
+    isExistingConversation,
   ]);
 
   useEffect(() => {
