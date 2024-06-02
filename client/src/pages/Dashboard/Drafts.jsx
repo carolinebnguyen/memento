@@ -65,16 +65,17 @@ export default function Drafts() {
       });
       setFile(fileWithPreview);
       setIsFileLoaded(true);
+      setPageState('DONE');
     };
 
-    const getPhotoFromIndexedDB = (setPreview) => {
+    const getPhotoFromIndexedDB = async (setPreview) => {
       const request = indexedDB.open('mementoPhotosDB', 1);
 
       request.onerror = (e) => {
         console.error('IndexedDB error:', e.target.error);
       };
 
-      request.onsuccess = (e) => {
+      request.onsuccess = async (e) => {
         const db = e.target.result;
         const transaction = db.transaction(['photos'], 'readonly');
         const objectStore = transaction.objectStore('photos');
@@ -118,8 +119,9 @@ export default function Drafts() {
         setText(text);
         if (type === 'photo' && !isFileLoaded) {
           await loadImageLocally();
+        } else if (type === 'status') {
+          setPageState('DONE');
         }
-        setPageState('DONE');
       } catch (error) {
         setPageState('ERROR');
       }
