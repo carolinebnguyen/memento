@@ -115,7 +115,39 @@ export default function Create() {
     const reader = new FileReader();
     reader.onload = () => {
       const photoData = reader.result;
-      localStorage.setItem(`draftPhoto_${currentUsername}`, photoData);
+
+      const request = indexedDB.open('mementoPhotosDB', 1);
+
+      request.onerror = (e) => {
+        console.error('IndexedDB error:', e.target.error);
+      };
+
+      request.onsuccess = (e) => {
+        const db = e.target.result;
+
+        const transaction = db.transaction(['photos'], 'readwrite');
+        const objectStore = transaction.objectStore('photos');
+
+        const fileName = `draftPhoto_${currentUsername}`;
+        const data = { fileName: fileName, photoData: photoData };
+
+        const putRequest = objectStore.put(data);
+
+        putRequest.onerror = (e) => {
+          console.error('Error saving photo in IndexedDB:', e.target.error);
+        };
+      };
+
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains('photos')) {
+          const objectStore = db.createObjectStore('photos', {
+            keyPath: 'fileName',
+          });
+
+          objectStore.createIndex('fileName', 'fileName', { unique: true });
+        }
+      };
     };
     reader.readAsDataURL(file);
   };

@@ -48,21 +48,59 @@ export default function Drafts() {
   const [alertMessage, setAlertMessage] = useState('');
   const [pageState, setPageState] = useState('LOADING');
 
+  const fileName = `draftPhoto_${currentUsername}`;
+
   useEffect(() => {
-    const loadImageLocally = async () => {
-      const photoData = localStorage.getItem(`draftPhoto_${currentUsername}`);
-      if (photoData && !isFileLoaded) {
-        const blob = await (await fetch(photoData)).blob();
-        const extension = blob.type.slice(blob.type.indexOf('/') + 1);
-        const file = new File([blob], `draftFile.${extension}`, {
-          type: blob.type,
-        });
-        const fileWithPreview = Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        });
-        setFile(fileWithPreview);
-        setIsFileLoaded(true);
+    const setFileWithPreview = async (photoData) => {
+      if (!photoData || isFileLoaded) {
+        return;
       }
+      const blob = await (await fetch(photoData)).blob();
+      const extension = blob.type.slice(blob.type.indexOf('/') + 1);
+      const file = new File([blob], `draftFile.${extension}`, {
+        type: blob.type,
+      });
+      const fileWithPreview = Object.assign(file, {
+        preview: URL.createObjectURL(file),
+      });
+      setFile(fileWithPreview);
+      setIsFileLoaded(true);
+    };
+
+    const getPhotoFromIndexedDB = (setPreview) => {
+      const request = indexedDB.open('mementoPhotosDB', 1);
+
+      request.onerror = (e) => {
+        console.error('IndexedDB error:', e.target.error);
+      };
+
+      request.onsuccess = (e) => {
+        const db = e.target.result;
+        const transaction = db.transaction(['photos'], 'readonly');
+        const objectStore = transaction.objectStore('photos');
+        const index = objectStore.index('fileName');
+        const getRequest = index.get(fileName);
+
+        getRequest.onsuccess = () => {
+          const photoData = getRequest.result?.photoData;
+          if (photoData) {
+            setPreview(photoData);
+          } else {
+            console.error(`Photo ${fileName} not found in IndexedDB`);
+          }
+        };
+
+        getRequest.onerror = (e) => {
+          console.error(
+            'Error retrieving photo from IndexedDB:',
+            e.target.error
+          );
+        };
+      };
+    };
+
+    const loadImageLocally = () => {
+      getPhotoFromIndexedDB(setFileWithPreview);
     };
 
     const fetchCurrentUserData = async () => {
@@ -87,7 +125,7 @@ export default function Drafts() {
       }
     };
     fetchCurrentUserData();
-  }, [isFileLoaded, currentUsername]);
+  }, [isFileLoaded, currentUsername, fileName]);
 
   const initialValues = {
     type: type,
@@ -99,8 +137,6 @@ export default function Drafts() {
     const { setFieldValue } = useFormikContext();
 
     useEffect(() => {
-      setFieldValue('type', type);
-      setFieldValue('text', text);
       if (type === 'photo' && isFileLoaded) {
         setFieldValue('imageSrc', file);
       }
@@ -119,18 +155,43 @@ export default function Drafts() {
     text: yup.string().required('Text content is required'),
   });
 
-  const removeFile = () => {
-    if (file?.preview) {
-      URL.revokeObjectURL(file.preview);
-    }
-    setFile(null);
-  };
-
   const savePhotoLocally = (file) => {
     const reader = new FileReader();
     reader.onload = () => {
       const photoData = reader.result;
-      localStorage.setItem(`draftPhoto_${currentUsername}`, photoData);
+
+      const request = indexedDB.open('mementoPhotosDB', 1);
+
+      request.onerror = (e) => {
+        console.error('IndexedDB error:', e.target.error);
+      };
+
+      request.onsuccess = (e) => {
+        const db = e.target.result;
+
+        const transaction = db.transaction(['photos'], 'readwrite');
+        const objectStore = transaction.objectStore('photos');
+
+        const fileName = `draftPhoto_${currentUsername}`;
+        const data = { fileName: fileName, photoData: photoData };
+
+        const putRequest = objectStore.put(data);
+
+        putRequest.onerror = (e) => {
+          console.error('Error saving photo in IndexedDB:', e.target.error);
+        };
+      };
+
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains('photos')) {
+          const objectStore = db.createObjectStore('photos', {
+            keyPath: 'fileName',
+          });
+
+          objectStore.createIndex('fileName', 'fileName', { unique: true });
+        }
+      };
     };
     reader.readAsDataURL(file);
   };
@@ -174,9 +235,44 @@ export default function Drafts() {
     }, 1000);
   };
 
+  const deletePhotoFromIndexedDB = () => {
+    const request = indexedDB.open('mementoPhotosDB', 1);
+
+    request.onerror = (e) => {
+      console.error('IndexedDB error:', e.target.error);
+    };
+
+    request.onsuccess = (e) => {
+      const db = e.target.result;
+      const transaction = db.transaction(['photos'], 'readwrite');
+      const objectStore = transaction.objectStore('photos');
+      const index = objectStore.index('fileName');
+      const getRequest = index.getKey(fileName);
+
+      getRequest.onsuccess = () => {
+        const photoName = getRequest.result;
+        if (photoName) {
+          const deleteRequest = objectStore.delete(photoName);
+          deleteRequest.onerror = (e) => {
+            console.error(
+              `Error deleting photo ${fileName} from IndexedDB:`,
+              e.target.error
+            );
+          };
+        } else {
+          console.error(`Photo ${fileName} not found in IndexedDB`);
+        }
+      };
+
+      getRequest.onerror = (e) => {
+        console.error('Error retrieving photo from IndexedDB:', e.target.error);
+      };
+    };
+  };
+
   const removeLocalDraft = () => {
+    deletePhotoFromIndexedDB();
     localStorage.removeItem(`draftPost_${currentUsername}`);
-    localStorage.removeItem(`draftPhoto_${currentUsername}`);
   };
 
   const confirmDeleteDraft = () => {
@@ -292,6 +388,13 @@ export default function Drafts() {
             setFile(file);
             setIsFileChanged(true);
             setFieldValue('imageSrc', file.preview);
+          };
+          const removeFile = () => {
+            if (file?.preview) {
+              URL.revokeObjectURL(file.preview);
+            }
+            setFile(null);
+            setFieldValue('imageSrc', '');
           };
           return (
             <Form>
