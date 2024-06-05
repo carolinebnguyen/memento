@@ -346,7 +346,7 @@ router.put('/:postId', async (req, res) => {
     if (Item.username !== username) {
       return res
         .status(403)
-        .json({ error: 'User is not authorized to delete this post' });
+        .json({ error: 'User is not authorized to edit this post' });
     }
 
     const dynamoParams = {
